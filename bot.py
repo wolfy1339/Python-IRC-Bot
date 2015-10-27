@@ -1,7 +1,7 @@
+from __future__ import print_function
 import socket
 import sys
 import json
-from __future__ import print_function
 
 config = json.loads("config.json")  # settings file
 # Config Settings
