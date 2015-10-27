@@ -17,7 +17,7 @@ username = config["user"]["username"]
 x = (server, port)
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # defines the socket
-print("connecting to: " + server + "\r\n")
+print("Connecting to: " + server + "\r\n")
 irc.connect(x)  # connects to the server
 irc.send("USER {0} {1} blah :{2}\r\n".format(
         ident, botnick, realname).encode("UTF-8"))  # user authentication
@@ -32,7 +32,7 @@ irc.send("JOIN {0}\r\n".format(channel).encode("UTF-8"))  # join the channel(s)
 
 while True:  # puts it in an infinite loop
     # Receive data
-    binary_data = irc.recv(2048)
+    binary_data = irc.recv(2040)
     # Decode data from UTF-8
     data = binary_data.decode("UTF-8", "ignore")
     # Split data by spaces
@@ -45,7 +45,11 @@ while True:  # puts it in an infinite loop
         channel = words[2]
         # Respond with a message saying "Hello!"
         irc.send("PRIVMSG {0} :Hello!\r\n".format(channel).encode("UTF-8"))
-
+    elif words[0] == config["owner"]["hostmask"] and words[3] == "quit":
+		if words[4]:
+			irc.send("QUIT :{0}".format([" ".join(words[4:])]).encode("UTF-8"))
+		else:
+		    irc.send("QUIT :Quit requested by {0}".format(config["owner"]["nick"]).encode("UTF-8"))
     # Print the data
     try:
       print(data)
