@@ -40,7 +40,7 @@ while True:  # puts it in an infinite loop
     if words[0] == "PING":
         # Respond with PONG
         irc.send("PONG\r\n".encode("UTF-8"))
-	elif (words[1] == "PRIVMSG" and words[2].startswith("#") and
+    elif (words[1] == "PRIVMSG" and words[2].startswith("#") and
         " ".join(words[3:]) == ":Hello world!"):
         channel = words[2]
         # Respond with a message saying "Hello!"
