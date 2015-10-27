@@ -15,14 +15,17 @@ username = config["user"]["username"]
 x = (server, port)
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # defines the socket
-print "connecting to:"+server
+print "connecting to: " + server
 irc.connect(x)  # connects to the server
-irc.send("USER {0} {1} blah :{2}\n".format(ident, botnick, realname).encode("UTF-8"))  # user authentication
+irc.send("USER {0} {1} blah :{2}\n".format(
+        ident, botnick, realname).encode("UTF-8"))  # user authentication
 irc.send("NICK {0}\n".format(botnick).encode("UTF-8"))  # sets nick
 if username == "" || password == "":
-    print "Username or Passwoord is empty! If that is not a mistake, please ignore this message"
+    print "Username or Passwoord is empty!"
+    print "If that is not a mistake, please ignore this message"
 else:
-    irc.send("PRIVMSG nickserv :identify {0} {1}\r\n".format(username, password).encode("UTF-8"))  # auth
+    irc.send("PRIVMSG nickserv :identify {0} {1}\r\n".format(
+        username, password).encode("UTF-8"))  # auth
 irc.send("JOIN {0}\n".format(channel).encode("UTF-8"))  # join the channel(s)
 
 while 1:  # puts it in a loop
@@ -30,7 +33,8 @@ while 1:  # puts it in a loop
     print text  # print text to console
 
     if text.find('PING') != -1:  # check if 'PING' is found
-        irc.send('PONG ' + text.split()[1] + '\r\n')  # returns 'PONG' back to the server (prevents pinging out!)
+        # returns 'PONG' back to the server (prevents pinging out!)
+        irc.send('PONG ' + text.split()[1] + '\r\n')
 
     if text.find("*BWBellairs") != -1:
         irc.send("Yo... whoever you are")
