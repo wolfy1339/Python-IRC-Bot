@@ -9,7 +9,8 @@
     "server": "chat.freenode.net"
   },
   "owner": {
-    "hostmask": "botters/wolfy1339",
+    "host": "botters/wolfy1339",
+    "hostmask":  "wolfy1339!~wolfy1339@botters/wolfy1339",
     "nick": "wolfy1339"
   },
   "user": {
