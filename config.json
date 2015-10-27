@@ -1,14 +1,22 @@
 {
-    "network": {
-        "server": "chat.freenode.net",
-        "port": 6667
-    },
-    "user": {
-        "nick": "BWBellairs[Bot]",
-        "username": "BWBellairsBot",
-        "ident": "BWBellairs[Bot]",
-        "realname": "BWBellairs[Bot]",
-        "password": ""
-    },
-    "channels": ["##powder-bots","#botters-test"]
+  "channels": [
+    "#botters-test",
+    "##powder-bots",
+    "##wolfy1339"
+  ],
+  "network": {
+    "port": 6667,
+    "server": "chat.freenode.net"
+  },
+  "owner": {
+    "hostmask": "botters/wolfy1339",
+    "nick": "wolfy1339"
+  },
+  "user": {
+    "ident": "python",
+    "nick": "WolfyPyBot",
+    "password": "",
+    "realname": "A python IRC bot",
+    "username": "BigWolfy1339"
+  }
 }

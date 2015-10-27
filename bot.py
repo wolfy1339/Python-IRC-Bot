@@ -17,7 +17,7 @@ username = config["user"]["username"]
 x = (server, port)
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # defines the socket
-print("connecting to: " + server)
+print("connecting to: " + server + "\r\n")
 irc.connect(x)  # connects to the server
 irc.send("USER {0} {1} blah :{2}\r\n".format(
         ident, botnick, realname).encode("UTF-8"))  # user authentication
@@ -26,17 +26,24 @@ if username == "" or password == "":
     print("Username or Passwoord is empty!")
     print("If that is not a mistake, please ignore this message")
 else:
-    irc.send("PRIVMSG nickserv :identify {0} {1}\r\n".format(
+    irc.send("PRIVMSG NICKSERV :identify {0} {1}\r\n".format(
         username, password).encode("UTF-8"))  # auth
 irc.send("JOIN {0}\r\n".format(channel).encode("UTF-8"))  # join the channel(s)
 
-while 1:  # puts it in a loop
-    text = irc.recv(2040)  # receive the text
-    print(text)  # print text to console
+while True:  # puts it in an infinite loop
+    binary_data = irc.recv(2048)
+    # Decode data from UTF-8
+    data = binary_data.decode("UTF-8", "ignore")
+    # Split data by spaces
+    words = data.split()
+    if (words[1] == "PRIVMSG" and words[2].startswith("#") and
+        " ".join(words[3:]) == ":Hello world!"):
+        channel = words[2]
+        # Respond with a message saying "Hello!"
+        irc.send("PRIVMSG {0} :Hello!\r\n".format(channel).encode("UTF-8"))
 
-    if text.find('PING') != -1:  # check if 'PING' is found
-        # returns 'PONG' back to the server (prevents pinging out!)
-        irc.send('PONG\r\n'.encode("UTF-8"))
-
-    if text.find("*BWBellairs") != -1:
-        irc.send("Yo... whoever you are".encode("UTF-8"))
+    # Print the data
+    try:
+      print(data)
+    except UnicodeEncodeError:
+      pass
