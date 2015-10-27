@@ -20,7 +20,7 @@ irc.connect(x)  # connects to the server
 irc.send("USER {0} {1} blah :{2}\r\n".format(
         ident, botnick, realname).encode("UTF-8"))  # user authentication
 irc.send("NICK {0}\r\n".format(botnick).encode("UTF-8"))  # sets nick
-if username == "" || password == "":
+if username == "" or password == "":
     print "Username or Passwoord is empty!"
     print "If that is not a mistake, please ignore this message"
 else:
