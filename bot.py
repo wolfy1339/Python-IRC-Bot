@@ -3,7 +3,8 @@ import socket
 import sys
 import json
 
-config = json.loads("config.json")  # settings file
+with open("config.json") as config_file:
+    config = json.load(config_file)  # settings file
 # Config Settings
 server = config["network"]["server"]
 port = config["network"]["port"]
