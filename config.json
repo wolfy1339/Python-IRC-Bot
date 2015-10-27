@@ -1,0 +1,14 @@
+{
+    "network": {
+        "server": "chat.freenode.net",
+        "port": 6667
+    },
+    "user": {
+        "nick": "BWBellairs[Bot]",
+        "username": "BWBellairsBot",
+        "ident": "BWBellairs[Bot]",
+        "realname": "BWBellairs[Bot]",
+        "password": ""
+    },
+    "channels": ["##powder-bots","#botters-test"]
+}
