@@ -30,10 +30,13 @@ botRealname = config["user"]["realname"]
 botAccount = config["user"]["username"]
 botPassword = config["user"]["password"]
 NickServ = True
+global ownerHostmasks
 ownerHostmasks = config["owner"]["hostmask"]
+global adminHostmasks
 adminHostmasks = (",".join(config["admin"]["hostmask"]))
 commandChar = config["prefix"]
 encoding = config["encoding"]
+disabledPlugins = []
 # A string containing python code that is run whenever an error happens
 errorCode = """with socket.socket() as sock:
     sock.connect(("termbin.com", 9999))
@@ -75,25 +78,6 @@ def Connect():
     else:
         for i in channels:
             SocketSend(irc, "JOIN {0}\n".format(i))
-
-def ReadPrefs():
-    try:
-        with open('logins.txt') as f:
-            for line in f:
-                if len(line.strip()):
-                    cookies = line.split("|")
-                    logins[cookies[0]] = {"username":cookies[1], "portfolio":{}, "cookies":cookies[2].strip()}
-    except OSError:
-        pass
-
-def WritePrefs():
-    try:
-        with open('logins.txt', 'w') as f:
-            for i in logins:
-                f.write("{0}|{1}|{2}\r\n".format(i, logins[i]["username"], logins[i]["cookies"]))
-    except OSError:
-        pass
-atexit.register(WritePrefs)
 
 def PrintError(channel = None):
     Print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
@@ -212,8 +196,6 @@ def Parse(text):
         command = text[3].lower().lstrip(":")
         if channel == botNick:
             channel = username
-        #if username == "FeynmanStockBot":
-        #    return
 
         #some special owner commands that aren't in modules
         if CheckOwner(text[0]):
@@ -225,22 +207,6 @@ def Parse(text):
                 if not os.path.isfile(os.path.join("mods", mod+".py")):
                     return
                 commands[mod] = []
-                if mod == "stocks":
-                    if "stocks" in mods:
-                        logins = mods["stocks"].logins
-                        history = mods["stocks"].history
-                        watched = mods["stocks"].watched
-                        news = mods["stocks"].news
-                        specialNews = mods["stocks"].specialNews
-                mods[mod] = imp.load_source(mod, os.path.join("mods", mod+".py"))
-                if mod == "stocks":
-                    mods["stocks"].logins = logins
-                    mods["stocks"].history = history
-                    mods["stocks"].watched = watched
-                    mods["stocks"].news = news
-                    mods["stocks"].specialNews = specialNews
-                SendMessage(channel, "Reloaded {0}.py".format(mod))
-                return
             elif command == "{0}eval".format(commandChar):
                 try:
                     command = " ".join(text[4:]).replace("\\n", "\n").replace("\\t", "\t")
@@ -265,11 +231,6 @@ def Parse(text):
                     i[1](username, hostmask, channel, text[4:])
                     return
 
-try:
-    mods["stocks"].GetStockInfo(True)
-except:
-    pass
-ReadPrefs()
 while True:
     try:
         Connect()
