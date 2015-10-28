@@ -16,11 +16,6 @@ def CheckAdmin(hostmask):
     host = hostmask.split("!")[-1]
     return host in adminHostmasks or CheckOwner(hostmask)
 
-#only used for stocks.py, maybe for more later
-logins = {}
-def GetAccount(hostmask):
-    return logins[hostmask] if hostmask in logins else None
-
 messageQueue = []
 def Send(msg):
     messageQueue.append(msg)

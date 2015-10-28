@@ -109,6 +109,7 @@ def main():
                                 SocketSend(irc, "ns identify {0} {1}\n".format(botAccount, botPassword))
                                 SocketSend(irc, "ns ghost {0}\n".format(botNick))
                                 SocketSend(irc, "NICK {0}\n".format(botNick))
+                        # Nickname temporarily unavailable
                         elif text[1] == "437":
                             SocketSend(irc, "NICK {0}-\n".format(text[3]))
                             if NickServ:
@@ -135,7 +136,7 @@ def main():
                          if hasattr(mods[mod], "Parse"):
                             mods[mod].Parse(line, text)
                 except SystemExit:
-                    SocketSend(irc, "QUIT :i'm a potato\n")
+                    SocketSend(irc, "QUIT :{0}\n".format(quitMessage))
                     irc.close()
                     quit()
                 except Exception:
@@ -192,6 +193,8 @@ def Parse(text):
                     SendMessage(channel, str(type(e))+":"+str(e))
                 return
             elif command == "{0}quit".format(commandChar):
+                SocketSend(irc, "QUIT :{0}\n".format(quitMessage))
+                irc.close()
                 quit()
 
         #actual commands here
