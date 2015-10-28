@@ -6,6 +6,7 @@ try:
 except ImportError:
     import urllib, urllib2
 import re
+from config import *
 
 def CheckOwner(hostmask):
     host = hostmask.split("!")[-1]
