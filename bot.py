@@ -40,8 +40,10 @@ errorCode = """with socket.socket() as sock:
     sock.send(traceback.format_exc().encode("utf-8", "replace"))
     SendMessage(errorchannel, "Error: " + sock.recv(1024).decode("utf-8"))"""
 
-#change to True when done
-configured = config["configured"]
+if config["configured"] == "True":
+    configured = True
+else:
+    configured = False
 
 from common import *
 mods = {}
