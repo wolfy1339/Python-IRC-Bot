@@ -22,7 +22,7 @@ with open("config.json") as config_file:
 # Configuration variables
 server = config["network"]["server"]
 port = config["network"]["port"]
-channels = (",".join(config["channels"]))
+channels = ",".join(config["channels"])
 errorchannel = config["errorchannel"]
 botNick = config["user"]["nick"]
 botIdent = config["user"]["ident"]
