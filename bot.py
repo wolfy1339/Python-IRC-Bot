@@ -8,7 +8,7 @@ with open("config.json") as config_file:
 # Config Settings
 server = config["network"]["server"]
 port = config["network"]["port"]
-channel = (",".join(config["channels"]))
+channel = ",".join(config["channels"])
 botnick = config["user"]["nick"]
 realname = config["user"]["realname"]
 ident = config["user"]["ident"]
