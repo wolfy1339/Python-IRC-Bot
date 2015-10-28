@@ -43,12 +43,12 @@ def PingCmd(username, hostmask, channel, text, account):
 @command("join", minArgs = 1, owner = True)
 def JoinCmd(username, hostmask, channel, text, account):
     """(no args). Make the bot join a channel (admin only)."""
-    Send("JOIN {}\n" % text[0])
+    Send("JOIN {0}\n".format(text[0]))
 
 @command("part", minArgs = 1, owner = True)
 def PartCmd(username, hostmask, channel, text, account):
     """(no args). Make the bot part a channel (admin only)."""
-    Send("PART {}\n" % text[0])
+    Send("PART {0}\n".format(text[0]))
 
 """def Parse(raw, text):
     if text[1] == "324":
@@ -60,7 +60,7 @@ def PartCmd(username, hostmask, channel, text, account):
 def PartCmd(username, hostmask, channel, text, account):
     ""secret command.""
     for i in text:
-        Send("MODE {}\n" % i)"""
+        Send("MODE {0}\n".format(i))"""
 
 @command("msg", minArgs = 2, owner = True)
 def MsgCmd(username, hostmask, channel, text, account):
@@ -77,7 +77,7 @@ def Viginerecmd(username, hostmask, channel, text, account):
     ""(<string> <listofkeys>...). moo""
     for i in text[1:]:
         (enc, dec) = Viginere(text[0], i)
-        SendMessage(channel, "Encrypted: {}, Decrypted: {}" % (enc, dec))"""
+        SendMessage(channel, "Encrypted: {0}, Decrypted: {1}".format(enc, dec))"""
 
 """@command("vigenere2", minArgs = 2)
 def Viginere2cmd(username, hostmask, channel, text, account):
@@ -86,7 +86,7 @@ def Viginere2cmd(username, hostmask, channel, text, account):
     for i in text[1:]:
         (enc, dec) = Viginere(text[0], i)
         checked.append(dec)
-        Send("MODE ####{}\n" % dec)
+        Send("MODE ####{0}\n".format(dec))
     SendMessage(channels[2], "Checking: " + ", ".join(checked))
 
 @command("vigenere3", minArgs = 2)
@@ -96,7 +96,7 @@ def Viginere3cmd(username, hostmask, channel, text, account):
     for i in text[1:]:
         (enc, dec) = Viginere(i, text[0])
         checked.append(dec)
-        Send("MODE ####{}\n" % dec)
+        Send("MODE ####{0}\n".format(dec))
     SendMessage(channels[2], "Checking: " + ", ".join(checked))
     
 alpha = string.lowercase
@@ -164,6 +164,6 @@ def Viginere(incoming, KEY, offset = 1):
             output_decrypted += y
 
         return (output_encrypted.upper(), output_decrypted.upper())
-    #SendMessage(channels[2], "Encrypted: {}, Decrypted: {}" % (output_encrypted.upper(), output_decrypted.upper()))
+    #SendMessage(channels[2], "Encrypted: {0}, Decrypted: {1}".format(output_encrypted.upper(), output_decrypted.upper()))
     #print 'Encrypted:', output_encrypted.upper()
     #print 'Decrypted:', output_decrypted.upper()"""

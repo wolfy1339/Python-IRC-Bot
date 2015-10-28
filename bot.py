@@ -17,7 +17,7 @@ if not os.path.isfile("config.json"):
 
 from config import *
 if not configured:
-    print("You have not configured the bot, open up config.py to edit settings")
+    print("You have not configured the bot, open up config.json to edit settings")
     quit()
 
 from common import *
