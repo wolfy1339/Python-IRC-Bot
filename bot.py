@@ -76,8 +76,7 @@ def Connect():
     if NickServ:
         SocketSend(irc, "ns identify {0} {1}\n".format(botAccount, botPassword))
     else:
-        for i in channels:
-            SocketSend(irc, "JOIN {0}\n".format(i))
+        SocketSend(irc, "JOIN {0}\n".format(channels))
 
 def PrintError(channel = None):
     Print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
@@ -128,11 +127,10 @@ def main():
                             return #try to reconnect
 
                     if len(text) > 1:
-                        #Only join channel once identified
+                        # Only join channel once identified
                         if text[1] == "396":
-                            for i in channels:
-                                SocketSend(irc, "JOIN {0}\n".format(i))
-                        #Nickname already in use
+                            SocketSend(irc, "JOIN {0}\n".format(channels))
+                        # Nickname already in use
                         elif text[1] == "433":
                             SocketSend(irc, "NICK {0}-\n".format(text[3]))
                             if NickServ:
@@ -147,7 +145,7 @@ def main():
                                 SocketSend(irc, "NICK {0}\n".format(botNick))
 
                     if len(text) > 2:
-                        #Get channel to reply to
+                        # Get channel to reply to
                         if text[1] == "PRIVMSG":
                             reply = text[2]
                             if reply == botNick:
