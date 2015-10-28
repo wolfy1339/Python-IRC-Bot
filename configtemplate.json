@@ -1,18 +1,25 @@
 {
+  "admin": {
+    "hostmask": [ ]
+  },
   "channels": [
     "#botters-test",
     "##powder-bots",
     "##wolfy1339"
   ],
+  "configured": True,
+  "encoding": "utf-8",
+  "errorchannel": "##wolfy1339",
   "network": {
     "port": 6667,
     "server": "chat.freenode.net"
   },
   "owner": {
     "host": "botters/wolfy1339",
-    "hostmask":  "wolfy1339!~wolfy1339@botters/wolfy1339",
+    "hostmask": "wolfy1339!~wolfy1339@botters/wolfy1339",
     "nick": "wolfy1339"
   },
+  "prefix": "@",
   "user": {
     "ident": "python",
     "nick": "WolfyPyBot",
