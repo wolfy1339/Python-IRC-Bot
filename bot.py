@@ -87,7 +87,7 @@ def main():
             for line in linesSplit:
                 try:
                     line = line.decode("utf-8", errors="replace")
-                    Print("<-- "+line+"\n")
+                    Print("<-- " + line + "\n")
                     text = line.split()
 
                     if len(text) > 0:
@@ -175,7 +175,7 @@ def Parse(text):
                     SendNotice(username, "No module given")
                     return
                 mod = text[4]
-                if not os.path.isfile(os.path.join("mods", mod+".py")):
+                if not os.path.isfile(os.path.join("mods", mod + ".py")):
                     return
                 commands[mod] = []
             elif command == "{0}eval".format(commandChar):
@@ -183,14 +183,14 @@ def Parse(text):
                     command = " ".join(text[4:]).replace("\\n", "\n").replace("\\t", "\t")
                     ret = str(eval(command))
                 except Exception as e:
-                    ret = str(type(e))+":"+str(e)
+                    ret = str(type(e)) + ":" + str(e)
                 SendMessage(channel, ret)
                 return
             elif command == "{0}exec".format(commandChar):
                 try:
                     exec(" ".join(text[4:]))
                 except Exception as e:
-                    SendMessage(channel, str(type(e))+":"+str(e))
+                    SendMessage(channel, str(type(e)) + ":" + str(e))
                 return
             elif command == "{0}quit".format(commandChar):
                 SocketSend(irc, "QUIT :{0}\n".format(quitMessage))
@@ -200,7 +200,7 @@ def Parse(text):
         #actual commands here
         for mod in commands:
             for i in commands[mod]:
-                if command == "{0}{1}".format(commandChar, i[0]):
+                if command == "{0}{1}".format(commandChar, i[0]) or command == "{0}{1}".format(botNick, i[0]):
                     i[1](username, hostmask, channel, text[4:])
                     return
 
