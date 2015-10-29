@@ -35,6 +35,9 @@ def SocketSend(socket, message):
 def Print(message):
     if encoding != "utf-8":
         message = message.encode(encoding, errors="replace").decode(encoding)
+    # Python throws an error when it sees the | character sent
+    elif message.find(u"\2502") !=-1:
+        message = message.lstrip(u"\u2502")
     print(message)
 
 def Connect():
