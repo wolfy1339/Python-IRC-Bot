@@ -17,7 +17,7 @@ def HelpCmd(username, hostmask, channel, text):
     SendNotice(username, "No such command")
 
 @command("list")
-def ListCmd(username, hostmask, channel, text, account):
+def ListCmd(username, hostmask, channel, text):
     """(no args). Lists all commands."""
     if len(text):
         if not text[0] in commands:
