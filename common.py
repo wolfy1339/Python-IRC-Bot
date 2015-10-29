@@ -37,7 +37,7 @@ def RegisterMod(name):
     plugin = name
 
 commands = {}
-def command(name, minArgs = 0, needsAccount = False, owner = False, admin = False):
+def command(name, minArgs = 0, owner = False, admin = False):
     def real_command(func):
         def call_func(username, hostmask, channel, text):
             if owner and not CheckOwner(hostmask):
@@ -49,11 +49,7 @@ def command(name, minArgs = 0, needsAccount = False, owner = False, admin = Fals
             if len(text) < minArgs:
                 SendNotice(username, "Usage: {0}".format(func.__doc__))
                 return
-            account = GetAccount(hostmask)
-            if needsAccount and not account:
-                SendNotice(username, "You are not logged in")
-                return
-            return func(username, hostmask, channel, text, account)
+            return func(username, hostmask, channel, text)
         call_func.__doc__ = func.__doc__
         commands[plugin].append((name, call_func))
         return call_func
