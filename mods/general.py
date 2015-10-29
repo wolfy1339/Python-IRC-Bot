@@ -23,9 +23,9 @@ def ListCmd(username, hostmask, channel, text):
         if not text[0] in commands:
             SendNotice(username, "No such module")
         else:
-            SendMessage(channel, "Commands: "+", ".join(i[0] for i in commands[text[0]]))
+            SendMessage(channel, "Commands: " + ", ".join(i[0] for i in commands[text[0]]))
     else:
-        SendMessage(channel, "Modules: "+", ".join(i for i in commands))
+        SendMessage(channel, "Modules: " + ", ".join(i for i in commands))
 
 @command("commands")
 def CommandsCmd(username, hostmask, channel, text):
@@ -52,9 +52,9 @@ def PartCmd(username, hostmask, channel, text):
 
 """def Parse(raw, text):
     if text[1] == "324":
-        SendMessage(channels[2], "Channel exists: "+text[3] + "; " + text[4])
+        SendMessage(channels[2], "Channel exists: " + text[3] + "; " + text[4])
     elif text[1] == "403":
-        SendMessage(channels[2], "No such channel: "+text[3])"""
+        SendMessage(channels[2], "No such channel: " + text[3])"""
 
 """@command("check", minArgs = 1)
 def PartCmd(username, hostmask, channel, text):
