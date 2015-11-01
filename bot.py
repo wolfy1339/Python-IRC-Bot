@@ -53,6 +53,16 @@ def Connect():
     else:
         SocketSend(irc, "JOIN {0}\n".format(channels))
 
+def ReadPrefs():
+    try:
+        with open('logins.txt') as f:
+            for line in f:
+                if len(line.strip()):
+                    cookies = line.split("|")
+                    logins[cookies[0]] = {"username":cookies[1], "portfolio":{}, "cookies":cookies[2].strip()}
+    except OSError:
+        pass
+
 def PrintError(channel = None):
     Print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
     if channel:
@@ -207,6 +217,7 @@ def Parse(text):
                     i[1](username, hostmask, channel, text[4:])
                     return
 
+ReadPrefs()
 while True:
     try:
         Connect()
