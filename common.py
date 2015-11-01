@@ -37,7 +37,7 @@ def RegisterMod(name):
     plugin = name
 
 commands = {}
-def command(name, minArgs = 0, owner = False, admin = False):
+def command(name, minArgs=0, owner=False, admin=False):
     def real_command(func):
         def call_func(username, hostmask, channel, text):
             if owner and not CheckOwner(hostmask):
@@ -55,7 +55,7 @@ def command(name, minArgs = 0, owner = False, admin = False):
         return call_func
     return real_command
 
-def GetPage(url, cookies = None, headers = None, removeTags = False, getredirect=False):
+def GetPage(url, cookies=None, headers=None, removeTags=False, getredirect=False):
     try:
         if cookies:
             if sys.version_info[0] > 2:
