@@ -1,6 +1,6 @@
 import sys
 try:
-  import urllib.request
+  import urllib.request as urllib2
   import urllib.parse
   import urllib.error
 except ImportError:
@@ -62,15 +62,9 @@ def command(name, minArgs=0, owner=False, admin=False):
 def GetPage(url, cookies=None, headers=None, removeTags=False, getredirect=False):
     try:
         if cookies:
-            if sys.version_info[0] > 2:
-                req = urllib.request.Request(url, data=urllib.parse.urlencode(headers).encode("utf-8") if headers else None, headers={'Cookie':cookies.encode("utf-8")})
-            else:
-                req = urllib2.Request(url, data=urllib.urlencode(headers).encode("utf-8") if headers else None, headers={'Cookie':cookies.encode("utf-8")})
+            req = urllib2.Request(url, data=urllib.urlencode(headers).encode("utf-8") if headers else None, headers={'Cookie':cookies.encode("utf-8")})
         else:
-            if sys.version_info[0] > 2:
-                req = urllib.request.Request(url, data=urllib.parse.urlencode(headers).encode("utf-8") if headers else None)
-            else:
-                req = urllib2.Request(url, data=urllib.urlencode(headers).encode("utf-8") if headers else None)
+            req = urllib2.Request(url, data=urllib.urlencode(headers).encode("utf-8") if headers else None)
         if sys.version_info[0] > 2:
             data = urllib.request.urlopen(req, timeout=10)
         else:
