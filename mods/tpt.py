@@ -1,4 +1,3 @@
-import html.parser
 import json
 import time
 import re
