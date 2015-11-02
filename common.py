@@ -1,7 +1,7 @@
 import sys
 try:
   import urllib.request as urllib2
-  import urllib.parse
+  import urllib.parse as urllib
   import urllib.error
 except ImportError:
     import urllib, urllib2
