@@ -46,7 +46,7 @@ while True:  # puts it in an infinite loop
             # Respond with a message saying "Hello!"
             irc.send("PRIVMSG {0} :Hello!\r\n".format(channel).encode("UTF-8"))
         elif words[0][1:] == config["owner"]["hostmask"] and words[3] == "quit":
-            reason = words[4]
+            reason = words[4:]
             if reason:
                 irc.send("QUIT :{0}".format([" ".join(words[4:])]).encode("UTF-8"))
             else:
