@@ -2,33 +2,27 @@ from __future__ import print_function
 import socket
 import sys
 import json
-
-with open("config.json") as config_file:
-    config = json.load(config_file)  # settings file
 # Config Settings
-server = config["network"]["server"]
-port = config["network"]["port"]
-channel = ",".join(config["channels"])
-botnick = config["user"]["nick"]
-realname = config["user"]["realname"]
-ident = config["user"]["ident"]
-password = config["user"]["password"]
-username = config["user"]["username"]
-x = (server, port)
+channel = config.channels
+botnick = config.nick
+realname = config.realname
+ident = config.ident
+password = config.password
+username = config.username
+x = (config.server, config.port)
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # defines the socket
-print("Connecting to: " + server + "\r\n")
+print("Connecting to: " + server + "\n")
 irc.connect(x)  # connects to the server
-irc.send("USER {0} {1} blah :{2}\r\n".format(
+irc.send("USER {0} {1} blah :{2}\n".format(
         ident, botnick, realname).encode("UTF-8"))  # user authentication
-irc.send("NICK {0}\r\n".format(botnick).encode("UTF-8"))  # sets nick
-if username == "" or password == "":
-    print("Username or Passwoord is empty!")
-    print("If that is not a mistake, please ignore this message")
-else:
-    irc.send("PRIVMSG NICKSERV :identify {0} {1}\r\n".format(
+irc.send("NICK {0}\n".format(botnick).encode("UTF-8"))  # sets nick
+if username == "" or password == "" and nickserv:
+    print("Username or Password is empty!")
+else if nickserv:
+    irc.send("PRIVMSG NICKSERV :identify {0} {1}\n".format(
         username, password).encode("UTF-8"))  # auth
-irc.send("JOIN {0}\r\n".format(channel).encode("UTF-8"))  # join the channel(s)
+irc.send("JOIN {0}\n".format(channel).encode("UTF-8"))  # join the channel(s)
 
 while True:  # puts it in an infinite loop
     # Receive data
@@ -39,22 +33,22 @@ while True:  # puts it in an infinite loop
     words = data.split()
     if words[0] == "PING":
         # Respond with PONG
-        irc.send("PONG\r\n".encode("UTF-8"))
+        irc.send("PONG\n".encode("UTF-8"))
     elif words[1] == "PRIVMSG":
         if " ".join(words[3:]) == ":Hello world!":
             channel = words[2]
             # Respond with a message saying "Hello!"
-            irc.send("PRIVMSG {0} :Hello!\r\n".format(channel).encode("UTF-8"))
-        elif words[0][1:] == config["owner"]["hostmask"] and words[3] == "quit":
+            irc.send("PRIVMSG {0} :Hello!\n".format(channel).encode("UTF-8"))
+        elif words[0][1:] in config.owner.hostmask and words[3] == "quit":
             reason = words[4:]
             if reason:
                 irc.send("QUIT :{0}".format([" ".join(words[4:])]).encode("UTF-8"))
             else:
-                irc.send("QUIT :Quit requested by {0}".format(config["owner"]["nick"]).encode("UTF-8"))
+                irc.send("QUIT :Quit requested by {0}".format(config.owner.nick).encode("UTF-8"))
         elif words[3] == "commands" or words[3] == "list":
-            irc.send("PRIVMSG {0} :NULL")
+            irc.send("PRIVMSG {0} :NULL".format())
     # Print the data
     try:
-      print(data)
+        print(data)
     except UnicodeEncodeError:
-      pass
+        pass
