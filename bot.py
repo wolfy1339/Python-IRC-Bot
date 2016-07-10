@@ -11,6 +11,7 @@ password = config.password
 username = config.username
 nickserv = True
 
+
 def connect():
     global irc
     print("Connecting to: " + server + "\n")
@@ -28,8 +29,10 @@ def connect():
             # join the channel(s)
             sendMsg(irc, "JOIN {0}\n".format(i))
 
+
 def sendMsg(irc, msg):
     irc.send(msg.encode('UTF-8'))
+
 
 def main():
     while True:
@@ -43,7 +46,7 @@ def main():
             # join channels only when idenified
             for i in channel:
                 # join the channel(s)
-                sendMsg(irc, "JOIN {0}\n".format(i)
+                sendMsg(irc, "JOIN {0}\n".format(i))
         if words[0] == "PING":
             # Respond with PONG
             sendMsg(irc, "PONG {0}\n".format(words[1]).encode("UTF-8"))
@@ -60,7 +63,7 @@ def main():
                     sendMsg(irc, "QUIT :Quit requested by {0}".format(config.owner.nick))
             elif words[3] == "commands" or words[3] == "list":
                 sendMsg(irc, "PRIVMSG {0} :NULL".format(channel))
-            
+
         # Print the data
         try:
             print(data)
