@@ -26,7 +26,7 @@ def connect():
     else:
         for i in channel:
             # join the channel(s)
-            sendMsg(irc, "JOIN {0}\n".format(i)
+            sendMsg(irc, "JOIN {0}\n".format(i))
 
 def sendMsg(irc, msg):
     irc.send(msg.encode('UTF-8'))
