@@ -14,14 +14,14 @@ nickserv = True
 
 def connect():
     global irc
-    print("Connecting to: " + server + "\n")
+    print("Connecting to: " + config.server + "\n")
     irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # defines the socket
     irc.connect((config.server, config.port))  # connects to the server
     irc.setblocking(0)
     sendMsg(irc, "USER {0} {1} {1} :{2}\n".format(
         ident, botnick, realname))  # user authentication
     sendMsg(irc, "NICK {0}\n".format(botnick))  # sets nick
-    if NickServ:
+    if nickserv:
         sendMsg(irc, "ns identify {0} {1}\n".format(
           username, password))
     else:
