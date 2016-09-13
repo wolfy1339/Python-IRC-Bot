@@ -26,15 +26,16 @@ class Bot(zirc.Client):
         privmsg = event.target == self.config['nickname']
         target = "a private message" if privmsg else event.target
         arguments = " ".join(event.arguments)
+        if arguments.startswith("?quit"):
             print("{} called quit in {}".format(event.source.nick, target))
             irc.quit(arguments.split("?quit")[1].strip())
             os._exit(1)
         elif arguments.startswith("?ping"):
             print("{} called ping in {}".format(event.source.nick, target))
-            irc.reply("PONG!")
+            irc.reply(event, "PONG!")
         elif arguments.startswith("?join"):
             print("{} called join in {}".format(event.source.nick, target))
-            irc.join(arguments.split("?join")[1].strip())
+            irc.join(event, arguments.split("?join")[1].strip())
         print(event.raw)
 
 
