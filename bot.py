@@ -1,4 +1,6 @@
-import zirc, ssl, socket
+import zirc
+import ssl
+import socket
 
 class Bot(zirc.Client):
     def __init__(self):
