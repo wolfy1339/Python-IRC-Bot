@@ -7,3 +7,4 @@ strictness: veryhigh
 pylint:
   disable:
     - no-self-argument
+    - R0201
