@@ -4,3 +4,6 @@ python-targets:
 pep8:
   full: true
 strictness: veryhigh
+pylint:
+  disable:
+    - no-self-argument
