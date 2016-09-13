@@ -10,6 +10,7 @@ class Bot(zirc.Client):
             realname="A zIRC bot",
             channels=["##wolfy1339"],
             sasl_user="BigWolfy1339",
+            sasl_pass=""
         )
 
         self.connect(self.config)
