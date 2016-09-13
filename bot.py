@@ -1,6 +1,7 @@
 import zirc
 import ssl
 import socket
+import os
 
 
 class Bot(zirc.Client):
@@ -19,13 +20,22 @@ class Bot(zirc.Client):
         self.connect(self.config)
         self.start()
 
-    def on_privmsg(bot, event, irc):
-        irc.reply(event, "It works!")
-        # Or alternatively:
-        # irc.privmsg(event.target, "It works!")
-
-    def on_all(irc, raw):
+    def on_ctcp(irc, raw):
         print(raw)
+    def on_privmsg(self, event, irc):
+        privmsg = event.target == self.config['nickname']
+        target = "a private message" if privmsg else event.target
+        arguments = " ".join(event.arguments)
+            print("{} called quit in {}".format(event.source.nick, target))
+            irc.quit(arguments.split("?quit")[1].strip())
+            os._exit(1)
+        elif arguments.startswith("?ping"):
+            print("{} called ping in {}".format(event.source.nick, target))
+            irc.reply("PONG!")
+        elif arguments.startswith("?join"):
+            print("{} called join in {}".format(event.source.nick, target))
+            irc.join(arguments.split("?join")[1].strip())
+        print(event.raw)
 
 
 Bot()
