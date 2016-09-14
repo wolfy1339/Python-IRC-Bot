@@ -26,7 +26,13 @@ class Bot(zirc.Client):
         privmsg = event.target == self.config['nickname']
         target = "a private message" if privmsg else event.target
         arguments = " ".join(event.arguments)
-        if arguments.startswith("?quit"):
+        if arguments.startswith("?help"):
+            args = arguments.split("?help")[1].strip()
+            if args == "quit" or args == "?quit":
+                irc.reply(event, "?quit <message>")
+            else:
+                irc.reply(event, "Invalid command {}".format(arguments.split("?help")[1].strip()))
+        elif arguments.startswith("?quit"):
             print("{} called quit in {}".format(event.source.nick, target))
             irc.quit(arguments.split("?quit")[1].strip())
             os._exit(1)
@@ -35,7 +41,16 @@ class Bot(zirc.Client):
             irc.reply(event, "PONG!")
         elif arguments.startswith("?join"):
             print("{} called join in {}".format(event.source.nick, target))
-            irc.join(event, arguments.split("?join")[1].strip())
+            irc.join(arguments.split("?join")[1].strip())
+        elif arguments.startswith("?part"):
+            print("{} called part in {}".format(event.source.nick, target))
+            irc.part(arguments.split("?join")[1].strip())
+        elif arguments.startswith("?ban"):
+            irc.ban(event.target, arguments.split("?ban")[1].strip())
+        elif arguments.startswith("?echo"):
+            irc.reply(event, arguments.split("?echo")[1].strip())
+        else:
+            irc.reply(event, "Invalid command {}".format(arguments.strip()))
         print(event.raw)
 
 
