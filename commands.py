@@ -1,6 +1,7 @@
 import math
 import time
 import os
+from utils import add_cmd
 
 @add_cmd("math", alias="calc")
 def math(bot, event, irc, args):
