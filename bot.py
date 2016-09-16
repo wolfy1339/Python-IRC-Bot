@@ -8,7 +8,7 @@ class Bot(zirc.Client):
     def __init__(self):
         self.connection = zirc.Socket(family=socket.AF_INET6,
                                       wrapper=ssl.wrap_socket)
-        self.config = zirc.IRCConfig(host="irc.freenode.net",
+        self.config = zirc.IRCConfig(host="chat.freenode.net",
                                      port=6697,
                                      nickname="zIRCBot2",
                                      ident="zirc",
