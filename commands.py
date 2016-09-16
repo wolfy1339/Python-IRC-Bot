@@ -1,7 +1,7 @@
 import math
 import time
 import os
-from utils import add_cmd
+from utils import add_cmd, commands
 
 @add_cmd("math", alias="calc")
 def math(bot, event, irc, args):
@@ -42,41 +42,41 @@ def ping(bot, event, irc, args):
     """Help text"""
     irc.reply(event, "PONG!")
 
-@add_cmd("join")
+@add_cmd("join", admin=True)
 def join(bot, event, irc, args):
     """Help text"""
     irc.join(args)
 
-@add_cmd("part", alias="leave")
+@add_cmd("part", alias="leave", admin=True)
 def part(bot, event, irc, args):
     """Help text"""
     irc.part(args)
 
-@add_cmd("ban")
+@add_cmd("ban", admin=True)
 def ban(bot, event, irc, args):
     """Help text"""
     irc.ban(args)
 
-@add_cmd("unban")
+@add_cmd("unban", admin=True)
 def unban(bot, event, irc, args):
     """Help text"""
     irc.unban(args)
 
-@add_cmd("ban")
+@add_cmd("op", admin=True)
 def op(bot, event, irc, args):
     """Help text"""
     irc.op(event.target, args)
 
-@add_cmd("deop")
+@add_cmd("deop", admin=True)
 def deop(bot, event, irc, args):
     """Help text"""
     irc.deop(event.target, args)
 
-@add_cmd("voice")
+@add_cmd("voice", admin=True)
 def voice(bot, event, irc, args):
     irc.voice(event.target, args)
 
-@add_cmd("unvoice")
+@add_cmd("unvoice", admin=True)
 def unvoice(bot, event, irc, args):
     irc.unvoice(event.target, args)
 
@@ -91,7 +91,15 @@ def quit(bot, event, irc, args):
 def help(bot, event, irc, args):
     """Help text"""
     try:
-        irc.reply(event, "Usage: {}".format(commands[args].__doc__))
+        irc.reply(event, "Usage: {}".format(utils.commands[args][0].__doc__))
     except KeyError:
-        irc.reply(event, "Invalid command {}".format(args))
+        if args:
+            irc.reply(event, "Invalid command {}".format(args))
+        else:
+            irc.reply(event, "Usage: {}".format(utils.commands["help"][0].__doc__))
+
+@add_cmd("list", alias="ls")
+def list(bot, event, irc, args):
+    """Help text"""
+    irc.reply(event, ", ".join(utils.commands.keys()))
 
