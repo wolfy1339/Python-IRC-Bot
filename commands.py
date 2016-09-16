@@ -67,22 +67,27 @@ def op(bot, event, irc, args):
     """Help text"""
     irc.op(event.target, args)
 
+@add_cmd("deop")
 def deop(bot, event, irc, args):
     """Help text"""
     irc.deop(event.target, args)
 
+@add_cmd("voice")
 def voice(bot, event, irc, args):
     irc.voice(event.target, args)
 
+@add_cmd("unvoice")
 def unvoice(bot, event, irc, args):
     irc.unvoice(event.target, args)
 
+@add_cmd("quit", admin=True)
 def quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
     irc.quit(args)
     time.spleep(1)
     os._exit(1)
 
+@add_cmd("help")
 def help(bot, event, irc, args):
     """Help text"""
     try:
