@@ -1,10 +1,12 @@
 import math
 import time
 import os
-from utils import add_cmd, commands
+import re
+import utils
+from utils import add_cmd
 
-@add_cmd("math", alias="calc")
-def math(bot, event, irc, args):
+@add_cmd("calc", alias="math")
+def calc(bot, event, irc, args):
     """Insert help text here"""
     safe_dict = {
         "sqrt": math.sqrt,
@@ -23,8 +25,9 @@ def math(bot, event, irc, args):
 
     try:
         t = args.replace("e", math.e).replace("pi", math.pi)
-        if args.find("!"):
-            t = t.split("!")[1]
+        r = re.match("[0-9]!", t).groups()
+        for i in r:
+            t = t.replace(i, "fact(" + i.split("!")[0] + ")")
         a = format(eval(t, {"__builtins__": None}, safe_dict), ",d")
         irc.reply(event, "The answer is: {0}".format(a))
     except ArithmeticError:
@@ -81,14 +84,14 @@ def unvoice(bot, event, irc, args):
     irc.unvoice(event.target, args)
 
 @add_cmd("quit", admin=True)
-def quit(bot, event, irc, args):
+def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
     irc.quit(args)
     time.spleep(1)
     os._exit(1)
 
 @add_cmd("help")
-def help(bot, event, irc, args):
+def Help(bot, event, irc, args):
     """Help text"""
     try:
         irc.reply(event, "Usage: {}".format(utils.commands[args][0].__doc__))
@@ -99,7 +102,6 @@ def help(bot, event, irc, args):
             irc.reply(event, "Usage: {}".format(utils.commands["help"][0].__doc__))
 
 @add_cmd("list", alias="ls")
-def list(bot, event, irc, args):
+def List(bot, event, irc, args):
     """Help text"""
     irc.reply(event, ", ".join(utils.commands.keys()))
-
