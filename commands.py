@@ -31,7 +31,7 @@ def calc(bot, event, irc, args):
         irc.reply(event, "The answer is: {0}".format(a))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
-    except Exception:
+    except ValueError:
         irc.reply(event, "\x034Invalid Input")
 
 @add_cmd("echo")

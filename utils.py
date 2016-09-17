@@ -18,11 +18,12 @@ def call_command(bot, event, irc):
     args = ' '.join(command[1:]) if len(command) > 1 else None
     name = command[0][1:]
     try:
-        if perms[name][0] and chekPerms():
+        if checkPerms(event.source.host, owner=perms[name][0], admin=perms[name][0]):
             commands[name](bot, event, irc, args)
+        
     except KeyError:
         irc.reply(event, 'Invalid command {}'.format(name))
-    except:
+    except Exception:
         irc.reply(event, 'Oops, an unknown error occured')
     else:
         privmsg = event.target == bot.config['nickname']
@@ -30,9 +31,13 @@ def call_command(bot, event, irc):
         print("{} called {} in {}".format(event.source, name, target))
 
 def checkPerms(host, owner=False, admin=False):
+    owner_list = ['botters/wolfy1339']
+    admin_list = []
     if owner and host in owner_list:
         return True
     elif admin and host in admin_list or admin and host in owner_list:
+        return True
+    elif not owner and not admin:
         return True
     else:
         return False

@@ -24,6 +24,7 @@ class Bot(zirc.Client):
         print(raw)
 
     def on_privmsg(bot, event, irc):
-        utils.call_command(bot, event, irc)
+        if event.arguments.startswith("?"):
+            utils.call_command(bot, event, irc)
 
 Bot()
