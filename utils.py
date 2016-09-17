@@ -18,7 +18,9 @@ def call_command(bot, event, irc):
     args = ' '.join(command[1:]) if len(command) > 1 else None
     name = command[0][1:]
     try:
-        if checkPerms(event.source.host, owner=perms[name][0], admin=perms[name][0]):
+        cmd_perms = perms[name]
+        host = event.source.host
+        if checkPerms(host, owner=cmd_perms[0], admin=cmd_pemrms[1]):
             commands[name](bot, event, irc, args)
     except KeyError:
         irc.reply(event, 'Invalid command {}'.format(name))
