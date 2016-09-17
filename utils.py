@@ -20,7 +20,6 @@ def call_command(bot, event, irc):
     try:
         if checkPerms(event.source.host, owner=perms[name][0], admin=perms[name][0]):
             commands[name](bot, event, irc, args)
-        
     except KeyError:
         irc.reply(event, 'Invalid command {}'.format(name))
     except Exception:
