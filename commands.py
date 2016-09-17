@@ -2,8 +2,7 @@ import math
 import time
 import os
 import re
-import utils
-from utils import add_cmd
+from utils import add_cmd, commands
 
 @add_cmd("calc", alias="math")
 def calc(bot, event, irc, args):
@@ -94,14 +93,14 @@ def Quit(bot, event, irc, args):
 def Help(bot, event, irc, args):
     """Help text"""
     try:
-        irc.reply(event, "Usage: {}".format(utils.commands[args][0].__doc__))
+        irc.reply(event, "Usage: {}".format(commands[args][0].__doc__))
     except KeyError:
         if args:
             irc.reply(event, "Invalid command {}".format(args))
         else:
-            irc.reply(event, "Usage: {}".format(utils.commands["help"][0].__doc__))
+            irc.reply(event, "Usage: {}".format(commands["help"][0].__doc__))
 
 @add_cmd("list", alias="ls")
 def List(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, ", ".join(utils.commands.keys()))
+    irc.reply(event, ", ".join(commands.keys()))
