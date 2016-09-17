@@ -8,3 +8,5 @@ pylint:
   disable:
     - no-self-argument
     - R0201
+    - invalid-name
+
