@@ -10,4 +10,5 @@ pylint:
     - R0201
     - invalid-name
     - unused-argument
+    - global-variable-not-assigned
 
