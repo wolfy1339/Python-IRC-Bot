@@ -99,7 +99,6 @@ def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
     irc.quit(args)
     time.spleep(1)
-    os._exit(1)
     os._exit(0)
 
 @add_cmd("help")
