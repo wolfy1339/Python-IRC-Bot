@@ -34,7 +34,7 @@ def call_command(bot, event, irc, arguments):
     except Exception as e:
         irc.reply(event, 'Oops, an error occured!')
         irc.reply(event, repr(e))
-        PrintError(event)
+        PrintError(irc, event)
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
@@ -52,7 +52,7 @@ def checkPerms(host, owner=False, admin=False):
     else:
         return False
 
-def PrintError(event):
+def PrintError(irc, event):
     print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
     irc.reply(event, "Error printed to console")
     try:
