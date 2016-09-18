@@ -93,12 +93,12 @@ def Quit(bot, event, irc, args):
 def Help(bot, event, irc, args):
     """Help text"""
     try:
-        irc.reply(event, "Usage: {}".format(commands[args][0].__doc__))
+        irc.reply(event, "Usage: {}".format(commands[args].__doc__))
     except KeyError:
         if args:
             irc.reply(event, "Invalid command {}".format(args))
         else:
-            irc.reply(event, "Usage: {}".format(commands["help"][0].__doc__))
+            irc.reply(event, "Usage: {}".format(commands["help"].__doc__))
 
 @add_cmd("list", alias="ls")
 def List(bot, event, irc, args):
