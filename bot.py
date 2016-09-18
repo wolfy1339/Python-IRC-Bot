@@ -4,6 +4,8 @@ import socket
 import utils
 import commands
 
+debug = False
+
 class Bot(zirc.Client):
     def __init__(self):
         self.connection = zirc.Socket(family=socket.AF_INET6,

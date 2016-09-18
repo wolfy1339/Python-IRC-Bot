@@ -23,12 +23,20 @@ def calc(bot, event, irc, args):
     }
 
     try:
-        t = args.replace("e", math.e).replace("pi", math.pi)
-        r = re.match("[0-9]!", t).groups()
-        for i in r:
-            t = t.replace(i, "fact(" + i.split("!")[0] + ")")
-        a = format(eval(t, {"__builtins__": None}, safe_dict), ",d")
-        irc.reply(event, "The answer is: {0}".format(a))
+        constant = {
+           "e": str(math.e),
+           "pi": str(math.pi),
+        }
+
+        for c in constant:
+            m = args.replace("){}".format(c), ") * {}".format(constant[c]))
+            p = re.compile('([:]?\d*\.\d+|\d+){}'.format(c))
+            subst = "\\1 * " + constant[c]
+            m = re.sub(p, subst, m)
+            m = re.sub('\\b{}\\b'.format(c), constant[c], m)
+
+        output = format(eval(m, {"__builtins__": None}, safe_dict), ",d")
+        irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
     except ValueError:
@@ -82,12 +90,17 @@ def voice(bot, event, irc, args):
 def unvoice(bot, event, irc, args):
     irc.unvoice(event.target, args)
 
+@add_cmd("nick", owner=True)
+def nick(bot, event, irc, args):
+    irc.nick(args)
+
 @add_cmd("quit", admin=True)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
     irc.quit(args)
     time.spleep(1)
     os._exit(1)
+    os._exit(0)
 
 @add_cmd("help")
 def Help(bot, event, irc, args):
@@ -103,4 +116,16 @@ def Help(bot, event, irc, args):
 @add_cmd("list", alias="ls")
 def List(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, ", ".join(commands.keys()))
+    irc.reply(event, ", ".join(sorted(list(commands.keys()))))
+
+@add_cmd("reload", admin=True)
+def Reload(bot, event, irc, args):
+    """Help text"""
+    if sys.version_info[0] >= 3:
+        reload = __import__("importlib").reload
+    
+    if args in ['commands', 'utils']:
+        reload(args)
+        irc.reply(event, "Reloaded {}".format(args))
+    else:
+        irc.reply(event, "Wrong module name")

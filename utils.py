@@ -1,3 +1,6 @@
+import requests
+import traceback
+
 commands = {}
 perms = {}
 
@@ -8,7 +11,11 @@ def add_cmd(name, alias=None, owner=False, admin=False):
         commands[name] = func
         perms[name] = [admin, owner]
         if alias:
-            commands[alias] = func
+            if isinstance(alias, list):
+                for i in alias:
+                    commands[i] = func
+            else:
+                commands[alias] = func
 
     return real_command
 
@@ -24,8 +31,10 @@ def call_command(bot, event, irc, arguments):
             commands[name](bot, event, irc, args)
     except KeyError:
         irc.reply(event, 'Invalid command {}'.format(name))
-    except Exception:
-        irc.reply(event, 'Oops, an unknown error occured')
+    except Exception as e:
+        irc.reply(event, 'Oops, an error occured!')
+        irc.reply(event, repr(e))
+        PrintError(event)
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
@@ -43,3 +52,12 @@ def checkPerms(host, owner=False, admin=False):
     else:
         return False
 
+def PrintError(event):
+    print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
+    irc.reply(event, "Error printed to console")
+    try:
+        r = requests.post("http://dpaste.com/api/v2/", data={"content": traceback.format_exc(), "expiry-days":"10"}, allow_redirects=True, timeout=60)
+        irc.reply(event, "Error: {1}".format(r.text.split("\n")[0]))
+    except Exception:
+        irc.reply(event, "We heard you like errors, so we put an error in your error handler so you can error while you catch errors")
+        print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
