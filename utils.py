@@ -13,14 +13,14 @@ def add_cmd(name, alias=None, owner=False, admin=False):
     return real_command
 
 
-def call_command(bot, event, irc):
-    command = ' '.join(event.arguments).split(' ')
+def call_command(bot, event, irc, arguments):
+    command = ' '.join(arguments).split(' ')
     args = ' '.join(command[1:]) if len(command) > 1 else None
     name = command[0][1:]
     try:
         cmd_perms = perms[name]
         host = event.source.host
-        if checkPerms(host, owner=cmd_perms[0], admin=cmd_pemrms[1]):
+        if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             commands[name](bot, event, irc, args)
     except KeyError:
         irc.reply(event, 'Invalid command {}'.format(name))

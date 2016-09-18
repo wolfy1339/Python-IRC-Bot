@@ -23,8 +23,12 @@ class Bot(zirc.Client):
     def on_ctcp(irc, raw):
         print(raw)
 
-    def on_privmsg(bot, event, irc):
-        if event.arguments.startswith("?"):
-            utils.call_command(bot, event, irc)
+    def on_privmsg(bot, event, irc, arguments):
+        if " ".join(arguments).startswith("?"):
+            utils.call_command(bot, event, irc, arguments)
+
+    def on_all(bot, event, irc):
+        if debug:
+            print(event.raw)
 
 Bot()
