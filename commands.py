@@ -4,6 +4,7 @@ import os
 import re
 from utils import add_cmd, commands
 
+
 @add_cmd("calc", alias="math")
 def calc(bot, event, irc, args):
     """Insert help text here"""
@@ -42,57 +43,69 @@ def calc(bot, event, irc, args):
     except ValueError:
         irc.reply(event, "\x034Invalid Input")
 
+
 @add_cmd("echo")
 def echo(bot, event, irc, args):
     """Help text"""
     irc.reply(event, args)
+
 
 @add_cmd("ping")
 def ping(bot, event, irc, args):
     """Help text"""
     irc.reply(event, "PONG!")
 
+
 @add_cmd("join", admin=True)
 def join(bot, event, irc, args):
     """Help text"""
     irc.join(args)
+
 
 @add_cmd("part", alias="leave", admin=True)
 def part(bot, event, irc, args):
     """Help text"""
     irc.part(args)
 
+
 @add_cmd("ban", admin=True)
 def ban(bot, event, irc, args):
     """Help text"""
     irc.ban(args)
+
 
 @add_cmd("unban", admin=True)
 def unban(bot, event, irc, args):
     """Help text"""
     irc.unban(args)
 
+
 @add_cmd("op", admin=True)
 def op(bot, event, irc, args):
     """Help text"""
     irc.op(event.target, args)
+
 
 @add_cmd("deop", admin=True)
 def deop(bot, event, irc, args):
     """Help text"""
     irc.deop(event.target, args)
 
+
 @add_cmd("voice", admin=True)
 def voice(bot, event, irc, args):
     irc.voice(event.target, args)
+
 
 @add_cmd("unvoice", admin=True)
 def unvoice(bot, event, irc, args):
     irc.unvoice(event.target, args)
 
+
 @add_cmd("nick", owner=True)
 def nick(bot, event, irc, args):
     irc.nick(args)
+
 
 @add_cmd("quit", admin=True)
 def Quit(bot, event, irc, args):
@@ -100,6 +113,7 @@ def Quit(bot, event, irc, args):
     irc.quit(args)
     time.spleep(1)
     os._exit(0)
+
 
 @add_cmd("help")
 def Help(bot, event, irc, args):
@@ -112,10 +126,12 @@ def Help(bot, event, irc, args):
         else:
             irc.reply(event, "Usage: {}".format(commands["help"].__doc__))
 
+
 @add_cmd("list", alias="ls")
 def List(bot, event, irc, args):
     """Help text"""
     irc.reply(event, ", ".join(sorted(list(commands.keys()))))
+
 
 @add_cmd("reload", admin=True)
 def Reload(bot, event, irc, args):

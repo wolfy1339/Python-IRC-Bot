@@ -4,6 +4,7 @@ import traceback
 commands = {}
 perms = {}
 
+
 def add_cmd(name, alias=None, owner=False, admin=False):
     def real_command(func):
         global commands
@@ -40,6 +41,7 @@ def call_command(bot, event, irc, arguments):
         target = "a private message" if privmsg else event.target
         print("{} called {} in {}".format(event.source, name, target))
 
+
 def checkPerms(host, owner=False, admin=False):
     owner_list = ['botters/wolfy1339']
     admin_list = []
@@ -52,12 +54,19 @@ def checkPerms(host, owner=False, admin=False):
     else:
         return False
 
+
 def PrintError(irc, event):
-    print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
+    print(traceback.format_exc())
     irc.reply(event, "Error printed to console")
     try:
-        r = requests.post("http://dpaste.com/api/v2/", data={"content": traceback.format_exc(), "expiry-days":"10"}, allow_redirects=True, timeout=60)
+        r = requests.post("http://dpaste.com/api/v2/",
+                          data={
+                              "content": traceback.format_exc(),
+                              "expiry-days": "10"
+                            },
+                          allow_redirects=True,
+                          timeout=60)
         irc.reply(event, "Error: {1}".format(r.text.split("\n")[0]))
     except Exception:
-        irc.reply(event, "We heard you like errors, so we put an error in your error handler so you can error while you catch errors")
-        print("=======ERROR=======\n{0}========END========\n".format(traceback.format_exc()))
+        irc.reply(event, "An error happened while trying to post the traceback")
+        print(traceback.format_exc())
