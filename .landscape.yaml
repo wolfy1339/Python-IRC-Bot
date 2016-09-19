@@ -12,3 +12,4 @@ pylint:
     - unused-argument
     - global-variable-not-assigned
     - bad-classmethod-argument
+    - protected-access
