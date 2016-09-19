@@ -25,7 +25,7 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_ctcp(irc, raw):
-        utils._print(raw, flush=True)
+        utils.print_(raw, flush=True)
 
     @classmethod
     def on_privmsg(bot, event, irc, arguments):
@@ -35,6 +35,6 @@ class Bot(zirc.Client):
     @classmethod
     def on_all(bot, event, irc):
         if debug:
-            utils._print(event.raw)
+            utils.print_(event.raw, flush=True)
 
 Bot()
