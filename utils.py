@@ -1,6 +1,8 @@
 import requests
 import traceback
+import six
 
+_print = six._print
 commands = {}
 perms = {}
 
@@ -39,7 +41,7 @@ def call_command(bot, event, irc, arguments):
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
-        print("{} called {} in {}".format(event.source, name, target))
+        _print("{} called {} in {}".format(event.source, name, target), flush=True)
 
 
 def checkPerms(host, owner=False, admin=False):
@@ -56,7 +58,7 @@ def checkPerms(host, owner=False, admin=False):
 
 
 def PrintError(irc, event):
-    print(traceback.format_exc())
+    _print(traceback.format_exc())
     irc.reply(event, "Error printed to console")
     try:
         r = requests.post("http://dpaste.com/api/v2/",
@@ -69,4 +71,4 @@ def PrintError(irc, event):
         irc.reply(event, "Error: {1}".format(r.text.split("\n")[0]))
     except Exception:
         irc.reply(event, "An error happened while trying to post the traceback")
-        print(traceback.format_exc())
+        _print(traceback.format_exc(), flush=True)
