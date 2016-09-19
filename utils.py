@@ -33,7 +33,7 @@ def call_command(bot, event, irc, arguments):
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             commands[name](bot, event, irc, args)
     except KeyError:
-        irc.reply(event, 'Invalid command {}'.format(name))
+        irc.reply(event, 'Invalid command {1}'.format(name))
     except Exception as e:
         irc.reply(event, 'Oops, an error occured!')
         irc.reply(event, repr(e))
@@ -41,7 +41,7 @@ def call_command(bot, event, irc, arguments):
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
-        print_("{} called {} in {}".format(event.source, name, target), flush=True)
+        print_("{0} called {1} in {2}".format(event.source, name, target), flush=True)
 
 
 def checkPerms(host, owner=False, admin=False):
@@ -68,7 +68,7 @@ def PrintError(irc, event):
                             },
                           allow_redirects=True,
                           timeout=60)
-        irc.reply(event, "Error: {1}".format(r.text.split("\n")[0]))
+        irc.reply(event, "Error: {0}".format(r.text.split("\n")[0]))
     except Exception:
         irc.reply(event, "An error happened while trying to post the traceback")
         print_(traceback.format_exc(), flush=True)

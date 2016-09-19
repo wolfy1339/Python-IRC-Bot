@@ -2,7 +2,7 @@ import math
 import time
 import os
 import re
-from utils import add_cmd, commands
+from utils import add_cmd, commands, PY3
 
 
 @add_cmd("calc", alias="math")
@@ -30,11 +30,11 @@ def calc(bot, event, irc, args):
         }
 
         for c in constant:
-            m = args.replace("){}".format(c), ") * {}".format(constant[c]))
-            p = re.compile(r'([:]?\d*\.\d+|\d+){}'.format(c))
+            m = args.replace("){0}".format(c), ") * {0}".format(constant[c]))
+            p = re.compile(r'([:]?\d*\.\d+|\d+){0}'.format(c))
             subst = "\\1 * " + constant[c]
             m = re.sub(p, subst, m)
-            m = re.sub('\\b{}\\b'.format(c), constant[c], m)
+            m = re.sub('\\b{0}\\b'.format(c), constant[c], m)
 
         output = format(eval(m, {"__builtins__": None}, safe_dict), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
@@ -120,12 +120,12 @@ def Quit(bot, event, irc, args):
 def Help(bot, event, irc, args):
     """Help text"""
     try:
-        irc.reply(event, "Usage: {}".format(commands[args].__doc__))
+        irc.reply(event, "Usage: {0}".format(commands[args].__doc__))
     except KeyError:
         if args:
-            irc.reply(event, "Invalid command {}".format(args))
+            irc.reply(event, "Invalid command {0}".format(args))
         else:
-            irc.reply(event, "Usage: {}".format(commands["help"].__doc__))
+            irc.reply(event, "Usage: {0}".format(commands["help"].__doc__))
 
 
 @add_cmd("list", alias="ls")
@@ -142,6 +142,6 @@ def Reload(bot, event, irc, args):
 
     if args in ['commands', 'utils']:
         reload(args)
-        irc.reply(event, "Reloaded {}".format(args))
+        irc.reply(event, "Reloaded {0}".format(args))
     else:
         irc.reply(event, "Wrong module name")
