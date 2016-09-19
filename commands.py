@@ -137,7 +137,7 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True)
 def Reload(bot, event, irc, args):
     """Help text"""
-    if __import__("sys").version_info[0] >= 3:
+    if PY3:
         reload = __import__("importlib").reload
 
     if args in ['commands', 'utils']:

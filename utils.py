@@ -3,6 +3,9 @@ import traceback
 import six
 
 print_ = six.print_
+PY3 = six.PY3
+PY34 = six.PY34
+PY2 = six.PY2
 commands = {}
 perms = {}
 
