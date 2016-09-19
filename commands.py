@@ -110,6 +110,7 @@ def nick(bot, event, irc, args):
 @add_cmd("quit", admin=True)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
+    args = "zIRC - https://github.com/itslukej/zirc" if not args else args
     irc.quit(args)
     time.spleep(1)
     os._exit(0)
