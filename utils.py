@@ -63,7 +63,7 @@ def PrintError(irc, event):
     try:
         r = requests.post("http://dpaste.com/api/v2/",
                           data={
-                              "content": traceback.format_exc(),
+                              "content": str(traceback.format_exc()),
                               "expiry-days": "10"
                             },
                           allow_redirects=True,
