@@ -28,12 +28,12 @@ class Bot(zirc.Client):
         utils.print_(raw, flush=True)
 
     @classmethod
-    def on_privmsg(bot, event, irc, arguments):
+    def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith("?"):
-            utils.call_command(bot, event, irc, arguments)
+            utils.call_command(self, event, irc, arguments)
 
     @classmethod
-    def on_all(bot, event, irc):
+    def on_all(self, event, irc):
         if debug:
             utils.print_(event.raw, flush=True)
 
