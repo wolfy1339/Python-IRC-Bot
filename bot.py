@@ -15,7 +15,7 @@ class Bot(zirc.Client):
                                      nickname="zIRCBot2",
                                      ident="zirc",
                                      realname="A zIRC bot",
-                                     channels=["##wolfy1339"],
+                                     channels=["##wolfy1339", "##powder-bots"],
                                      sasl_user="BigWolfy1339",
                                      sasl_pass="")
 
