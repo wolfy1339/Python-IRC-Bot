@@ -11,4 +11,4 @@ pylint:
     - invalid-name
     - unused-argument
     - global-variable-not-assigned
-
+    - bad-classmethod-argument
