@@ -1,6 +1,7 @@
 import requests
 import traceback
 import six
+from time import strftime, localtime
 
 print_ = six.print_
 PY3 = six.PY3
@@ -49,7 +50,8 @@ def call_command(bot, event, irc, arguments):
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
-        print_("{0} called {1} in {2}".format(event.source, name, target), flush=True)
+        time = strftime("%H:%M:%S", localtime())
+        print_("[{0}] {1} called {2} in {3}".format(time, event.source, name, target), flush=True)
 
 
 def checkPerms(host, owner=False, admin=False):
