@@ -35,6 +35,8 @@ def call_command(bot, event, irc, arguments):
         host = event.source.host
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             commands[name](bot, event, irc, args)
+        else:
+            irc.reply(event, "Sorry, you do not have the right permissions to execute this command")
     except KeyError:
         irc.reply(event, 'Invalid command {0}'.format(name))
     except Exception as e:
