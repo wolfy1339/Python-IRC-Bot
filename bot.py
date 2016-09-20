@@ -38,6 +38,11 @@ class Bot(zirc.Client):
             utils.print_(event.raw, flush=True)
 
     @classmethod
+    def on_send(self, event, irc):
+        if debug:
+            utils.print_(event.raw, flush=True)
+
+    @classmethod
     def on_nicknameinuse(self, event, irc):
         irc.nick(bot.config['nickname'] + "_")
 
