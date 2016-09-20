@@ -36,7 +36,7 @@ def call_command(bot, event, irc, arguments):
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             commands[name](bot, event, irc, args)
     except KeyError:
-        irc.reply(event, 'Invalid command {1}'.format(name))
+        irc.reply(event, 'Invalid command {0}'.format(name))
     except Exception as e:
         irc.reply(event, 'Oops, an error occured!')
         irc.reply(event, repr(e))
