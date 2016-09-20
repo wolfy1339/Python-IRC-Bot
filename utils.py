@@ -36,7 +36,7 @@ def call_command(bot, event, irc, arguments):
         host = event.source.host
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             if not name == "help" and args is None:
-                irc.reply(event, "Oops, looks like you forgot an argument here")
+                irc.reply(event, "Oops, looks like you forgot an argument there.")
             else:
                 commands[name](bot, event, irc, args)
         else:
@@ -68,7 +68,7 @@ def checkPerms(host, owner=False, admin=False):
 
 
 def PrintError(irc, event):
-    print_(traceback.format_exc())
+    print_(traceback.format_exc(), flush=True)
     irc.reply(event, "Error printed to console")
     try:
         r = requests.post("http://dpaste.com/api/v2/",
