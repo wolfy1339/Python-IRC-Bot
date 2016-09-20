@@ -65,7 +65,10 @@ def join(bot, event, irc, args):
 @add_cmd("part", alias="leave", admin=True)
 def part(bot, event, irc, args):
     """Help text"""
-    irc.part(args)
+    if args is not None:
+        irc.part(args)
+    else:
+        irc.part(event.target)
 
 
 @add_cmd("ban", admin=True)
@@ -83,23 +86,35 @@ def unban(bot, event, irc, args):
 @add_cmd("op", admin=True)
 def op(bot, event, irc, args):
     """Help text"""
-    irc.op(event.target, args)
+    if args is not None:
+        irc.op(event.target, args)
+    else:
+        irc.op(event.target, event.source.nick)
 
 
 @add_cmd("deop", admin=True)
 def deop(bot, event, irc, args):
     """Help text"""
-    irc.deop(event.target, args)
+    if args is not None:
+        irc.deop(event.target, args)
+    else:
+        irc.deop(event.target, event.source.nick)
 
 
 @add_cmd("voice", admin=True)
 def voice(bot, event, irc, args):
-    irc.voice(event.target, args)
+    if args is not None:
+        irc.voice(event.target, args)
+    else:
+        irc.voice(event.target, event.source.nick)
 
 
 @add_cmd("unvoice", admin=True)
 def unvoice(bot, event, irc, args):
-    irc.unvoice(event.target, args)
+    if args is not None:
+        irc.unvoice(event.target, args)
+    else:
+        irc.unvoice(event.target, event.source.nick)
 
 
 @add_cmd("nick", owner=True)
