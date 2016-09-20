@@ -32,14 +32,17 @@ class Bot(zirc.Client):
         if " ".join(arguments).startswith("?"):
             utils.call_command(self, event, irc, arguments)
 
-    def on_all(self, event, irc):
+    @staticmethod
+    def on_all(event, irc):
         if debug:
             utils.print_(event.raw, flush=True)
 
-    def on_send(self, event, irc):
+    @staticmethod
+    def on_send(event, irc):
         if debug:
             utils.print_(event.raw, flush=True)
 
+    @classmethod
     def on_nicknameinuse(self, event, irc):
         irc.nick(self.config['nickname'] + "_")
 
