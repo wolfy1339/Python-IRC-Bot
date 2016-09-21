@@ -4,9 +4,10 @@ import socket
 import utils
 import commands
 import logging
+import config
 
 
-logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', datefmt='%Y-%m-%dT%H:%M:%S', level=logging.INFO)
+logging.basicConfig(format=config.format, datefmt=config.timestampFormat, level=logging.INFO)
 
 class Bot(zirc.Client):
     def __init__(self):
