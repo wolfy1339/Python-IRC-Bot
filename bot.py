@@ -45,4 +45,10 @@ class Bot(zirc.Client):
     def on_nicknameinuse(self, event, irc):
         irc.nick(self.config['nickname'] + "_")
 
+    def on_474(self, event, irc):
+        s = ''.join(event.arguments).split(" ")
+        channel = ' '.join(s[1])
+        irc.notice("wolfy1339", "Banned from {0}".format(channel))
+        logging.warning("{0} from {1}".format(' '.join(s[2:]), channel))
+
 Bot()
