@@ -119,6 +119,7 @@ def unvoice(bot, event, irc, args):
 
 @add_cmd("nick", owner=True)
 def nick(bot, event, irc, args):
+    bot.config['nickname'] = args
     irc.nick(args)
 
 
