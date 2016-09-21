@@ -123,6 +123,24 @@ def nick(bot, event, irc, args):
     irc.nick(args)
 
 
+@add_cmd("log.level", admin=True)
+def logLevel(bot, event, irc, args):
+    if args == "debug":
+        level = logging.DEBUG
+    elif args == "info":
+        level = logging.INFO
+    elif args == "error":
+        level = logging.ERROR
+    elif args == "warning":
+        level = logging.WARNING
+    elif args == "critical":
+        level = logging.CRITICAL
+    else:
+        level = logging.INFO # Default logging level
+        irc.reply(event, "Invalid log level {0}".format(args))
+    logging.setLevel(level)
+
+
 @add_cmd("quit", admin=True)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
