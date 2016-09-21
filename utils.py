@@ -2,6 +2,8 @@ import requests
 import traceback
 import six
 from time import strftime, localtime
+import logging
+import ansi
 
 print_ = six.print_
 PY3 = six.PY3
@@ -50,8 +52,7 @@ def call_command(bot, event, irc, arguments):
     else:
         privmsg = event.target == bot.config['nickname']
         target = "a private message" if privmsg else event.target
-        time = strftime("%H:%M:%S", localtime())
-        print_("[{0}] {1} called {2} in {3}".format(time, event.source, name, target), flush=True)
+        logging.info("{0} called {1} in {2}".format(event.source, name, target))
 
 
 def checkPerms(host, owner=False, admin=False):
@@ -68,7 +69,7 @@ def checkPerms(host, owner=False, admin=False):
 
 
 def PrintError(irc, event):
-    print_(traceback.format_exc(), flush=True)
+    print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
     irc.reply(event, "Error printed to console")
     try:
         r = requests.post("http://dpaste.com/api/v2/",
@@ -81,4 +82,4 @@ def PrintError(irc, event):
         irc.reply(event, "Error: {0}".format(r.text.split("\n")[0]))
     except Exception:
         irc.reply(event, "An error happened while trying to post the traceback")
-        print_(traceback.format_exc(), flush=True)
+        print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)

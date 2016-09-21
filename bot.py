@@ -3,9 +3,10 @@ import ssl
 import socket
 import utils
 import commands
+import logging
 
 
-debug = False
+logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', datefmt='%Y-%m-%dT%H:%M:%S', level=logging.INFO)
 
 class Bot(zirc.Client):
     def __init__(self):
@@ -25,7 +26,7 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_ctcp(irc, raw):
-        utils.print_(raw, flush=True)
+        logging.info(raw)
 
     @classmethod
     def on_privmsg(self, event, irc, arguments):
@@ -34,13 +35,11 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_all(event, irc):
-        if debug:
-            utils.print_(event.raw, flush=True)
+        logging.debug(event.raw)
 
     @staticmethod
-    def on_send(event, irc):
-        if debug:
-            utils.print_(event.raw, flush=True)
+    def on_send(data):
+        logging.debug(data)
 
     @classmethod
     def on_nicknameinuse(self, event, irc):
