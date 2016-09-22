@@ -50,11 +50,10 @@ def call_command(bot, event, irc, arguments):
         else:
             irc.reply(event, "Sorry, you do not have the right permissions to execute this command")
     except KeyError:
-    except Exception as e:
         if not name == '':
             irc.reply(event, 'Invalid command {0}'.format(name))
+    except Exception:
         irc.reply(event, 'Oops, an error occured!')
-        irc.reply(event, repr(e))
         PrintError(irc, event)
     else:
         privmsg = event.target == bot.config['nickname']
@@ -77,7 +76,6 @@ def checkPerms(host, owner=False, admin=False):
 
 def PrintError(irc, event):
     print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
-    irc.reply(event, "Error printed to console")
     try:
         r = requests.post("http://dpaste.com/api/v2/",
                           data={
