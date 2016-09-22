@@ -3,6 +3,7 @@ import time
 import os
 import re
 from utils import add_cmd, commands, PY3
+import logging
 
 
 @add_cmd("calc", alias="math")
@@ -138,7 +139,7 @@ def logLevel(bot, event, irc, args):
     else:
         level = logging.INFO # Default logging level
         irc.reply(event, "Invalid log level {0}".format(args))
-    logging.setLevel(level)
+    logging.getLogger().setLevel(level)
 
 
 @add_cmd("quit", admin=True)
