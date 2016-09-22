@@ -10,37 +10,43 @@ PY3 = six.PY3
 PY34 = six.PY34
 PY2 = six.PY2
 commands = {}
-perms = {}
+aliases = {}
 
 
-def add_cmd(name, alias=None, owner=False, admin=False):
+def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False):
     def real_command(func):
         global commands
-        global perms
-        commands[name] = func
-        perms[name] = [admin, owner]
+        global aliases
+        commands[name] = {
+            'perms': [admin, owner],
+            'function': func,
+            'minArgs': minArgs
+        }
+
         if alias:
-            if isinstance(alias, list):
-                for i in alias:
-                    commands[i] = func
-            else:
-                commands[alias] = func
+            for i in alias:
+                aliases[i] = {
+                    'function': func,
+                    'perms' = [admin, owner]
+                    'minArgs': minArgs
+                }
 
     return real_command
 
 
 def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
-    args = ' '.join(command[1:]) if len(command) > 1 else None
+    args = command[1:] if len(command) > 1 else None
     name = command[0][1:]
     try:
-        cmd_perms = perms[name]
+        cmd_perms = commands[name]['perms']
+        minArgs = commands[name]['minArgs']
         host = event.source.host
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
-            if not name == "help" and args is None:
+            if not args and minArgs >= 1 or len(args) < minArgs:
                 irc.reply(event, "Oops, looks like you forgot an argument there.")
             else:
-                commands[name](bot, event, irc, args)
+                commands[name]['function'](bot, event, irc, args)
         else:
             irc.reply(event, "Sorry, you do not have the right permissions to execute this command")
     except KeyError:
