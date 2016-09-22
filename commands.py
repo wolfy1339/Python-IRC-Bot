@@ -2,7 +2,7 @@ import math
 import time
 import os
 import re
-from utils import add_cmd, commands, PY3
+from utils import add_cmd, commands, PY3, PrintError
 import logging
 
 
@@ -176,7 +176,10 @@ def Reload(bot, event, irc, args):
         reload = __import__("importlib").reload
 
     if args in ['commands', 'utils']:
-        reload(args)
-        irc.reply(event, "Reloaded {0}".format(args))
+        try:
+            reload(args)
+            irc.reply(event, "Reloaded {0}".format(args))
+        except ImportError:
+            PrintError()
     else:
         irc.reply(event, "Wrong module name")
