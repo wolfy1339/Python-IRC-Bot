@@ -50,8 +50,9 @@ def call_command(bot, event, irc, arguments):
         else:
             irc.reply(event, "Sorry, you do not have the right permissions to execute this command")
     except KeyError:
-        irc.reply(event, 'Invalid command {0}'.format(name))
     except Exception as e:
+        if not name == '':
+            irc.reply(event, 'Invalid command {0}'.format(name))
         irc.reply(event, 'Oops, an error occured!')
         irc.reply(event, repr(e))
         PrintError(irc, event)
