@@ -4,6 +4,7 @@ import six
 from time import strftime, localtime
 import logging
 import ansi
+import config
 
 print_ = six.print_
 PY3 = six.PY3
@@ -44,11 +45,11 @@ def call_command(bot, event, irc, arguments):
         host = event.source.host
         if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
             if not args and minArgs >= 1 or len(args) < minArgs:
-                irc.reply(event, "Oops, looks like you forgot an argument there.")
+                irc.reply(event, config.argsMissing)
             else:
                 commands[name]['function'](bot, event, irc, args)
         else:
-            irc.reply(event, "Sorry, you do not have the right permissions to execute this command")
+            irc.reply(event, config.noPerms)
     except KeyError:
         if not name == '':
             irc.reply(event, 'Invalid command {0}'.format(name))
@@ -62,13 +63,14 @@ def call_command(bot, event, irc, arguments):
 
 
 def checkPerms(host, owner=False, admin=False):
-    owner_list = ['botters/wolfy1339']
-    admin_list = []
-    if owner and host in owner_list:
+    isOwner = host in config.owners
+    isAdmin = host in config.admins
+    isIgnored = host in config.ignores
+    if owner and isOwner and isIgnored:
         return True
-    elif admin and host in admin_list or admin and host in owner_list:
+    elif admin and (isAdmin or isOwner) and isIgnored:
         return True
-    elif not owner and not admin:
+    elif not owner and not admin and isIgnored:
         return True
     else:
         return False

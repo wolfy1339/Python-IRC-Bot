@@ -7,7 +7,7 @@ import logging
 import config
 
 
-logging.basicConfig(format=config.format, datefmt=config.timestampFormat, level=logging.INFO)
+logging.basicConfig(format=config.format, datefmt=config.timestampFormat, level=config.logLevel)
 
 class Bot(zirc.Client):
     def __init__(self):
@@ -31,7 +31,7 @@ class Bot(zirc.Client):
 
     @classmethod
     def on_privmsg(self, event, irc, arguments):
-        if " ".join(arguments).startswith("?"):
+        if " ".join(arguments).startswith(config.commandChar):
             utils.call_command(self, event, irc, arguments)
 
     @staticmethod
