@@ -16,7 +16,7 @@ def chunks(l, n):
 
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
-    """Insert help text here"""
+    """Command to do some math calculation"""
     safe_dict = {
         "sqrt": math.sqrt,
         "pow": math.pow,
@@ -67,13 +67,13 @@ def ping(bot, event, irc, args):
 
 @add_cmd("join", admin=True, minArgs=1)
 def join(bot, event, irc, args):
-    """Help text"""
+    """Joins given channel"""
     irc.join(args)
 
 
 @add_cmd("part", alias=["leave"], admin=True, minArgs=0)
 def part(bot, event, irc, args):
-    """Help text"""
+    """Parts the given channel or the current channel"""
     if len(args):
         irc.part(args[0])
     else:
@@ -82,7 +82,7 @@ def part(bot, event, irc, args):
 
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
-    """Help text"""
+    """Bans a user"""
     if len(args):
         if len(args) > 1:
             if args[0].find("#") == -1:
@@ -150,6 +150,7 @@ def deop(bot, event, irc, args):
 
 @add_cmd("voice", admin=True, minArgs=0)
 def voice(bot, event, irc, args):
+    """"Help text"""
     if len(args):
         if len(args) > 1:
             if args[0].find("#") == -1:
@@ -164,6 +165,7 @@ def voice(bot, event, irc, args):
 
 @add_cmd("unvoice", admin=True, minArgs=0)
 def unvoice(bot, event, irc, args):
+    """Help text"""
     if len(args):
         if len(args) > 1:
             if args[0].find("#") == -1:
@@ -179,12 +181,14 @@ def unvoice(bot, event, irc, args):
 
 @add_cmd("nick", owner=True, minArgs=1)
 def nick(bot, event, irc, args):
+    """Help text"""
     bot.config['nickname'] = args[0]
     irc.nick(args[0])
 
 
 @add_cmd("log.level", admin=True, minArgs=1)
 def logLevel(bot, event, irc, args):
+    """Help text"""
     if args[0] == "debug":
         level = logging.DEBUG
     elif args[0] == "info":
@@ -222,7 +226,6 @@ def Quit(bot, event, irc, args):
 @add_cmd("help", minArgs=0)
 def Help(bot, event, irc, args):
     """Help text"""
-    """Help text"""
         try:
             irc.reply(event, "Usage: {0}".format(commands[args[0]]['function'].__doc__))
         except KeyError:
@@ -236,7 +239,7 @@ def Help(bot, event, irc, args):
 
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
-    if len(args) >= 1:
+    """Help text"""
     irc.reply(event, ", ".join(sorted(cmd_list)))
 
 
