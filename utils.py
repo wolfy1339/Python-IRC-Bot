@@ -84,9 +84,11 @@ def checkPerms(host, owner=False, admin=False):
 def PrintError(irc, event):
     print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
     try:
+        syntax = "py3tb" if PY3 else "pytb"
         r = requests.post("http://dpaste.com/api/v2/",
                           data={
                               "content": str(traceback.format_exc()),
+                              "syntax": syntax,
                               "expiry-days": "10"
                             },
                           allow_redirects=True,
