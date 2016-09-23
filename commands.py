@@ -6,6 +6,12 @@ from utils import add_cmd, commands, PY3, PrintError
 import logging
 
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
+
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Insert help text here"""
@@ -63,11 +69,11 @@ def join(bot, event, irc, args):
     irc.join(args)
 
 
-@add_cmd("part", alias=["leave"], admin=True, minArgs=1)
+@add_cmd("part", alias=["leave"], admin=True, minArgs=0)
 def part(bot, event, irc, args):
     """Help text"""
-    if args is not None:
-        irc.part(args)
+    if len(args) > 0:
+        irc.part(args[0])
     else:
         irc.part(event.target)
 
@@ -87,8 +93,13 @@ def unban(bot, event, irc, args):
 @add_cmd("op", admin=True, minArgs=0)
 def op(bot, event, irc, args):
     """Help text"""
-    if args is not None:
-        irc.op(event.target, args)
+    if len(args) > 0:
+        if len(args) > 1 and args[0].find("#") == -1:
+            irc.mode(args[0], chunks(args[1:], 4), "+oooo")
+        elif len(args) > 1 and args[0].find("#") != -1:
+            irc.mode(event.target, chunks(args, 4), "+oooo")
+        elif len(args) == 1:
+            irc.op(event.target, args[0])
     else:
         irc.op(event.target, event.source.nick)
 
@@ -96,24 +107,40 @@ def op(bot, event, irc, args):
 @add_cmd("deop", admin=True, minArgs=0)
 def deop(bot, event, irc, args):
     """Help text"""
-    if args is not None:
-        irc.deop(event.target, args)
+    if len(args) > 0:
+        if len(args) > 1 and args[0].find("#") == -1:
+            irc.mode(args[0], chunks(args[1:], 4), "-oooo")
+        elif len(args) > 1 and args[0].find("#") != -1:
+            irc.mode(event.target, chunks(args, 4), "-oooo")
+        elif len(args) == 1:
+            irc.deop(event.target, args[0])
     else:
         irc.deop(event.target, event.source.nick)
 
 
 @add_cmd("voice", admin=True, minArgs=0)
 def voice(bot, event, irc, args):
-    if args is not None:
-        irc.voice(event.target, args)
+    if len(args) > 0:
+        if len(args) > 1 and args[0].find("#") == -1:
+            irc.mode(args[0], chunks(args[1:], 4), "+vvvv")
+        elif len(args) > 1 and args[0].find("#") != -1:
+            irc.mode(event.target, chunks(args, 4), "+vvvv")
+        elif len(args) == 1:
+            irc.deop(event.target, args[0])
     else:
         irc.voice(event.target, event.source.nick)
 
 
 @add_cmd("unvoice", admin=True, minArgs=0)
 def unvoice(bot, event, irc, args):
-    if args is not None:
-        irc.unvoice(event.target, args)
+    if len(args) >= 1:
+        if len(args) > 1 and args[0].find("#") == -1:
+            irc.mode(args[0], chunks(args[1:], 4), "-vvvv")
+        elif len(args) > 1 and args[0].find("#") != -1:
+            irc.mode(event.target, chunks(args, 4), "-vvvv")
+        elif len(args) == 1:
+            irc.deop(event.target, args[0])
+            irc.unvoice(event.target, args[0])
     else:
         irc.unvoice(event.target, event.source.nick)
 
@@ -126,15 +153,15 @@ def nick(bot, event, irc, args):
 
 @add_cmd("log.level", admin=True, minArgs=1)
 def logLevel(bot, event, irc, args):
-    if args == "debug":
+    if args[0] == "debug":
         level = logging.DEBUG
-    elif args == "info":
+    elif args[0] == "info":
         level = logging.INFO
-    elif args == "error":
+    elif args[0] == "error":
         level = logging.ERROR
-    elif args == "warning":
+    elif args[0] == "warning":
         level = logging.WARNING
-    elif args == "critical":
+    elif args[0] == "critical":
         level = logging.CRITICAL
     else:
         level = logging.INFO # Default logging level
@@ -146,7 +173,7 @@ def logLevel(bot, event, irc, args):
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
     args = "zIRC - https://github.com/itslukej/zirc" if not args else args
-    irc.quit(args)
+    irc.quit(" ".join(args))
     time.sleep(1)
     os._exit(0)
 
@@ -154,9 +181,9 @@ def Quit(bot, event, irc, args):
 @add_cmd("help", minArgs=0)
 def Help(bot, event, irc, args):
     """Help text"""
-    if args:
+    if len(args) >= 1:
         try:
-            irc.reply(event, "Usage: {0}".format(commands[args]['function'].__doc__))
+            irc.reply(event, "Usage: {0}".format(commands[args[0]['function'].__doc__))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args))
     else:

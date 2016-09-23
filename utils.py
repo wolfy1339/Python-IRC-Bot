@@ -27,7 +27,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False):
             for i in alias:
                 aliases[i] = {
                     'function': func,
-                    'perms' = [admin, owner]
+                    'perms': [admin, owner],
                     'minArgs': minArgs
                 }
 
@@ -36,7 +36,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False):
 
 def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
-    args = command[1:] if len(command) > 1 else None
+    args = command[1:] if len(command) > 1 else ''
     name = command[0][1:]
     try:
         cmd_perms = commands[name]['perms']
