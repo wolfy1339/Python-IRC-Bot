@@ -66,11 +66,11 @@ def checkPerms(host, owner=False, admin=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     isIgnored = host in config.ignores
-    if owner and isOwner and isIgnored:
+    if owner and isOwner and not isIgnored:
         return True
-    elif admin and (isAdmin or isOwner) and isIgnored:
+    elif admin and (isAdmin or isOwner) and not isIgnored:
         return True
-    elif not owner and not admin and isIgnored:
+    elif not owner and not admin and not isIgnored:
         return True
     else:
         return False
