@@ -39,27 +39,27 @@ def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
     args = command[1:] if len(command) > 1 else ''
     name = command[0][1:]
-    try:
-        cmd_perms = commands[name]['perms']
-        minArgs = commands[name]['minArgs']
-        host = event.source.host
-        if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
-            if not args and minArgs >= 1 or len(args) < minArgs:
-                irc.reply(event, config.argsMissing)
+    if not name == '' or name.find("?") != -1:
+        try:
+            cmd_perms = commands[name]['perms']
+            minArgs = commands[name]['minArgs']
+            host = event.source.host
+            if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
+                if not len(args) and minArgs >= 1 or len(args) < minArgs:
+                    irc.reply(event, config.argsMissing)
+                else:
+                    commands[name]['function'](bot, event, irc, args)
             else:
-                commands[name]['function'](bot, event, irc, args)
-        else:
-            irc.reply(event, config.noPerms)
-    except KeyError:
-        if not name == '' or name.find("?") != -1:
+                irc.reply(event, config.noPerms)
+        except KeyError:
             irc.notice(event.source.nick, config.invalidCmd.format(name))
-    except Exception:
-        irc.reply(event, 'Oops, an error occured!')
-        PrintError(irc, event)
-    else:
-        privmsg = event.target == bot.config['nickname']
-        target = "a private message" if privmsg else event.target
-        logging.info("{0} called {1} in {2}".format(event.source, name, target))
+        except Exception:
+            irc.reply(event, 'Oops, an error occured!')
+            PrintError(irc, event)
+        else:
+            privmsg = event.target == bot.config['nickname']
+            target = "a private message" if privmsg else event.target
+            logging.info("{0} called {1} in {2}".format(event.source, name, target))
 
 
 def checkPerms(host, owner=False, admin=False):
