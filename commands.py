@@ -81,13 +81,35 @@ def part(bot, event, irc, args):
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
     """Help text"""
-    irc.ban(args)
+    if len(args):
+        if len(args) > 1:
+            if args[0].find("#") == -1:
+                chunked = chunks(args[1:], 4)
+                irc.mode(args[0], chunked, "+" + "b" * len(chunked))
+            elif args[0].find("#") != -1:
+                chunked = chunks(args, 4)
+                irc.mode(event.target, chunked, "+" + "b" * len(chunked))
+        else:
+            irc.ban(event.target, args[0])
+    else:
+        irc.ban(event.target, event.source.nick)
 
 
 @add_cmd("unban", admin=True, minArgs=1)
 def unban(bot, event, irc, args):
     """Help text"""
-    irc.unban(args)
+    if len(args):
+        if len(args) > 1:
+            if args[0].find("#") == -1:
+                chunked = chunks(args[1:], 4)
+                irc.mode(args[0], chunked, "-" + "b" * len(chunked))
+            elif args[0].find("#") != -1:
+                chunked = chunks(args, 4)
+                irc.mode(event.target, chunked, "-" + "b" * len(chunked))
+        else:
+            irc.unban(event.target, args[0])
+    else:
+        irc.unban(event.target, event.source.nick)
 
 
 @add_cmd("op", admin=True, minArgs=0)
@@ -147,8 +169,8 @@ def unvoice(bot, event, irc, args):
 
 @add_cmd("nick", owner=True, minArgs=1)
 def nick(bot, event, irc, args):
-    bot.config['nickname'] = args
-    irc.nick(args)
+    bot.config['nickname'] = args[0]
+    irc.nick(args[0])
 
 
 @add_cmd("log.level", admin=True, minArgs=1)
@@ -172,8 +194,8 @@ def logLevel(bot, event, irc, args):
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
-    args = "zIRC - https://github.com/itslukej/zirc" if not args else args
-    irc.quit(" ".join(args))
+    args = "zIRC - https://github.com/itslukej/zirc" if not args else " ".join(args)
+    irc.quit(args)
     time.sleep(1)
     os._exit(0)
 
@@ -201,7 +223,7 @@ def List(bot, event, irc, args):
 
 @add_cmd("reload", admin=True)
 def Reload(bot, event, irc, args):
-    """Help text"""
+    if len(args) >= 1:
     if PY3:
         reload = __import__("importlib").reload
 
