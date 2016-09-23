@@ -55,8 +55,8 @@ def calc(bot, event, irc, args):
 
 @add_cmd("echo", minArgs=1)
 def echo(bot, event, irc, args):
-    """Help text"""
-    irc.reply(event, args)
+    """Responds with given text"""
+    irc.reply(event, ' '.join(args))
 
 
 @add_cmd("ping", minArgs=0)
