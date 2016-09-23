@@ -84,7 +84,7 @@ def PrintError(irc, event):
                             },
                           allow_redirects=True,
                           timeout=60)
-        irc.reply(event, "Error: {0}".format(r.text.split("\n")[0]))
+        irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
     except Exception:
-        irc.reply(event, "An error happened while trying to post the traceback")
+        irc.msg('##wolfy1339', "An error happened while trying to post the traceback")
         print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
