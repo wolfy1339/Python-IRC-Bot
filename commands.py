@@ -72,7 +72,7 @@ def join(bot, event, irc, args):
 @add_cmd("part", alias=["leave"], admin=True, minArgs=0)
 def part(bot, event, irc, args):
     """Help text"""
-    if len(args) > 0:
+    if len(args):
         irc.part(args[0])
     else:
         irc.part(event.target)
@@ -93,7 +93,7 @@ def unban(bot, event, irc, args):
 @add_cmd("op", admin=True, minArgs=0)
 def op(bot, event, irc, args):
     """Help text"""
-    if len(args) > 0:
+    if len(args):
         if len(args) > 1 and args[0].find("#") == -1:
             irc.mode(args[0], chunks(args[1:], 4), "+oooo")
         elif len(args) > 1 and args[0].find("#") != -1:
@@ -107,7 +107,7 @@ def op(bot, event, irc, args):
 @add_cmd("deop", admin=True, minArgs=0)
 def deop(bot, event, irc, args):
     """Help text"""
-    if len(args) > 0:
+    if len(args):
         if len(args) > 1 and args[0].find("#") == -1:
             irc.mode(args[0], chunks(args[1:], 4), "-oooo")
         elif len(args) > 1 and args[0].find("#") != -1:
@@ -120,7 +120,7 @@ def deop(bot, event, irc, args):
 
 @add_cmd("voice", admin=True, minArgs=0)
 def voice(bot, event, irc, args):
-    if len(args) > 0:
+    if len(args):
         if len(args) > 1 and args[0].find("#") == -1:
             irc.mode(args[0], chunks(args[1:], 4), "+vvvv")
         elif len(args) > 1 and args[0].find("#") != -1:
@@ -133,7 +133,7 @@ def voice(bot, event, irc, args):
 
 @add_cmd("unvoice", admin=True, minArgs=0)
 def unvoice(bot, event, irc, args):
-    if len(args) >= 1:
+    if len(args):
         if len(args) > 1 and args[0].find("#") == -1:
             irc.mode(args[0], chunks(args[1:], 4), "-vvvv")
         elif len(args) > 1 and args[0].find("#") != -1:
@@ -181,7 +181,7 @@ def Quit(bot, event, irc, args):
 @add_cmd("help", minArgs=0)
 def Help(bot, event, irc, args):
     """Help text"""
-    if len(args) >= 1:
+    """Help text"""
         try:
             irc.reply(event, "Usage: {0}".format(commands[args[0]]['function'].__doc__))
         except KeyError:
@@ -205,7 +205,7 @@ def Reload(bot, event, irc, args):
     if PY3:
         reload = __import__("importlib").reload
 
-    if args in ['commands', 'utils']:
+    if args[0] in ['commands', 'utils']:
         try:
             reload(args)
             irc.reply(event, "Reloaded {0}".format(args))
