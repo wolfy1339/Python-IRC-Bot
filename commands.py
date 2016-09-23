@@ -2,7 +2,7 @@ import math
 import time
 import os
 import re
-from utils import add_cmd, commands, PY3, PrintError
+from utils import add_cmd, commands, cmd_list, PY3, PrintError
 import logging
 
 
@@ -196,7 +196,7 @@ def Help(bot, event, irc, args):
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, ", ".join(sorted(list(commands.keys()))))
+    irc.reply(event, ", ".join(sorted(cmd_list)))
 
 
 @add_cmd("reload", admin=True)

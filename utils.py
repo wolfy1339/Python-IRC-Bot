@@ -11,6 +11,7 @@ PY3 = six.PY3
 PY34 = six.PY34
 PY2 = six.PY2
 commands = {}
+cmd_list = []
 
 
 def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
@@ -33,6 +34,8 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
                     'minArgs': minArgs,
                     'hide': True
                 }
+
+        cmd_list = sorted([i for i in commands.keys() if not commands[i]['hide']])
 
     return real_command
 
