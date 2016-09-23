@@ -226,6 +226,7 @@ def Quit(bot, event, irc, args):
 @add_cmd("help", minArgs=0)
 def Help(bot, event, irc, args):
     """Help text"""
+    if len(args) >= 1:
         try:
             irc.reply(event, "Usage: {0}".format(commands[args[0]]['function'].__doc__))
         except KeyError:
