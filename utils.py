@@ -14,14 +14,15 @@ commands = {}
 aliases = {}
 
 
-def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False):
+def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
     def real_command(func):
         global commands
         global aliases
         commands[name] = {
             'perms': [admin, owner],
             'function': func,
-            'minArgs': minArgs
+            'minArgs': minArgs,
+            'hide': hide
         }
 
         if alias:
