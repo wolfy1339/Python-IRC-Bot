@@ -51,8 +51,8 @@ def call_command(bot, event, irc, arguments):
         else:
             irc.reply(event, config.noPerms)
     except KeyError:
-        if not name == '':
-            irc.reply(event, 'Invalid command {0}'.format(name))
+        if not name == '' or name.find("?") != -1:
+            irc.notice(event.source.nick, config.invalidCmd.format(name))
     except Exception:
         irc.reply(event, 'Oops, an error occured!')
         PrintError(irc, event)
