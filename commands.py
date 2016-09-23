@@ -2,8 +2,10 @@ import math
 import time
 import os
 import re
-from utils import add_cmd, commands, cmd_list, PY3, PrintError
 import logging
+from utils import add_cmd, commands, cmd_list, PY3, PY34, PrintError
+import utils
+import config
 
 
 def chunks(l, n):
@@ -231,14 +233,16 @@ def List(bot, event, irc, args):
 
 @add_cmd("reload", admin=True)
 def Reload(bot, event, irc, args):
-    if len(args) >= 1:
-    if PY3:
+    """Help text"""
+    if PY34:
         reload = __import__("importlib").reload
+    elif PY3:
+        reload = __import__("imp").reload
 
-    if args[0] in ['commands', 'utils']:
+    if args[0] in ['commands', 'utils', 'config']:
         try:
-            reload(args)
-            irc.reply(event, "Reloaded {0}".format(args))
+            reload(eval(args[0]))
+            irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
             PrintError()
     else:
