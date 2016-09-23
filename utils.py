@@ -11,13 +11,13 @@ PY3 = six.PY3
 PY34 = six.PY34
 PY2 = six.PY2
 commands = {}
-aliases = {}
 
 
 def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
     def real_command(func):
         global commands
-        global aliases
+        global cmd_list
+
         commands[name] = {
             'perms': [admin, owner],
             'function': func,
@@ -27,10 +27,11 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
 
         if alias:
             for i in alias:
-                aliases[i] = {
-                    'function': func,
+                commands[i] = {
                     'perms': [admin, owner],
-                    'minArgs': minArgs
+                    'function': func,
+                    'minArgs': minArgs,
+                    'hide': True
                 }
 
     return real_command
