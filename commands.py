@@ -183,7 +183,7 @@ def Help(bot, event, irc, args):
     """Help text"""
     if len(args) >= 1:
         try:
-            irc.reply(event, "Usage: {0}".format(commands[args[0]['function'].__doc__))
+            irc.reply(event, "Usage: {0}".format(commands[args[0]]['function'].__doc__))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args))
     else:
