@@ -201,6 +201,15 @@ def logLevel(bot, event, irc, args):
     logging.getLogger().setLevel(level)
 
 
+@add_cmd("config", admin=True, minArgs=1, alias=['cfg'])
+def Config(bot, event, irc, args):
+    """Help"""
+    if len(args) > 1:
+        eval("config.{0} = {1}".format(args[0], args[1]))
+        irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
+    else:
+        irc.reply(event, eval("config.{0}".format(args[0])))
+
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
