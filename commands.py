@@ -227,7 +227,7 @@ def Help(bot, event, irc, args):
 
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
-    """Help text"""
+    if len(args) >= 1:
     irc.reply(event, ", ".join(sorted(cmd_list)))
 
 
