@@ -9,7 +9,13 @@ logLevel = 20
 commandChar = '?'
 owners= ['botters/wolfy1339']
 admins = []
-ignores = []
+ignores = {
+    'global': [],
+    'channels': {
+        "##powder-bots": [],
+        "##wolfy1339": [],
+    }
+}
 
 # Error messages
 noPerms = "Sorry, you do not have the right permissions to execute this command"
