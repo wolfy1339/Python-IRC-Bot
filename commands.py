@@ -3,7 +3,7 @@ import time
 import os
 import re
 import logging
-from utils import add_cmd, commands, cmd_list, PY3, PY34, PrintError
+from utils import add_cmd, commands, cmd_list, aliases, PY3, PY34, PrintError
 import utils
 import config
 
@@ -257,6 +257,6 @@ def Reload(bot, event, irc, args):
             reload(eval(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
-            PrintError()
+            PrintError(irc, event)
     else:
         irc.reply(event, "Wrong module name")
