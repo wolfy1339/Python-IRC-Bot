@@ -7,7 +7,10 @@ import logging
 import config
 
 
-logging.basicConfig(format=config.format, datefmt=config.timestampFormat, level=config.logLevel)
+logging.basicConfig(format=config.logFormat,
+                    datefmt=config.timestampFormat,
+                    level=config.logLevel)
+
 
 class Bot(zirc.Client):
     def __init__(self):
@@ -53,6 +56,6 @@ class Bot(zirc.Client):
         s = ''.join(event.arguments).split(" ")
         channel = ' '.join(s[1])
         irc.notice("wolfy1339", "Banned from {0}".format(channel))
-        logging.warning("{0} from {1}".format(' '.join(s[2:]), channel))
+        logging.warning("%s from %s", ' '.join(s[2:]), channel)
 
 Bot()
