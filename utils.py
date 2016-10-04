@@ -20,7 +20,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
 
         commands[name] = {
             'perms': [admin, owner],
-            'function': func,
+            'func': func,
             'minArgs': minArgs,
             'hide': hide
         }
@@ -29,7 +29,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
             for i in alias:
                 commands[i] = {
                     'perms': [admin, owner],
-                    'function': func,
+                    'func': func,
                     'minArgs': minArgs,
                     'hide': True
                 }
@@ -53,7 +53,7 @@ def call_command(bot, event, irc, arguments):
                 if not len(args) and minArgs >= 1 or len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
-                    commands[name]['function'](bot, event, irc, args)
+                    commands[name]['func'](bot, event, irc, args)
             else:
                 irc.reply(event, config.noPerms)
         except KeyError:
