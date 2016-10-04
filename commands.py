@@ -196,8 +196,8 @@ def Config(bot, event, irc, args):
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
-    args = "zIRC - https://github.com/itslukej/zirc" if not args else " ".join(args)
-    irc.quit(args)
+    irc.quit("zIRC - https://github.com/itslukej/zirc" if (
+        not args else " ".join(args)))
     time.sleep(1)
     os._exit(0)
 
@@ -229,9 +229,9 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True, minArgs=1)
 def Reload(bot, event, irc, args):
     """Help text"""
-    if PY34:
+    if utils.PY34:
         reload = __import__("importlib").reload
-    elif PY3:
+    elif utils.PY3:
         reload = __import__("imp").reload
 
     if args[0] in ['commands', 'utils', 'config']:
