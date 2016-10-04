@@ -13,6 +13,16 @@ def chunks(l, n):
         yield l[i:i+n]
 
 
+def setMode(event, irc, args, mode):
+    if args[0].find("#") == -1:
+        for i in chunks(args[1:], 4):
+            modes = "".join(mode[1:]) * len(i)
+            irc.mode(args[0], " ".join(i), "".join(mode[:1]) + modes)
+    else:
+        for i in chunks(args, 4):
+            modes = "".join(mode[1:]) * len(i)
+            irc.mode(event.target, " ".join(i), "".join(mode[:1]) + modes)
+
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation"""
@@ -84,12 +94,7 @@ def ban(bot, event, irc, args):
     """Bans a user"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                chunked = chunks(args[1:], 4)
-                irc.mode(args[0], chunked, "+" + "b" * len(chunked))
-            elif args[0].find("#") != -1:
-                chunked = chunks(args, 4)
-                irc.mode(event.target, chunked, "+" + "b" * len(chunked))
+            setMode(event, irc, args, "+b")
         else:
             irc.ban(event.target, args[0])
     else:
@@ -101,12 +106,7 @@ def unban(bot, event, irc, args):
     """Help text"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                chunked = chunks(args[1:], 4)
-                irc.mode(args[0], chunked, "-" + "b" * len(chunked))
-            elif args[0].find("#") != -1:
-                chunked = chunks(args, 4)
-                irc.mode(event.target, chunked, "-" + "b" * len(chunked))
+            setMode(event, irc, args, "-b")
         else:
             irc.unban(event.target, args[0])
     else:
@@ -118,12 +118,7 @@ def op(bot, event, irc, args):
     """Help text"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                chunked = chunks(args[1:], 4)
-                irc.mode(args[0], chunked, "+" + "o" * len(chunked))
-            elif args[0].find("#") != -1:
-                chunks(args, 4)
-                irc.mode(event.target, chunked, "+" + "o" * len(chunked))
+            setMode(event, irc, args, "+o")
         else:
             irc.op(event.target, args[0])
     else:
@@ -135,12 +130,7 @@ def deop(bot, event, irc, args):
     """Help text"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                chunked = chunks(args[1:], 4)
-                irc.mode(args[0], chunked, "-" + "o" * len(chunked))
-            elif args[0].find("#") != -1:
-                chunked = chunks(args, 4)
-                irc.mode(event.target, chunked, "-" + "o" * len(chunked))
+            setMode(event, irc, args, "-o")
         else:
             irc.deop(event.target, args[0])
     else:
@@ -152,10 +142,7 @@ def voice(bot, event, irc, args):
     """"Help text"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                irc.mode(args[0], chunks(args[1:], 4), "+vvvv")
-            elif args[0].find("#") != -1:
-                irc.mode(event.target, chunks(args, 4), "+vvvv")
+            setMode(event, irc, args, "+v")
         else:
             irc.deop(event.target, args[0])
     else:
@@ -167,12 +154,8 @@ def unvoice(bot, event, irc, args):
     """Help text"""
     if len(args):
         if len(args) > 1:
-            if args[0].find("#") == -1:
-                irc.mode(args[0], chunks(args[1:], 4), "-vvvv")
-            elif args[0].find("#") != -1:
-                irc.mode(event.target, chunks(args, 4), "-vvvv")
+            setMode(event, irc, args, "-v")
         else:
-            irc.deop(event.target, args[0])
             irc.unvoice(event.target, args[0])
     else:
         irc.unvoice(event.target, event.source.nick)
