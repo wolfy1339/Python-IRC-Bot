@@ -1,7 +1,6 @@
 import requests
 import traceback
 import six
-from time import strftime, localtime
 import logging
 import ansi
 import config
@@ -35,7 +34,8 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
                     'hide': True
                 }
 
-        cmd_list = sorted([i for i in commands.keys() if not commands[i]['hide']])
+        cmds = [i for i in commands.keys() if not commands[i]['hide']]
+        cmd_list = sorted(cmds)
 
     return real_command
 
@@ -64,7 +64,7 @@ def call_command(bot, event, irc, arguments):
         else:
             privmsg = event.target == bot.config['nickname']
             target = "a private message" if privmsg else event.target
-            logging.info("{0} called {1} in {2}".format(event.source, name, target))
+            logging.info("%s called %s in %s", event.source, name, target)
 
 
 def checkPerms(host, owner=False, admin=False):
@@ -95,5 +95,5 @@ def PrintError(irc, event):
                           timeout=60)
         irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
     except Exception:
-        irc.msg('##wolfy1339', "An error happened while trying to post the traceback")
+        irc.msg('##wolfy1339', config.tracebackPostError)
         print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
