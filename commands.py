@@ -4,7 +4,6 @@ import os
 import re
 import logging
 from utils import add_cmd, commands, cmd_list, aliases, PY3, PY34, PrintError
-import utils
 import config
 
 
