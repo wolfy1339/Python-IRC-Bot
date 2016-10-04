@@ -3,7 +3,8 @@ import time
 import os
 import re
 import logging
-from utils import add_cmd, commands, cmd_list, aliases, PY3, PY34, PrintError
+from utils import add_cmd
+import utils
 import config
 
 
@@ -22,6 +23,7 @@ def setMode(event, irc, args, mode):
         for i in chunks(args, 4):
             modes = "".join(mode[1:]) * len(i)
             irc.mode(event.target, " ".join(i), "".join(mode[:1]) + modes)
+
 
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
@@ -92,25 +94,19 @@ def part(bot, event, irc, args):
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
     """Bans a user"""
-    if len(args):
-        if len(args) > 1:
-            setMode(event, irc, args, "+b")
-        else:
-            irc.ban(event.target, args[0])
+    if len(args) > 1:
+        setMode(event, irc, args, "+b")
     else:
-        irc.ban(event.target, event.source.nick)
+        irc.ban(event.target, args[0])
 
 
 @add_cmd("unban", admin=True, minArgs=1)
 def unban(bot, event, irc, args):
     """Help text"""
-    if len(args):
-        if len(args) > 1:
-            setMode(event, irc, args, "-b")
-        else:
-            irc.unban(event.target, args[0])
+    if len(args) > 1:
+        setMode(event, irc, args, "-b")
     else:
-        irc.unban(event.target, event.source.nick)
+        irc.unban(event.target, args[0])
 
 
 @add_cmd("op", admin=True, minArgs=0)
@@ -182,7 +178,7 @@ def logLevel(bot, event, irc, args):
     elif args[0] == "critical":
         level = logging.CRITICAL
     else:
-        level = logging.INFO # Default logging level
+        level = logging.INFO  # Default logging level
         irc.reply(event, "Invalid log level {0}".format(args))
     logging.getLogger().setLevel(level)
 
@@ -195,6 +191,7 @@ def Config(bot, event, irc, args):
         irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
     else:
         irc.reply(event, eval("config.{0}".format(args[0])))
+
 
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
@@ -210,23 +207,26 @@ def Help(bot, event, irc, args):
     """Help text"""
     if len(args) >= 1:
         try:
-            irc.reply(event, "Usage: {0}".format(commands[args[0]]['function'].__doc__))
+            doc = utils.commands[args[0]]['func'].__doc__
+            irc.reply(event, "Usage: {0}".format(doc))
         except KeyError:
             try:
-                irc.reply(event, "Usage: {0}".format(aliases[args[0]]['function'].__doc__))
+                doc = utils.aliases[args[0]]['func'].__doc__
+                irc.reply(event, "Usage: {0}".format(doc))
             except KeyError:
                 irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
-        irc.reply(event, "Usage: {0}".format(commands["help"]['function'].__doc__))
+        doc = utils.commands["help"]['func'].__doc__
+        irc.reply(event, "Usage: {0}".format(doc))
 
 
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, ", ".join(sorted(cmd_list)))
+    irc.reply(event, ", ".join(sorted(utils.cmd_list)))
 
 
-@add_cmd("reload", admin=True)
+@add_cmd("reload", admin=True, minArgs=1)
 def Reload(bot, event, irc, args):
     """Help text"""
     if PY34:
@@ -239,6 +239,6 @@ def Reload(bot, event, irc, args):
             reload(eval(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
-            PrintError(irc, event)
+            utils.PrintError(irc, event)
     else:
         irc.reply(event, "Wrong module name")
