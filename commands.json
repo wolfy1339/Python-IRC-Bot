@@ -1,1 +1,0 @@
-{"cmd_list": ["ban", "calc", "deop", "echo", "help", "join", "list", "log.level", "nick", "op", "part", "ping", "quit", "reload", "unban", "unvoice", "voice"], "commands": {"reload": {"hide": false, "perms": [true, false], "minArgs": 1}}}
