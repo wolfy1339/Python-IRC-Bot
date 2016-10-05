@@ -187,7 +187,7 @@ def logLevel(bot, event, irc, args):
 def Config(bot, event, irc, args):
     """Help"""
     if len(args) > 1:
-        eval("config.{0} = {1}".format(args[0], args[1]))
+        settatr(config, args[0], args[1])
         irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
     else:
         irc.reply(event, eval("config.{0}".format(args[0])))
