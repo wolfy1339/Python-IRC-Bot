@@ -37,7 +37,7 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_all(event, irc):
-        if event.raw.find("ERROR") != -1:
+        if event.raw.startswith("ERROR"):
             logging.error(event.raw)
         else:
             logging.debug(event.raw)
