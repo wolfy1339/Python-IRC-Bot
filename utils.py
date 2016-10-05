@@ -72,7 +72,7 @@ def checkPerms(host, owner=False, admin=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     ignores = config.ignores.global
-    if channel:
+    if channel and hasattr(config.channel, channel):
         ignores.extend(getattr(config.ignores.channels, channel))
     isIgnored = host in ignores
     if owner and isOwner and not isIgnored:
