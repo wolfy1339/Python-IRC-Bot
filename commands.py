@@ -190,7 +190,7 @@ def Config(bot, event, irc, args):
         settatr(config, args[0], args[1])
         irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
     else:
-        irc.reply(event, eval("config.{0}".format(args[0])))
+        irc.reply(event, getattr(config, args[0]))
 
 
 @add_cmd("quit", admin=True, minArgs=0)
