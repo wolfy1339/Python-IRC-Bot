@@ -49,7 +49,8 @@ def call_command(bot, event, irc, arguments):
             cmd_perms = commands[name]['perms']
             minArgs = commands[name]['minArgs']
             host = event.source.host
-            if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1]):
+            channel = event.target if not event.target == bot.config["nickname"] else False
+            if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1], channel=channel):
                 if not len(args) and minArgs >= 1 or len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
@@ -67,10 +68,13 @@ def call_command(bot, event, irc, arguments):
             logging.info("%s called %s in %s", event.source, name, target)
 
 
-def checkPerms(host, owner=False, admin=False):
+def checkPerms(host, owner=False, admin=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
-    isIgnored = host in config.ignores
+    ignores = config.ignores.global
+    if channel:
+        ignores.extend(getattr(config.ignores.channels, channel))
+    isIgnored = host in ignores
     if owner and isOwner and not isIgnored:
         return True
     elif admin and (isAdmin or isOwner) and not isIgnored:
