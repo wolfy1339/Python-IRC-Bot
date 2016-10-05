@@ -71,9 +71,9 @@ def call_command(bot, event, irc, arguments):
 def checkPerms(host, owner=False, admin=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
-    ignores = config.ignores.global
-    if channel and hasattr(config.channel, channel):
-        ignores.extend(getattr(config.ignores.channels, channel))
+    ignores = config.ignores["global"]
+    if channel and channel in config.ignores["channels"]:
+        ignores.extend(config.ignores["channels"][channel])
     isIgnored = host in ignores
     if owner and isOwner and not isIgnored:
         return True
