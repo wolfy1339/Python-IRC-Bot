@@ -31,7 +31,6 @@ class Bot(zirc.Client):
     def on_ctcp(irc, raw):
         logging.info(raw)
 
-    @classmethod
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
             utils.call_command(self, event, irc, arguments)
@@ -47,7 +46,6 @@ class Bot(zirc.Client):
     def on_send(data):
         logging.debug(data)
 
-    @classmethod
     def on_nicknameinuse(self, event, irc):
         irc.nick(self.config['nickname'] + "_")
 
