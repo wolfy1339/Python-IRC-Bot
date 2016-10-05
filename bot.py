@@ -22,8 +22,7 @@ class Bot(zirc.Client):
                                      ident="zirc",
                                      realname="A zIRC bot",
                                      channels=["##wolfy1339", "##powder-bots"],
-                                     sasl_user="BigWolfy1339",
-                                     sasl_pass="")
+                                     caps=zirc.Caps(zirc.Sasl(username="BigWolfy1339", password="")))
 
         self.connect(self.config)
         self.start()
