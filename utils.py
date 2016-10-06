@@ -42,15 +42,18 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
 
 def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
-    args = command[1:] if len(command) > 1 else ''
     name = command[0][1:]
     if not name == '' or name.find("?") != -1:
+        privmsg = event.target == bot.config['nickname']
+        args = command[1:] if len(command) > 1 else ''
+
         try:
-            cmd_perms = commands[name]['perms']
+            perms = commands[name]['perms']
             minArgs = commands[name]['minArgs']
             host = event.source.host
-            channel = event.target if not event.target == bot.config["nickname"] else False
-            if checkPerms(host, owner=cmd_perms[0], admin=cmd_perms[1], channel=channel):
+            chan = event.target if not privmsg else False
+
+            if checkPerms(host, owner=perms[0], admin=perms[1], channel=chan):
                 if not len(args) and minArgs >= 1 or len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
@@ -63,7 +66,6 @@ def call_command(bot, event, irc, arguments):
             irc.reply(event, 'Oops, an error occured!')
             PrintError(irc, event)
         else:
-            privmsg = event.target == bot.config['nickname']
             target = "a private message" if privmsg else event.target
             logging.info("%s called %s in %s", event.source, name, target)
 
@@ -72,9 +74,11 @@ def checkPerms(host, owner=False, admin=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     ignores = config.ignores["global"]
+
     if channel and channel in config.ignores["channels"]:
         ignores.extend(config.ignores["channels"][channel])
     isIgnored = host in ignores
+
     if owner and isOwner and not isIgnored:
         return True
     elif admin and (isAdmin or isOwner) and not isIgnored:
