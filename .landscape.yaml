@@ -13,3 +13,5 @@ pylint:
     - global-variable-not-assigned
     - bad-classmethod-argument
     - protected-access
+    - broad-except
+    - too-many-arguments
