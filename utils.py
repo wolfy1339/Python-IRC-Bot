@@ -75,7 +75,9 @@ def checkPerms(host, owner=False, admin=False, channel=False):
     isAdmin = host in config.admins
     ignores = config.ignores["global"]
 
-    if channel and channel in config.ignores["channels"]:
+    ignoreChans = liat(config.ignores["channels"].keys())
+
+    if channel and channel in ignoreChans:
         ignores.extend(config.ignores["channels"][channel])
     isIgnored = host in ignores
 
