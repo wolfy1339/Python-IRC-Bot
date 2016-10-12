@@ -1,10 +1,11 @@
-import zirc
-import ssl
-import socket
-import utils
-import commands
 import logging
+import socket
+import ssl
+
+import commands
 import config
+import utils
+import zirc
 
 
 logging.basicConfig(format=config.logFormat,
@@ -47,13 +48,20 @@ class Bot(zirc.Client):
         logging.debug(data)
 
     def on_nicknameinuse(self, event, irc):
+        logging.error("Nick already in use, trying alternative")
         irc.nick(self.config['nickname'] + "_")
 
     @staticmethod
-    def on_474(event, irc):
+    def on_bannedfromchan(event, irc):
         s = ''.join(event.arguments).split(" ")
         channel = s[1]
         irc.notice("wolfy1339", "Banned from {0}".format(channel))
         logging.warning("%s from %s", ' '.join(s[2:]), channel)
+
+    def on_endofmotd(event, irc):
+        logging.info("Received MOTD from network")
+
+    def on_welcome(event, irc):
+        logging.info("Connected to network")
 
 Bot()
