@@ -64,4 +64,8 @@ class Bot(zirc.Client):
     def on_welcome(event, irc):
         logging.info("Connected to network")
 
+    def on_kick(self, event, irc):
+        logging.warning("Kicked from %s, trying to re-join", event.target)
+        irc.join(event.target)
+
 Bot()
