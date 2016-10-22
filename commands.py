@@ -28,6 +28,7 @@ def setMode(event, irc, args, mode):
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation"""
+    arguments = "".join(args)
     safe_dict = {
         "sqrt": math.sqrt,
         "pow": math.pow,
@@ -50,7 +51,7 @@ def calc(bot, event, irc, args):
         }
 
         for c in constant:
-            m = args.replace("){0}".format(c), ") * {0}".format(constant[c]))
+            m = arguments.replace("){0}".format(c), ") * {0}".format(constant[c]))
             p = re.compile(r'([:]?\d*\.\d+|\d+){0}'.format(c))
             subst = "\\1 * " + constant[c]
             m = re.sub(p, subst, m)
