@@ -75,7 +75,7 @@ def call_command(bot, event, irc, arguments):
             logging.info("%s called %s in %s", event.source, name, target)
 
 
-def checkPerms(host, owner=False, admin=False, channel=False):
+def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     isTrusted = host in config.trusted
