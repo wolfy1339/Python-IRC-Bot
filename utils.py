@@ -13,13 +13,13 @@ commands = {}
 cmd_list = []
 
 
-def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
+def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False, hide=False):
     def real_command(func):
         global commands
         global cmd_list
 
         commands[name] = {
-            'perms': [admin, owner],
+            'perms': [trusted, admin, owner],
             'func': func,
             'minArgs': minArgs,
             'hide': hide
@@ -28,7 +28,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, hide=False):
         if alias:
             for i in alias:
                 commands[i] = {
-                    'perms': [admin, owner],
+                    'perms': [trusted, admin, owner],
                     'func': func,
                     'minArgs': minArgs,
                     'hide': True
@@ -53,7 +53,7 @@ def call_command(bot, event, irc, arguments):
             host = event.source.host
             chan = event.target if not privmsg else False
 
-            if checkPerms(host, owner=perms[0], admin=perms[1], channel=chan):
+            if checkPerms(host, owner=perms[2], admin=perms[1], trusted=perms[0], channel=chan):
                 if not len(args) and minArgs >= 1 or len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
@@ -73,6 +73,7 @@ def call_command(bot, event, irc, arguments):
 def checkPerms(host, owner=False, admin=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
+    isTrusted = host in config.trusted
     ignores = config.ignores["global"]
 
     ignoreChans = list(config.ignores["channels"].keys())
@@ -85,7 +86,9 @@ def checkPerms(host, owner=False, admin=False, channel=False):
         return True
     elif admin and (isAdmin or isOwner) and not isIgnored:
         return True
-    elif not owner and not admin and not isIgnored:
+    elif trusted and (isTrusted or isAdmin or isOwner) and not isIgnored:
+        return True
+    elif not (owner or admin or trusted) and not isIgnored:
         return True
     else:
         return False
