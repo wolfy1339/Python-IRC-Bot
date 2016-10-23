@@ -65,6 +65,12 @@ def calc(bot, event, irc, args):
         irc.reply(event, "\x034Invalid Input")
 
 
+@add_cmd("eval", alias=['py'], minArgs=1, owner=True, hide=True)
+def repl(bot, event, irc, args):
+    """Help text"""
+    irc.reply(event, eval(" ".join(args)))
+
+
 @add_cmd("echo", minArgs=1)
 def echo(bot, event, irc, args):
     """Responds with given text"""
@@ -91,6 +97,14 @@ def part(bot, event, irc, args):
     else:
         irc.part(event.target)
 
+@add_cmd("cycle", alias=["rejoin"], admin=True, minArgs=0)
+def cycle(bot, event, irc, args):
+    if len(args):
+        irc.part(args[0])
+        irc.join(args[0])
+    else:
+        irc.part(event.target)
+        irc.join(event.target)
 
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
@@ -199,6 +213,7 @@ def Config(bot, event, irc, args):
         else:
             irc.reply(event, "Invalid config variable {}".format(args[0]))
 
+
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
     """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
@@ -229,7 +244,10 @@ def Help(bot, event, irc, args):
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, ", ".join(sorted(utils.cmd_list)))
+    if len(args) and args[0] == "alias":
+        irc.reply(event, ", ".join(utils.alias_list))
+    else:
+        irc.reply(event, ", ".join(utils.cmd_list))
 
 
 @add_cmd("reload", admin=True, minArgs=1)
