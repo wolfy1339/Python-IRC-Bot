@@ -9,6 +9,7 @@ logLevel = 20
 commandChar = '?'
 owners = ['botters/wolfy1339']
 admins = []
+trusted = []
 ignores = {
     'global': [],
     'channels': {
