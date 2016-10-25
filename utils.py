@@ -20,6 +20,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False
         global commands
         global cmd_list
         global aliases
+        global alias_list
 
         commands[name] = {
             'perms': [trusted, admin, owner],
