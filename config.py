@@ -10,6 +10,10 @@ commandChar = '?'
 owners = ['botters/wolfy1339']
 admins = []
 trusted = []
+bots = {
+    'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
+    'channels': ['##jeffl35', '##wolfy1339']
+}
 ignores = {
     'global': [],
     'channels': {

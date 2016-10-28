@@ -80,21 +80,26 @@ def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     isTrusted = host in config.trusted
+    isBot = host.find("bot") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
     ignoreChans = list(config.ignores["channels"].keys())
 
-    if channel and channel in ignoreChans:
-        ignores.extend(config.ignores["channels"][channel])
+    if channel:
+        if channel in ignoreChans:
+            ignores.extend(config.ignores["channels"][channel])
+
+        if channel in config.bots['channels']:
+            isBot = False
     isIgnored = host in ignores
 
-    if owner and isOwner and not isIgnored:
+    if owner and isOwner:
         return True
-    elif admin and (isAdmin or isOwner) and not isIgnored:
+    elif admin and (isAdmin or isOwner):
         return True
     elif trusted and (isTrusted or isAdmin or isOwner) and not isIgnored:
         return True
-    elif not (owner or admin or trusted) and not isIgnored:
+    elif not (owner or admin or trusted) and not isIgnored and not isBot:
         return True
     else:
         return False
