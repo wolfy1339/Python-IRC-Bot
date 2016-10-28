@@ -3,7 +3,6 @@ import traceback
 import six
 import logging
 import ansi
-import commands
 import config
 
 print_ = six.print_
