@@ -47,7 +47,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False
 def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
     name = command[0][1:]
-    if not name == '' or name.find("?") != -1:
+    if not name == '' or not name.find("?") != -1:
         privmsg = event.target == bot.config['nickname']
         args = command[1:] if len(command) > 1 else ''
 
