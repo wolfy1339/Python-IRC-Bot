@@ -68,7 +68,7 @@ def calc(bot, event, irc, args):
 @add_cmd("eval", alias=['py'], minArgs=1, owner=True, hide=True)
 def repl(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, eval(" ".join(args)))
+    irc.reply(event, repr(eval(" ".join(args))))
 
 
 @add_cmd("echo", minArgs=1)
@@ -119,6 +119,42 @@ def ban(bot, event, irc, args):
         setMode(event, irc, args, "+b")
     else:
         irc.ban(event.target, args[0])
+
+
+@add_cmd("kban", admin=True, minArgs=1)
+def kban(bot, event, irc, args):
+    """Kick-bans a user"""
+    if len(args) > 1:
+        setMode(event, irc, args, "+b")
+
+        if args[0].startsith("#"):
+            channel = args[0]
+            users = args[1:]
+        else:
+            channel = event.target
+            users = args
+
+            for i in users:
+                irc.kick(channel, i)
+    else:
+        irc.ban(event.target, args[0])
+        irc.kick(event.target, args[0])
+
+@add_cmd("kick", admin=True, minArgs=1)
+def kick(bot, event, irc, args):
+    """Kicks a user"""
+    if len(args) > 1:
+        if args[0].startsith("#"):
+            channel = args[0]
+            users = args[1:]
+        else:
+            channel = event.target
+            users = args
+
+            for i in users:
+                irc.kick(channel, i)
+    else:
+        irc.kick(event.target, args[0])
 
 
 @add_cmd("unban", admin=True, minArgs=1)
@@ -295,3 +331,10 @@ def permissions(bot, event, irc, args):
         perms = 'User'
 
     irc.reply(event, perms)
+
+
+@add_cmd("version", minArgs=0)
+def version(bot, event, irc, args):
+    sysver = "".join(__import__("sys").version.split("\n"))
+    version = "A zIRC bot v{0}, running on Python {1}".format("0.1", sysver)
+    irc.reply(event, version)
