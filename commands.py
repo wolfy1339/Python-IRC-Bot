@@ -321,7 +321,7 @@ def permissions(bot, event, irc, args):
     """Replies with your permission level"""
     host = event.source.host
 
-    if host in config.owner:
+    if host in config.owners:
         perms = 'owner'
     elif host in config.admins:
         perms = 'admin'
