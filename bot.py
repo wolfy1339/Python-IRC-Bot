@@ -2,7 +2,6 @@ import logging
 import socket
 import ssl
 
-import commands
 import config
 import utils
 import zirc

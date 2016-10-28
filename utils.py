@@ -1,3 +1,4 @@
+import copy
 import requests
 import traceback
 import six
@@ -11,7 +12,6 @@ PY34 = six.PY34
 PY2 = six.PY2
 commands = {}
 cmd_list = []
-aliases = {}
 alias_list = []
 
 
@@ -19,12 +19,11 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False
     def real_command(func):
         global commands
         global cmd_list
-        global aliases
         global alias_list
 
         commands[name] = {
             'perms': [trusted, admin, owner],
-            'func': func,
+            'func': copy.deepcopy(func),
             'minArgs': minArgs,
             'hide': hide
         }
@@ -33,15 +32,15 @@ def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False
             for i in alias:
                 commands[i] = {
                     'perms': [trusted, admin, owner],
-                    'func': func,
+                    'func': copy.deepcopy(func),
                     'minArgs': minArgs,
                     'hide': True
                 }
-                aliases[i] = commands[i]
+                alias_list.append(i)
 
         cmds = [i for i in commands.keys() if not commands[i]['hide']]
         cmd_list = sorted(cmds)
-        alias_list = sorted([i for i in aliases.keys()])
+        alias_list = sorted(alias_list)
 
     return real_command
 
