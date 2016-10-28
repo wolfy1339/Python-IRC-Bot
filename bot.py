@@ -30,7 +30,7 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_ctcp(irc, raw):
-        logging.info(raw)
+        logging.info("Received CTCP reply " + raw)
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
@@ -53,10 +53,10 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_bannedfromchan(event, irc):
-        s = ''.join(event.arguments).split(" ")
-        channel = s[1]
+        s = event.raw.split(" ")
+        channel = s[3]
         irc.notice("wolfy1339", "Banned from {0}".format(channel))
-        logging.warning("%s from %s", ' '.join(s[2:]), channel)
+        logging.warning("Banned from %s", channel)
 
     def on_endofmotd(event, irc):
         logging.info("Received MOTD from network")
