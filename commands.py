@@ -275,13 +275,13 @@ def Reload(bot, event, irc, args):
 
 
 @add_cmd("host", minArgs=0)
-def host(bot, event, irc, args):
+def hostmask(bot, event, irc, args):
     """Replies with your host"""
     irc.reply(event, event.source.host)
 
 
 @add_cmd("perms", minArgs=0)
-def level(bot, event, irc, args):
+def permissions(bot, event, irc, args):
     """Replies with your permission level"""
     host = event.source.host
 
