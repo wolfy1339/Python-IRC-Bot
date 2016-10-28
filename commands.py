@@ -272,3 +272,26 @@ def Reload(bot, event, irc, args):
             utils.PrintError(irc, event)
     else:
         irc.reply(event, "Wrong module name")
+
+
+@add_cmd("host", minArgs=0)
+def host(bot, event, irc, args):
+    """Replies with your host"""
+    irc.reply(event, event.source.host)
+
+
+@add_cmd("perms", minArgs=0)
+def level(bot, event, irc, args):
+    """Replies with your permission level"""
+    host = event.source.host
+
+    if host in config.owner:
+        perms = 'owner'
+    elif host in config.admins:
+        perms = 'admin'
+    elif host in config.trusted:
+        perms = 'trusted'
+    else:
+        perms = 'User'
+
+    irc.reply(event, perms)
