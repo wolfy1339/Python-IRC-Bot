@@ -58,7 +58,7 @@ def call_command(bot, event, irc, arguments):
             chan = event.target if not privmsg else False
 
             if checkPerms(host, owner=perms[2], admin=perms[1], trusted=perms[0], channel=chan):
-                if not len(args) and minArgs >= 1 or len(args) < minArgs:
+                if len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
                     commands[name]['func'](bot, event, irc, args)
