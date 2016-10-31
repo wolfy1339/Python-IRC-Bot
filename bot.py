@@ -22,8 +22,8 @@ class Bot(zirc.Client):
                                      nickname="zIRCBot2",
                                      ident="zirc",
                                      realname="A zIRC bot",
-                                     channels=["##wolfy1339", "##powder-bots"],
-                                     caps=zirc.Caps(zirc.Sasl(username="BigWolfy1339", password="")))
+                                     channels=["##wolfy1339", "##powder-bots", "##jeffl35"],
+                                     caps=zirc.Caps(zirc.Sasl(username="BigWolfy1339", password=""), "multi-prefix"))
 
         self.connect(self.config)
         self.start()
@@ -39,7 +39,7 @@ class Bot(zirc.Client):
     @staticmethod
     def on_all(event, irc):
         if event.raw.startswith("ERROR"):
-            logging.error(event.raw)
+            logging.error(event.arguments)
         else:
             logging.debug(event.raw)
 
@@ -68,4 +68,25 @@ class Bot(zirc.Client):
         logging.warning("Kicked from %s, trying to re-join", event.target)
         irc.join(event.target)
 
+    def on_join(self, event, irc):
+        logging.info("Joining %s", event.target)
+        irc.send("WHO {0} nuhs%nhu".format(event.target))
+
+    def on_invite(self, event, irc):
+        if utils.checkPerms(event.source.host, trusted=True):
+            logging.info("Invited to %s by %s", event.target, event.source.hostmask)
+            irc.join(event.target)
+
+    def on_whoreply(self, event, irc):
+        #logging.info("Received WHO reply from network")
+        (___, host, ident, ___, nick, ___, ___) = event.arguments
+        hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+
+    def on_whospcrpl(self, event, irc):
+        logging.info("Received WHO reply from network")
+        (host, ident, nick) = event.arguments
+        hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+
+    def on_315(self, event, irc):
+        logging.info("Received WHO reply from network")
 Bot()
