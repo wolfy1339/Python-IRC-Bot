@@ -16,6 +16,8 @@ logging.basicConfig(format=config.logFormat,
 
 class Bot(zirc.Client):
     def __init__(self):
+        self.userdb = {}
+        # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
                                       wrapper=ssl.wrap_socket)
         self.config = zirc.IRCConfig(host="chat.freenode.net",
@@ -23,8 +25,8 @@ class Bot(zirc.Client):
                                      nickname="zIRCBot2",
                                      ident="zirc",
                                      realname="A zIRC bot",
-                                     channels=["##wolfy1339", "##powder-bots", "##jeffl35"],
-                                     caps=zirc.Caps(zirc.Sasl(username="BigWolfy1339", password=""), "multi-prefix"))
+                                     channels=config.channels,
+                                     caps=zirc.Caps(config.sasl, "multi-prefix"))
 
         self.connect(self.config)
         self.start()
@@ -75,19 +77,30 @@ class Bot(zirc.Client):
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
-            logging.info("Invited to %s by %s", event.target, event.source.hostmask)
+            hostmask = event.source.hostmask
+            logging.info("Invited to %s by %s", event.target, hostmask)
             irc.join(event.target)
 
     def on_whoreply(self, event, irc):
-        #logging.info("Received WHO reply from network")
         (___, host, ident, ___, nick, ___, ___) = event.arguments
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+        self.userdb[nick] = {
+            'hostmask': hostmask,
+            'host': host,
+            'account': None
+        }
 
     def on_whospcrpl(self, event, irc):
         logging.info("Received WHO reply from network")
         (host, ident, nick) = event.arguments
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+        self.userdb[nick] = {
+            'hostmask': hostmask,
+            'host': host,
+            'account': None
+        }
 
     def on_315(self, event, irc):
-        logging.info("Received WHO reply from network")
+        logging.info("Received end of WHO reply from network")
+
 Bot()
