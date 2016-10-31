@@ -1,9 +1,16 @@
+from zirc import Sasl
+
+# zIRC
+sasl = zirc.Sasl(username="BigWolfy1339", password="")
+
+# IRC
+channels = ["##wolfy1339", "##powder-bots", "##jeffl35"]
+
 # Logging
-stdout = True
 logFormat = '%(levelname)s %(asctime)s %(message)s'
 colorized = True
 timestampFormat = '%Y-%m-%dT%H:%M:%S'
-logLevel = 20
+logLevel = 20 # INFO
 
 # Bot
 commandChar = '?'
