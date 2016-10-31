@@ -116,6 +116,6 @@ def PrintError(irc, event):
                           allow_redirects=True,
                           timeout=60)
         irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
-    except Exception:
+    except Exception as e:
         irc.msg('##wolfy1339', config.tracebackPostError)
-        print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
+        logging.exception(config.tracebackPostError)
