@@ -14,7 +14,8 @@ cmd_list = []
 alias_list = []
 
 
-def add_cmd(name, minArgs=1, alias=None, owner=False, admin=False, trusted=False, hide=False):
+def add_cmd(name, minArgs=1, alias=None, owner=False,
+            admin=False, trusted=False, hide=False):
     def real_command(func):
         global commands
         global cmd_list
@@ -57,7 +58,8 @@ def call_command(bot, event, irc, arguments):
             host = event.source.host
             chan = event.target if not privmsg else False
 
-            if checkPerms(host, owner=perms[2], admin=perms[1], trusted=perms[0], channel=chan):
+            if checkPerms(host, owner=perms[2], admin=perms[1],
+                          trusted=perms[0], channel=chan):
                 if len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
