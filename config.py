@@ -1,7 +1,8 @@
-from zirc import Sasl
+from zirc import Sasl, Caps
 
 # zIRC
 sasl = Sasl(username="BigWolfy1339", password="")
+caps = Caps(sasl, "multi-prefix")
 
 # IRC
 channels = ["##wolfy1339", "##powder-bots", "##jeffl35"]
@@ -10,7 +11,7 @@ channels = ["##wolfy1339", "##powder-bots", "##jeffl35"]
 logFormat = '%(levelname)s %(asctime)s %(message)s'
 colorized = True
 timestampFormat = '%Y-%m-%dT%H:%M:%S'
-logLevel = 20 # INFO
+logLevel = 20  # INFO
 
 # Bot
 commandChar = '?'
@@ -30,7 +31,9 @@ ignores = {
 }
 
 # Error messages
-noPerms = "Sorry, you do not have the right permissions to execute this command"
+noPerms = " ".join(["Sorry,",
+                    "you do not have the right permissions",
+                    "to execute this command"])
 argsMissing = "Oops, looks like you forgot an argument there."
 invalidCmd = 'Invalid command {0}'
 tracebackPostError = "An error happened while trying to post the traceback"
