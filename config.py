@@ -1,7 +1,7 @@
 from zirc import Sasl
 
 # zIRC
-sasl = zirc.Sasl(username="BigWolfy1339", password="")
+sasl = Sasl(username="BigWolfy1339", password="")
 
 # IRC
 channels = ["##wolfy1339", "##powder-bots", "##jeffl35"]
