@@ -26,10 +26,18 @@ class Bot(zirc.Client):
                                      ident="zirc",
                                      realname="A zIRC bot",
                                      channels=config.channels,
-                                     caps=zirc.Caps(config.sasl, "multi-prefix"))
+                                     caps=config.caps)
 
         self.connect(self.config)
         self.start()
+
+    # Non-numeric events
+    @staticmethod
+    def on_all(event, irc):
+        if event.raw.startswith("ERROR"):
+            logging.error(event.arguments)
+        else:
+            logging.debug(event.raw)
 
     @staticmethod
     def on_ctcp(irc, raw):
@@ -40,16 +48,24 @@ class Bot(zirc.Client):
             utils.call_command(self, event, irc, arguments)
 
     @staticmethod
-    def on_all(event, irc):
-        if event.raw.startswith("ERROR"):
-            logging.error(event.arguments)
-        else:
-            logging.debug(event.raw)
-
-    @staticmethod
     def on_send(data):
         logging.debug(data)
 
+    def on_kick(self, event, irc):
+        logging.warning("Kicked from %s, trying to re-join", event.target)
+        irc.join(event.target)
+
+    def on_join(self, event, irc):
+        logging.info("Joining %s", event.target)
+        irc.send("WHO {0} nuhs%nhu".format(event.target))
+
+    def on_invite(self, event, irc):
+        if utils.checkPerms(event.source.host, trusted=True):
+            hostmask = event.source.hostmask
+            logging.info("Invited to %s by %s", event.target, hostmask)
+            irc.join(event.target)
+
+    # Numeric events
     def on_nicknameinuse(self, event, irc):
         logging.error("Nick already in use, trying alternative")
         irc.nick(self.config['nickname'] + "_")
@@ -67,22 +83,8 @@ class Bot(zirc.Client):
     def on_welcome(event, irc):
         logging.info("Connected to network")
 
-    def on_kick(self, event, irc):
-        logging.warning("Kicked from %s, trying to re-join", event.target)
-        irc.join(event.target)
-
-    def on_join(self, event, irc):
-        logging.info("Joining %s", event.target)
-        irc.send("WHO {0} nuhs%nhu".format(event.target))
-
-    def on_invite(self, event, irc):
-        if utils.checkPerms(event.source.host, trusted=True):
-            hostmask = event.source.hostmask
-            logging.info("Invited to %s by %s", event.target, hostmask)
-            irc.join(event.target)
-
     def on_whoreply(self, event, irc):
-        (___, host, ident, ___, nick, ___, ___) = event.arguments
+        (host, ident, nick) = event.arguments[1:3] + event.arguments[4]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         self.userdb[nick] = {
             'hostmask': hostmask,
