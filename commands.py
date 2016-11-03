@@ -25,6 +25,19 @@ def setMode(event, irc, args, mode):
             irc.mode(event.target, " ".join(i), "".join(mode[:1]) + modes)
 
 
+def getUsersFromCommaList(args):
+    pos = args.find(",") + 2
+    users = args[pos:].strip().split(", ")
+    args = args[:pos].strip().split(" ")
+    for i in range(len(users)):
+        try:
+            args.remove(users[i])
+        except ValueError:
+            args.remove(users[i] + ",")
+    users.append("".join(args[-1:])[:-1])
+    return users
+
+
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation"""
@@ -71,7 +84,8 @@ def repl(bot, event, irc, args):
     try:
         irc.reply(event, repr(eval(" ".join(args))))
     except Exception as e:
-        irc.reply(event, repr(e))
+        irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.message)
+        utils.PrintError(irc, event)
 
 
 @add_cmd("echo", minArgs=1)
@@ -126,16 +140,19 @@ def ban(bot, event, irc, args):
 
 @add_cmd("kban", admin=True, minArgs=1)
 def kban(bot, event, irc, args):
-    """Kick-bans a user"""
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Kick-bans a user
+    """
     if len(args) > 1:
         setMode(event, irc, args, "+b")
 
         if args[0].startswith("#"):
             channel = args[0]
-            users = args[1:]
+            users = getUsersFromCommaList(args)
+            message = " ".join(args[:-len(users)]) or event.source.nick
         else:
             channel = event.target
-            users = args
+            users = getUsersFromCommaList(args)
 
             for i in users:
                 irc.kick(channel, i)
@@ -145,19 +162,25 @@ def kban(bot, event, irc, args):
 
 @add_cmd("kick", admin=True, minArgs=1)
 def kick(bot, event, irc, args):
-    """Kicks a user"""
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Kicks a user
+    """
     if len(args) > 1:
         if args[0].startswith("#"):
             channel = args[0]
-            users = args[1:]
+            args = " ".join(args[1:])
+            users = getUsersFromCommaList(args)
+            message = " ".join(args[:-len(users)]) or event.source.nick
         else:
             channel = event.target
-            users = args
+            args = " ".join(args)
+            users = getUsersFromCommaList(args)
+            message = " ".join(args[:-len(users)]) or event.source.nick
 
-            for i in users:
-                irc.kick(channel, i)
+        for i in users:
+            irc.kick(channel, i, message)
     else:
-        irc.kick(event.target, args[0])
+        irc.kick(event.target, args[0], " ".join(args[1:]))
 
 
 @add_cmd("unban", admin=True, minArgs=1)
