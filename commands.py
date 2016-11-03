@@ -148,17 +148,20 @@ def kban(bot, event, irc, args):
 
         if args[0].startswith("#"):
             channel = args[0]
-            users = getUsersFromCommaList(args)
-            message = " ".join(args[:-len(users)]) or event.source.nick
+            str_args = " ".join(args[1:])
+            users = getUsersFromCommaList(str_args) if str_args.find(",") != -1 else args[-1:]
+            message = " ".join(args[1:-len(users)]) or event.source.nick
         else:
             channel = event.target
-            users = getUsersFromCommaList(args)
+            str_args = " ".join(args)
+            users = getUsersFromCommaList(str_args) if str_args.find(",") != -1 else args[-1:]
+            message = " ".join(args[:-len(users)]) or event.source.nick
 
-            for i in users:
-                irc.kick(channel, i)
+        for i in users:
+            irc.kick(channel, i, message)
     else:
         irc.ban(event.target, args[0])
-        irc.kick(event.target, args[0])
+        irc.kick(event.target, args[0], message)
 
 @add_cmd("kick", admin=True, minArgs=1)
 def kick(bot, event, irc, args):
@@ -168,13 +171,13 @@ def kick(bot, event, irc, args):
     if len(args) > 1:
         if args[0].startswith("#"):
             channel = args[0]
-            args = " ".join(args[1:])
-            users = getUsersFromCommaList(args)
-            message = " ".join(args[:-len(users)]) or event.source.nick
+            str_args = " ".join(args[1:])
+            users = getUsersFromCommaList(str_args) if str_args.find(",") != -1 else args[-1:]
+            message = " ".join(args[1:-len(users)]) or event.source.nick
         else:
             channel = event.target
-            args = " ".join(args)
-            users = getUsersFromCommaList(args)
+            str_args = " ".join(args)
+            users = getUsersFromCommaList(str_args) if str_args.find(",") != -1 else args[-1:]
             message = " ".join(args[:-len(users)]) or event.source.nick
 
         for i in users:
