@@ -15,3 +15,8 @@ pylint:
     - protected-access
     - broad-except
     - too-many-arguments
+    - too-few-public-methods
+    - arguments-differ
+mccabe:
+  disable:
+    - MC0001

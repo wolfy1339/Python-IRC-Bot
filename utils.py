@@ -1,9 +1,8 @@
 import requests
 import traceback
 import six
-import logging
-import ansi
 import config
+import log
 
 print_ = six.print_
 PY3 = six.PY3
@@ -73,7 +72,7 @@ def call_command(bot, event, irc, arguments):
             PrintError(irc, event)
         else:
             target = "a private message" if privmsg else event.target
-            logging.info("%s called %s in %s", event.source, name, target)
+            log.info("%s called %s in %s", event.source, name, target)
 
 
 def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
@@ -106,7 +105,7 @@ def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
 
 
 def PrintError(irc, event):
-    print_(ansi.RED, traceback.format_exc(), ansi.RESET, flush=True)
+    log.exception("An unknown error occured")
     try:
         syntax = "py3tb" if PY3 else "pytb"
         r = requests.post("http://dpaste.com/api/v2/",
@@ -120,4 +119,4 @@ def PrintError(irc, event):
         irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
     except Exception:
         irc.msg('##wolfy1339', config.tracebackPostError)
-        logging.exception(config.tracebackPostError)
+        log.exception(config.tracebackPostError)
