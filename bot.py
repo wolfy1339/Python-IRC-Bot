@@ -93,7 +93,6 @@ class Bot(zirc.Client):
         }
 
     def on_whospcrpl(self, event, irc):
-        logging.info("Received WHO reply from network")
         (ident, host, nick) = event.arguments
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         self.userdb[nick] = {
