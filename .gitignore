@@ -1,3 +1,5 @@
 *~
 *.pyc
 bot.private.py
+password
+*.sav

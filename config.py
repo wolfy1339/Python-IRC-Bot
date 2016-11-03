@@ -1,7 +1,9 @@
 from zirc import Sasl, Caps
 
 # zIRC
-sasl = Sasl(username="BigWolfy1339", password="")
+with open("password", "r") as i:
+    password = i.read().strip()
+sasl = Sasl(username="BigWolfy1339", password=password)
 caps = Caps(sasl, "multi-prefix")
 
 # IRC
