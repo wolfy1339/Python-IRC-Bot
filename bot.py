@@ -9,9 +9,7 @@ import zirc
 
 logging.basicConfig(format=config.logFormat,
                     datefmt=config.timestampFormat,
-                    level=config.logLevel,
-                    filename="messages.log",
-                    filemode="w")
+                    level=config.logLevel)
 
 
 class Bot(zirc.Client):
