@@ -68,7 +68,10 @@ def calc(bot, event, irc, args):
 @add_cmd("eval", alias=['py'], minArgs=1, owner=True, hide=True)
 def repl(bot, event, irc, args):
     """Help text"""
-    irc.reply(event, repr(eval(" ".join(args))))
+    try:
+        irc.reply(event, repr(eval(" ".join(args))))
+    except Exception as e:
+        irc.reply(event, repr(e))
 
 
 @add_cmd("echo", minArgs=1)
@@ -127,7 +130,7 @@ def kban(bot, event, irc, args):
     if len(args) > 1:
         setMode(event, irc, args, "+b")
 
-        if args[0].startsith("#"):
+        if args[0].startswith("#"):
             channel = args[0]
             users = args[1:]
         else:
@@ -144,7 +147,7 @@ def kban(bot, event, irc, args):
 def kick(bot, event, irc, args):
     """Kicks a user"""
     if len(args) > 1:
-        if args[0].startsith("#"):
+        if args[0].startswith("#"):
             channel = args[0]
             users = args[1:]
         else:
@@ -226,14 +229,19 @@ def logLevel(bot, event, irc, args):
     """Help text"""
     if args[0] == "debug":
         level = logging.DEBUG
+        irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "info":
         level = logging.INFO
+        irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "error":
         level = logging.ERROR
+        irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "warning":
         level = logging.WARNING
+        irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "critical":
         level = logging.CRITICAL
+        irc.reply(event, "Set log level to {0}".format(args[0]))
     else:
         level = logging.INFO  # Default logging level
         irc.reply(event, "Invalid log level {0}".format(args))
