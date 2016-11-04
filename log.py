@@ -131,7 +131,7 @@ class MetaSynchronized(type):
                     original__init__(self, *args, **kwargs)
                 else:
                     # newclass is defined below.
-                    super(newclass, self).__init__(*args, **kwargs)
+                    super(MetaSynchronized, self).__init__(*args, **kwargs)
 
             dictionnary['__init__'] = __init__
         newclass = super(MetaSynchronized, mcs).__new__(mcs, name, bases, dictionnary)
