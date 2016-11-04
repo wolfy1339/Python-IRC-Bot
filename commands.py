@@ -29,11 +29,11 @@ def getUsersFromCommaList(args):
     pos = args.find(",") + 2
     users = args[pos:].strip().split(", ")
     args = args[:pos].strip().split(" ")
-    for i in range(len(users)):
+    for user in users:
         try:
-            args.remove(users[i])
+            args.remove(user)
         except ValueError:
-            args.remove(users[i] + ",")
+            args.remove(user + ",")
     users.append("".join(args[-1:])[:-1])
     return users
 
