@@ -50,8 +50,10 @@ class Bot(zirc.Client):
         logging.debug(data)
 
     def on_kick(self, event, irc):
-        logging.warning("Kicked from %s, trying to re-join", event.target)
-        irc.join(event.target)
+        nick = event.raw.split(" ")[3]
+        if nick == self.config['nickname']:
+            logging.warning("Kicked from %s, trying to re-join", event.target)
+            irc.join(event.target)
 
     def on_join(self, event, irc):
         logging.info("Joining %s", event.target)
