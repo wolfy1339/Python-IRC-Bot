@@ -149,7 +149,7 @@ def kban(bot, event, irc, args):
         if args[0].startswith("#"):
             channel = args[0]
             str_args = " ".join(args[1:])
-            if str_args.find(",") != -1
+            if str_args.find(",") != -1:
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
@@ -157,7 +157,7 @@ def kban(bot, event, irc, args):
         else:
             channel = event.target
             str_args = " ".join(args)
-            if str_args.find(",") != -1
+            if str_args.find(",") != -1:
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
@@ -178,7 +178,7 @@ def kick(bot, event, irc, args):
         if args[0].startswith("#"):
             channel = args[0]
             str_args = " ".join(args[1:])
-            if str_args.find(",") != -1
+            if str_args.find(",") != -1:
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
@@ -186,7 +186,7 @@ def kick(bot, event, irc, args):
         else:
             channel = event.target
             str_args = " ".join(args)
-            if str_args.find(",") != -1
+            if str_args.find(",") != -1:
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
