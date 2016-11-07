@@ -84,7 +84,7 @@ def repl(bot, event, irc, args):
     try:
         irc.reply(event, repr(eval(" ".join(args))))
     except Exception as e:
-        irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args))
+        irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
         utils.PrintError(irc, event)
 
 
