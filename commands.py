@@ -2,7 +2,7 @@ import math
 import time
 import os
 import re
-import logging
+import log
 from utils import add_cmd
 import utils
 import config
@@ -266,24 +266,24 @@ def nick(bot, event, irc, args):
 def logLevel(bot, event, irc, args):
     """Help text"""
     if args[0] == "debug":
-        level = logging.DEBUG
+        level = 10
         irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "info":
-        level = logging.INFO
+        level = 20
         irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "error":
-        level = logging.ERROR
+        level = 30
         irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "warning":
-        level = logging.WARNING
+        level = 40
         irc.reply(event, "Set log level to {0}".format(args[0]))
     elif args[0] == "critical":
-        level = logging.CRITICAL
+        level = 50
         irc.reply(event, "Set log level to {0}".format(args[0]))
     else:
-        level = logging.INFO  # Default logging level
+        level = config.logLevel  # Default logging level
         irc.reply(event, "Invalid log level {0}".format(args))
-    logging.getLogger().setLevel(level)
+    log.setLevel(level)
 
 
 @add_cmd("config", admin=True, minArgs=1, alias=['cfg'])
