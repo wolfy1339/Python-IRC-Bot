@@ -14,6 +14,7 @@ logFormat = '%(levelname)s %(asctime)s %(message)s'
 colorized = True
 timestampFormat = '%Y-%m-%dT%H:%M:%S'
 logLevel = 20  # INFO
+stdoutWrap = True
 
 # Bot
 commandChar = '?'
