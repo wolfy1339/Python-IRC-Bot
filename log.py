@@ -102,7 +102,7 @@ class MetaSynchronized(type):
             if hasattr(base, MetaSynchronized.METHODS):
                 sync.update(getattr(base, MetaSynchronized.METHODS))
 
-        if MetaSynchronized.METHODS in dict:
+        if MetaSynchronized.METHODS in dictionnary:
             sync.update(dictionnary[MetaSynchronized.METHODS])
 
         if sync:
