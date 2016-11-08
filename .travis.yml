@@ -8,4 +8,4 @@ python:
   - "3.6"
 install: 
   - pip install --user -r requirements.txt
-script: pytest
+script: python test.py
