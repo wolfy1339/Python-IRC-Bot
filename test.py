@@ -5,6 +5,10 @@ import commands
 import config
 
 class botTest(TestCase):
+    def __init__(self):
+        self.config = {}
+        self.config['nickname'] = 'zIRC-test'
+
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
             utils.call_command(self, event, irc, arguments)
