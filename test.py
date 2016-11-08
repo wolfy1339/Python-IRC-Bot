@@ -1,5 +1,5 @@
 from zirc.test import TestCase
-import log
+import log as logging
 import utils
 import commands
 import config
@@ -12,7 +12,7 @@ class botTest(TestCase):
         self.config['nickname'] = 'zIRC-test'
 
     def on_all(event, irc):
-        log.debug(event.source)
+        logging.debug(event.source)
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
@@ -21,17 +21,17 @@ class botTest(TestCase):
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
         if nick == 'zIRC-test':
-            log.warning("Kicked from %s, trying to re-join", event.target)
+            logging.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
 
     def on_join(self, event, irc):
-        log.info("Joining %s", event.target)
+        logging.info("Joining %s", event.target)
         irc.send("WHO {0} nuhs%nhu".format(event.target))
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.hostmask
-            log.info("Invited to %s by %s", event.target, hostmask)
+            logging.info("Invited to %s by %s", event.target, hostmask)
             irc.join(event.target)
 
 
