@@ -16,13 +16,13 @@ def chunks(l, n):
 
 def setMode(event, irc, args, mode):
     if args[0].find("#") == -1:
-        for i in chunks(args[1:], 4):
-            modes = "".join(mode[1:]) * len(i)
-            irc.mode(args[0], " ".join(i), "".join(mode[:1]) + modes)
+        for block in chunks(args[1:], 4):
+            modes = "".join(mode[1:]) * len(block)
+            irc.mode(args[0], " ".join(block), "".join(mode[:1]) + modes)
     else:
-        for i in chunks(args, 4):
-            modes = "".join(mode[1:]) * len(i)
-            irc.mode(event.target, " ".join(i), "".join(mode[:1]) + modes)
+        for block in chunks(args, 4):
+            modes = "".join(mode[1:]) * len(block)
+            irc.mode(event.target, " ".join(block), "".join(mode[:1]) + modes)
 
 
 def getUsersFromCommaList(args):
@@ -164,6 +164,11 @@ def kban(bot, event, irc, args):
             message = " ".join(args[:-len(users)]) or event.source.nick
 
         for i in users:
+            try:
+                irc.ban(channel, "*!*@" + bot.userdb[i]['host'], message)
+            except KeyError:
+                irc.send("WHO {0} nuhs%nhu".format(event.target))
+                irc.ban(channel, "*!*@" + bot.userdb[i]['host'], message)
             irc.kick(channel, i, message)
     else:
         irc.ban(event.target, args[0])
