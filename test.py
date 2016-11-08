@@ -4,10 +4,15 @@ import utils
 import commands
 import config
 
+log.setLevel(10)
+
 class botTest(TestCase):
     def __init__(self):
         self.config = {}
         self.config['nickname'] = 'zIRC-test'
+
+    def on_all(event, irc):
+        log.debug(event.source)
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
@@ -16,7 +21,7 @@ class botTest(TestCase):
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
         if nick == 'zIRC-test':
-            logging.warning("Kicked from %s, trying to re-join", event.target)
+            log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
 
     def on_join(self, event, irc):
