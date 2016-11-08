@@ -4,7 +4,7 @@ import utils
 import commands
 import config
 
-log.setLevel(10)
+logging.setLevel(10)
 
 class botTest(TestCase):
     def __init__(self):
