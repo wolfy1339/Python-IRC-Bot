@@ -62,6 +62,8 @@ def call_command(bot, event, irc, arguments):
                 if len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
+                    target = "a private message" if privmsg else event.target
+                    log.info("%s called %s in %s", event.source, name, target)
                     commands[name]['func'](bot, event, irc, args)
             else:
                 irc.reply(event, config.noPerms)
@@ -70,9 +72,6 @@ def call_command(bot, event, irc, arguments):
         except Exception:
             irc.reply(event, 'Oops, an error occured!')
             PrintError(irc, event)
-        else:
-            target = "a private message" if privmsg else event.target
-            log.info("%s called %s in %s", event.source, name, target)
 
 
 def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
