@@ -11,7 +11,7 @@ class botTest(TestCase):
         self.config = {}
         self.config['nickname'] = 'zIRC-test'
 
-    def on_all(event, irc):
+    def on_all(self, event, irc):
         logging.debug(event.source)
 
     def on_privmsg(self, event, irc, arguments):
