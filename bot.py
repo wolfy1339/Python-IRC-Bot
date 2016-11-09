@@ -51,6 +51,12 @@ class Bot(zirc.Client):
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
 
+    def on_part(self, event, irc):
+        requested = "".join(event.arguments).startswith("requested")
+        if event.source.nick == self.config['nickname'] and requested:
+            log.warning("Removed from %s, trying to re-join", event.target)
+            irc.join(event.target)
+
     def on_join(self, event, irc):
         log.info("Joining %s", event.target)
         irc.send("WHO {0} nuhs%nhu".format(event.target))
