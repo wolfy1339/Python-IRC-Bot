@@ -346,6 +346,7 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True, minArgs=1)
 def Reload(bot, event, irc, args):
     """Help text"""
+    global reload
     if utils.PY34:
         find_module = __import__("importlib").find_module
         reload = __import__("importlib").reload
