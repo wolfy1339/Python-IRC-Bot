@@ -343,27 +343,18 @@ def List(bot, event, irc, args):
         irc.reply(event, ", ".join(utils.cmd_list))
 
 
-@add_cmd("reload", admin=True, minArgs=1)
+@add_cmd("reload", admin=True, minArgs=1, hidden=True)
 def Reload(bot, event, irc, args):
     """Help text"""
     global reload
     if utils.PY34:
-        load_module = __import__("importlib").import_module
         reload = __import__("importlib").reload
     elif utils.PY3:
-        find_module = __import__("imp").find_module
-        load_module = __import__("imp").load_module
         reload = __import__("imp").reload
-    elif utils.PY2:
-        find_module = __import__("imp").find_module
-        load_module = __import__("imp").load_module
 
     if args[0] in ['commands', 'utils', 'config']:
         try:
-            if not utils.PY34:
-                reload(load_module(find_module(args[0])))
-            else:
-                reload(load_module(args[0]))
+            reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
             utils.PrintError(irc, event)
