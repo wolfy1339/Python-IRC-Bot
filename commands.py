@@ -120,6 +120,7 @@ def part(bot, event, irc, args):
     else:
         irc.part(event.target)
 
+
 @add_cmd("cycle", alias=["rejoin"], admin=True, minArgs=0)
 def cycle(bot, event, irc, args):
     if len(args):
@@ -128,6 +129,7 @@ def cycle(bot, event, irc, args):
     else:
         irc.part(event.target)
         irc.join(event.target)
+
 
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
@@ -174,6 +176,7 @@ def kban(bot, event, irc, args):
         irc.ban(event.target, args[0])
         irc.kick(event.target, args[0], message)
 
+
 @add_cmd("kick", admin=True, minArgs=1)
 def kick(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
@@ -201,6 +204,35 @@ def kick(bot, event, irc, args):
             irc.kick(channel, i, message)
     else:
         irc.kick(event.target, args[0], " ".join(args[1:]))
+
+
+@add_cmd("remove", alias=['ninja'], admin=True, minArgs=1)
+def remove(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Forces a user to part the channel.
+    """
+    if len(args) > 1:
+        if args[0].startswith("#"):
+            channel = args[0]
+            str_args = " ".join(args[1:])
+            if str_args.find(",") != -1:
+                users = getUsersFromCommaList(str_args)
+            else:
+                users = args[-1:]
+            message = " ".join(args[1:-len(users)]) or event.source.nick
+        else:
+            channel = event.target
+            str_args = " ".join(args)
+            if str_args.find(",") != -1:
+                users = getUsersFromCommaList(str_args)
+            else:
+                users = args[-1:]
+            message = " ".join(args[:-len(users)]) or event.source.nick
+
+        for i in users:
+            irc.msg("REMOVE {0} {1} :{2}".format(channel, i, message))
+    else:
+        irc.msg("REMOVE {0} {1} :{2}".format(event.target, args[0], " ".join(args[1:]))
 
 
 @add_cmd("unban", admin=True, minArgs=1)
