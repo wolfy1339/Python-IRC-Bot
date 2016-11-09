@@ -232,7 +232,7 @@ def remove(bot, event, irc, args):
         for i in users:
             irc.msg("REMOVE {0} {1} :{2}".format(channel, i, message))
     else:
-        irc.msg("REMOVE {0} {1} :{2}".format(event.target, args[0], " ".join(args[1:]))
+        irc.msg("REMOVE {0} {1} :{2}".format(event.target, args[0], " ".join(args[1:])))
 
 
 @add_cmd("unban", admin=True, minArgs=1)
