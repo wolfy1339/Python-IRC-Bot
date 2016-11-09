@@ -54,7 +54,6 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ping
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?quit
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload config
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?version
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unvoice
