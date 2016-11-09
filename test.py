@@ -11,9 +11,6 @@ class botTest(TestCase):
         self.config = {}
         self.config['nickname'] = 'zIRC-test'
 
-    def on_all(self, event, irc):
-        logging.debug(event.source)
-
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
             utils.call_command(self, event, irc, arguments)
@@ -21,17 +18,14 @@ class botTest(TestCase):
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
         if nick == 'zIRC-test':
-            logging.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
 
     def on_join(self, event, irc):
-        logging.info("Joining %s", event.target)
         irc.send("WHO {0} nuhs%nhu".format(event.target))
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.hostmask
-            logging.info("Invited to %s by %s", event.target, hostmask)
             irc.join(event.target)
 
 
@@ -53,14 +47,14 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list alias
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level info
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?nick
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?nick foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?op
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?perms
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ping
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?quit
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload config
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?version
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unvoice
