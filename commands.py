@@ -360,7 +360,7 @@ def Reload(bot, event, irc, args):
 
     if args[0] in ['commands', 'utils', 'config']:
         try:
-            if not PY34:
+            if not utils.PY34:
                 reload(load_module(find_module(args[0])))
             else:
                 reload(load_module(args[0]))
