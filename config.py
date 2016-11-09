@@ -1,10 +1,11 @@
 from zirc import Sasl, Caps
 
 # zIRC
-with open("password", "r") as i:
-    password = i.read().strip()
-sasl = Sasl(username="BigWolfy1339", password=password)
-caps = Caps(sasl, "multi-prefix")
+if __import__("os").getenv('CI', 'false') == 'false':
+    with open("password", "r") as i:
+        password = i.read().strip()
+    sasl = Sasl(username="BigWolfy1339", password=password)
+    caps = Caps(sasl, "multi-prefix")
 
 # IRC
 channels = ["##wolfy1339", "##powder-bots", "##jeffl35"]
