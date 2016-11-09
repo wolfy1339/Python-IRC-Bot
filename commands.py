@@ -15,7 +15,7 @@ def chunks(l, n):
 
 
 def setMode(event, irc, args, mode):
-    if args[0].find("#") == -1:
+    if args[0].find("#") != -1:
         for block in chunks(args[1:], 4):
             modes = "".join(mode[1:]) * len(block)
             irc.mode(args[0], " ".join(block), "".join(mode[:1]) + modes)
