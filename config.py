@@ -1,7 +1,8 @@
 from zirc import Sasl, Caps
 
 # zIRC
-if __import__("os").getenv('CI', 'false') == 'false':
+ci = __import__("os").getenv('CI', 'false') == 'false'
+if not ci:
     with open("password", "r") as i:
         password = i.read().strip()
     sasl = Sasl(username="BigWolfy1339", password=password)
