@@ -343,7 +343,7 @@ def List(bot, event, irc, args):
         irc.reply(event, ", ".join(utils.cmd_list))
 
 
-@add_cmd("reload", admin=True, minArgs=1, hidden=True)
+@add_cmd("reload", admin=True, minArgs=1, hide=True)
 def Reload(bot, event, irc, args):
     """Help text"""
     global reload
