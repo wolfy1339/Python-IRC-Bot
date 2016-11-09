@@ -165,10 +165,10 @@ def kban(bot, event, irc, args):
 
         for i in users:
             try:
-                irc.ban(channel, "*!*@" + bot.userdb[i]['host'], message)
+                irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
             except KeyError:
                 irc.send("WHO {0} nuhs%nhu".format(event.target))
-                irc.ban(channel, "*!*@" + bot.userdb[i]['host'], message)
+                irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
             irc.kick(channel, i, message)
     else:
         irc.ban(event.target, args[0])
