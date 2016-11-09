@@ -63,7 +63,8 @@ def call_command(bot, event, irc, arguments):
                     irc.reply(event, config.argsMissing)
                 else:
                     target = "a private message" if privmsg else event.target
-                    log.info("%s called %s in %s", event.source, name, target)
+                    if not config.ci:
+                        log.info("%s called %s in %s", event.source, name, target)
                     commands[name]['func'](bot, event, irc, args)
             else:
                 irc.reply(event, config.noPerms)
