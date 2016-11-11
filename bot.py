@@ -58,8 +58,9 @@ class Bot(zirc.Client):
             irc.join(event.target)
 
     def on_join(self, event, irc):
-        log.info("Joining %s", event.target)
-        irc.send("WHO {0} nuhs%nhu".format(event.target))
+        if event.source.nick == self.config['nickname']:
+            log.info("Joining %s", event.target)
+            irc.send("WHO {0} nuhs%nhu".format(event.target))
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
