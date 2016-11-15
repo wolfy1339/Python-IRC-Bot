@@ -56,11 +56,20 @@ class Bot(zirc.Client):
         if event.source.nick == self.config['nickname'] and requested:
             log.warning("Removed from %s, trying to re-join", event.target)
             irc.join(event.target)
+        else:
+            try:
+                self.userdb.pop(event.source.nick)
+            except KeyError:
+                for i in self.userdb:
+                    if i['host'] == event.source.host:
+                        self.userdb.pop(i['hostmask'].split("!")[0])
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
-            irc.send("WHO {0} nuhs%nhu".format(event.target))
+            irc.send("WHO {0} nuhs%nhua".format(event.target))
+        else:
+            irc.send("WHO {0}".format(event.source.nick))
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
@@ -87,7 +96,8 @@ class Bot(zirc.Client):
         log.info("Connected to network")
 
     def on_whoreply(self, event, irc):
-        (host, ident, nick) = event.arguments[1:3] + event.arguments[4]
+        (host, ident, nick) = event.arguments[1:3] + event.arguments[4:5]
+        channel = None
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         self.userdb[nick] = {
             'hostmask': hostmask,
@@ -96,8 +106,9 @@ class Bot(zirc.Client):
         }
 
     def on_whospcrpl(self, event, irc):
-        (ident, host, nick) = event.arguments
+        (ident, host, nick) = event.arguments[:3]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+        channel = None
         self.userdb[nick] = {
             'hostmask': hostmask,
             'host': host,
