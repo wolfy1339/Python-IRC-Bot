@@ -51,11 +51,12 @@ def call_command(bot, event, irc, arguments):
         privmsg = event.target == bot.config['nickname']
         args = command[1:] if len(command) > 1 else ''
 
+        host = event.source.host
+        chan = event.target if not privmsg else False
+
         try:
             perms = commands[name]['perms']
             minArgs = commands[name]['minArgs']
-            host = event.source.host
-            chan = event.target if not privmsg else False
 
             if checkPerms(host, owner=perms[2], admin=perms[1],
                           trusted=perms[0], channel=chan):
@@ -79,7 +80,7 @@ def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
     isOwner = host in config.owners
     isAdmin = host in config.admins
     isTrusted = host in config.trusted
-    isBot = host.find("bot") != -1 and host not in config.bots['hosts']
+    isBot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
     ignoreChans = list(config.ignores["channels"].keys())
