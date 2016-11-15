@@ -334,7 +334,7 @@ def Config(bot, event, irc, args):
             irc.reply(event, "Invalid config variable {}".format(args[0]))
     else:
         if hasattr(config, args[0]):
-            irc.reply(event, getattr(config, args[0]))
+            irc.reply(event, repr(getattr(config, args[0])))
         else:
             irc.reply(event, "Invalid config variable {}".format(args[0]))
 
