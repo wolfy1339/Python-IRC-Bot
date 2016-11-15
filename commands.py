@@ -174,7 +174,7 @@ def kban(bot, event, irc, args):
             irc.kick(channel, i, message)
     else:
         irc.ban(event.target, args[0])
-        irc.kick(event.target, args[0], message)
+        irc.kick(event.target, args[0], " ".join(args[1:]))
 
 
 @add_cmd("kick", admin=True, minArgs=1)
