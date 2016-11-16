@@ -26,8 +26,13 @@ def setMode(event, irc, args, mode):
 
 
 def getUsersFromCommaList(args):
-    pos = args.find(",") + 2
-    users = args[pos:].strip().split(", ")
+    pos = args.find(",")
+    if args[pos + 1] != " ":
+        split = ","
+    else:
+        pos += 2
+        split = ", "
+    users = args[pos:].strip().split(split)
     args = args[:pos].strip().split(" ")
     for user in users:
         try:
