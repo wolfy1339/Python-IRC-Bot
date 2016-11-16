@@ -139,58 +139,6 @@ class MetaSynchronized(type):
         return newclass
 Synchronized = MetaSynchronized('Synchronized', (), {})
 
-# From http://code.activestate.com/recipes/52215-get-more-information-from-tracebacks/
-def collect_extra_debug_data():
-    """
-    Print the usual traceback information, followed by a listing of all the
-    local variables in each frame.
-    """
-    data = ''
-
-    try:
-        tb = sys.exc_info()[2]
-        stack = []
-
-        while tb:
-            stack.append(tb.tb_frame)
-            tb = tb.tb_next
-    finally:
-        del tb
-
-    data += 'Locals by frame, innermost last:\n'
-    for frame in stack:
-        data += '\n\n'
-        data += ('Frame %s in %s at line %s\n' % (frame.f_code.co_name,
-                                             frame.f_code.co_filename,
-                                             frame.f_lineno))
-        frame_locals = frame.f_locals
-        for inspected in ('self', 'cls'):
-            if inspected in frame_locals:
-                if hasattr(frame_locals[inspected], '__dict__') and \
-                        frame_locals[inspected].__dict__:
-                    for (key, value) in frame_locals[inspected].__dict__.items():
-                        frame_locals['%s.%s' % (inspected, key)] = value
-
-        for key, value in frame_locals.items():
-            if key == '__builtins__':
-                # This is flooding
-                continue
-            data += ('\t%20s = ' % key)
-            # We have to be careful not to cause a new error in our error
-            # printer! Calling str() on an unknown object could cause an
-            # error we don't want.
-            try:
-                data += repr(value) + '\n'
-            except Exception:
-                data += '<ERROR WHILE PRINTING VALUE>\n'
-    data += '\n'
-    data += '+-----------------------+\n'
-    data += '| End of locals display |\n'
-    data += '+-----------------------+\n'
-    data += '\n'
-    return data
-### END
-
 deadlyExceptions = [KeyboardInterrupt, SystemExit]
 
 ###
@@ -234,7 +182,6 @@ class Logger(logging.Logger):
         eId = hex(hash(eStrId) & 0xFFFFF)
         logging.Logger.exception(self, *args)
         self.error('Exception id: %s', eId)
-        self.debug('%s', collect_extra_debug_data())
         # The traceback should be sufficient if we want it.
         # self.error('Exception string: %s', eStrId)
 
