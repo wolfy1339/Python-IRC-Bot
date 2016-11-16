@@ -421,3 +421,8 @@ def version(bot, event, irc, args):
     sysver = "".join(__import__("sys").version.split("\n"))
     botver = "A zIRC bot v{0}, running on Python {1}".format("0.1", sysver)
     irc.reply(event, botver)
+
+@add_cmd("flushq", alias=['flush'], minArgs=0, admin=True)
+def flush(bot, event, irc, args):
+    bot.fp.irc_queue = []
+    irc.reply(event, "Cleared IRC queue")
