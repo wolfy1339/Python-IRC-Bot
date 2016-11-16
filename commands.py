@@ -160,7 +160,10 @@ def kban(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[1:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0}".format(event.source.nick)
         else:
             channel = event.target
             str_args = " ".join(args)
@@ -168,7 +171,10 @@ def kban(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0}".format(event.source.nick)
 
         for i in users:
             try:
@@ -195,7 +201,10 @@ def kick(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[1:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0}".format(event.source.nick)
         else:
             channel = event.target
             str_args = " ".join(args)
@@ -203,7 +212,10 @@ def kick(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0}".format(event.source.nick)
 
         for i in users:
             irc.kick(channel, i, message)
@@ -224,7 +236,10 @@ def remove(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[1:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0} says GTFO!".format(event.source.nick)
         else:
             channel = event.target
             str_args = " ".join(args)
@@ -232,7 +247,10 @@ def remove(bot, event, irc, args):
                 users = getUsersFromCommaList(str_args)
             else:
                 users = args[-1:]
-            message = " ".join(args[:-len(users)]) or event.source.nick
+            if not " ".join(args[:-len(users)]) == '':
+                message =  " ".join(args[:-len(users)])
+            else:
+                message = "{0} says GTFO!".format(event.source.nick)
 
         for i in users:
             irc.msg("REMOVE {0} {1} :{2}".format(channel, i, message))
@@ -410,11 +428,13 @@ def permissions(bot, event, irc, args):
     host = event.source.host
 
     if host in config.owners:
-        perms = 'owner'
+        perms = 'Owner'
     elif host in config.admins:
-        perms = 'admin'
+        perms = 'Admin'
     elif host in config.trusted:
-        perms = 'trusted'
+        perms = 'Trusted'
+    elif host in config.bots.host or event.target in config.bots.channels:
+        perms = 'Bot'
     else:
         perms = 'User'
 
