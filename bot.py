@@ -101,11 +101,19 @@ class Bot(zirc.Client):
         channel = event.arguments[0]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         if nick != "ChanServ":
-            self.userdb[channel][nick] = {
-                'hostmask': hostmask,
-                'host': host,
-                'account': ''.join(host.split("/")[:-1])
-            }
+            try:
+                self.userdb[channel][nick] = {
+                    'hostmask': hostmask,
+                    'host': host,
+                    'account': ''.join(host.split("/")[:-1])
+                }
+            except KeyErrorr:
+                self.userdb[channel] = {}
+                self.userdb[channel][nick] = {
+                    'hostmask': hostmask,
+                    'host': host,
+                    'account': ''.join(host.split("/")[:-1])
+                } 
 
     def on_whospcrpl(self, event, irc):
         (ident, host, nick) = event.arguments[1:4]
@@ -113,11 +121,19 @@ class Bot(zirc.Client):
         channel = event.arguments[0]
         account = event.arguments[4]
         if nick != "ChanServ":
-            self.userdb[channel][nick] = {
-                'hostmask': hostmask,
-                'host': host,
-                'account': account
-            }
+            try:
+                self.userdb[channel][nick] = {
+                    'hostmask': hostmask,
+                    'host': host,
+                    'account': account
+                }
+            except KeyErrorr:
+                self.userdb[channel] = {}
+                self.userdb[channel][nick] = {
+                    'hostmask': hostmask,
+                    'host': host,
+                    'account': account
+                } 
 
     def on_315(self, event, irc):
         log.info("Received end of WHO reply from network")
