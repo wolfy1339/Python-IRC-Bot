@@ -43,7 +43,8 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_send(data):
-        log.debug(data)
+        if data.find("%") == -1:
+            log.debug(data)
 
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
@@ -58,16 +59,16 @@ class Bot(zirc.Client):
             irc.join(event.target)
         else:
             try:
-                self.userdb.pop(event.source.nick)
+                self.userdb[event.target].pop(event.source.nick)
             except KeyError:
                 for i in self.userdb:
                     if i['host'] == event.source.host:
-                        self.userdb.pop(i['hostmask'].split("!")[0])
+                        self.userdb[event.target].pop(i['hostmask'].split("!")[0])
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
-            irc.send("WHO {0} nuhs%nhua".format(event.target))
+            irc.send("WHO {0} nuhs%nhuac".format(event.target))
         else:
             irc.send("WHO {0}".format(event.source.nick))
 
@@ -96,24 +97,27 @@ class Bot(zirc.Client):
         log.info("Connected to network")
 
     def on_whoreply(self, event, irc):
-        (host, ident, nick) = event.arguments[1:3] + event.arguments[4:5]
-        channel = None
+        (ident, host, nick) = event.arguments[1:3] + event.arguments[4:5]
+        channel = event.arguments[0]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-        self.userdb[nick] = {
-            'hostmask': hostmask,
-            'host': host,
-            'account': None
-        }
+        if nick != "ChanServ":
+            self.userdb[channel][nick] = {
+                'hostmask': hostmask,
+                'host': host,
+                'account': ''.join(host.split("/")[:-1])
+            }
 
     def on_whospcrpl(self, event, irc):
-        (ident, host, nick) = event.arguments[:3]
+        (ident, host, nick) = event.arguments[1:4]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-        channel = None
-        self.userdb[nick] = {
-            'hostmask': hostmask,
-            'host': host,
-            'account': None
-        }
+        channel = event.arguments[0]
+        account = event.arguments[4]
+        if nick != "ChanServ":
+            self.userdb[channel][nick] = {
+                'hostmask': hostmask,
+                'host': host,
+                'account': account
+            }
 
     def on_315(self, event, irc):
         log.info("Received end of WHO reply from network")
