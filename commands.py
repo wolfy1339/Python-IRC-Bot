@@ -359,11 +359,7 @@ def Help(bot, event, irc, args):
             doc = utils.commands[args[0]]['func'].__doc__
             irc.reply(event, "Usage: {0}".format(doc))
         except KeyError:
-            try:
-                doc = utils.aliases[args[0]]['func'].__doc__
-                irc.reply(event, "Usage: {0}".format(doc))
-            except KeyError:
-                irc.reply(event, "Invalid command {0}".format(args[0]))
+            irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
         doc = utils.commands["help"]['func'].__doc__
         irc.reply(event, "Usage: {0}".format(doc))
