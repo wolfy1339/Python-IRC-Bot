@@ -107,7 +107,7 @@ class Bot(zirc.Client):
                     'host': host,
                     'account': ''.join(host.split("/")[:-1])
                 }
-            except KeyErrorr:
+            except KeyError:
                 self.userdb[channel] = {}
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
@@ -127,7 +127,7 @@ class Bot(zirc.Client):
                     'host': host,
                     'account': account
                 }
-            except KeyErrorr:
+            except KeyError:
                 self.userdb[channel] = {}
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
