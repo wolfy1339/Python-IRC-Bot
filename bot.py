@@ -31,7 +31,8 @@ class Bot(zirc.Client):
         if event.raw.startswith("ERROR"):
             log.error(" ".join(event.arguments))
         else:
-            log.debug(event.raw)
+            if event.raw.find("%") == -1:
+                log.debug(event.raw)
 
     @staticmethod
     def on_ctcp(irc, raw):
