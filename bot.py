@@ -75,7 +75,7 @@ class Bot(zirc.Client):
 
     def on_invite(self, event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
-            hostmask = event.source.hostmask
+            hostmask = event.source.host
             log.info("Invited to %s by %s", event.target, hostmask)
             irc.join(event.target)
 
