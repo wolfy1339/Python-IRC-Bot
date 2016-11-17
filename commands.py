@@ -161,7 +161,7 @@ def kban(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0}".format(event.source.nick)
         else:
@@ -172,7 +172,7 @@ def kban(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0}".format(event.source.nick)
 
@@ -202,7 +202,7 @@ def kick(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0}".format(event.source.nick)
         else:
@@ -213,7 +213,7 @@ def kick(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0}".format(event.source.nick)
 
@@ -237,7 +237,7 @@ def remove(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0} says GTFO!".format(event.source.nick)
         else:
@@ -248,7 +248,7 @@ def remove(bot, event, irc, args):
             else:
                 users = args[-1:]
             if not " ".join(args[:-len(users)]) == '':
-                message =  " ".join(args[:-len(users)])
+                message = " ".join(args[:-len(users)])
             else:
                 message = "{0} says GTFO!".format(event.source.nick)
 
@@ -433,7 +433,7 @@ def permissions(bot, event, irc, args):
         perms = 'Admin'
     elif host in config.trusted:
         perms = 'Trusted'
-    elif host in config.bots.host or event.target in config.bots.channels:
+    elif host in config.bots['hosts'] or event.target in config.bots['channels'] and host.find("/bot/") != -1:
         perms = 'Bot'
     else:
         perms = 'User'
@@ -446,6 +446,7 @@ def version(bot, event, irc, args):
     sysver = "".join(__import__("sys").version.split("\n"))
     botver = "A zIRC bot v{0}, running on Python {1}".format("0.1", sysver)
     irc.reply(event, botver)
+
 
 @add_cmd("flushq", alias=['flush'], minArgs=0, admin=True)
 def flush(bot, event, irc, args):
