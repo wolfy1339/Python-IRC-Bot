@@ -62,7 +62,7 @@ class Bot(zirc.Client):
             try:
                 self.userdb[event.target].pop(event.source.nick)
             except KeyError:
-                for i in self.userdb:
+                for i in self.userdb[event.target]:
                     if i['host'] == event.source.host:
                         self.userdb[event.target].pop(i['hostmask'].split("!")[0])
 
