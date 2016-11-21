@@ -106,14 +106,14 @@ class Bot(zirc.Client):
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': ''.join(host.split("/")[:-1])
+                    'account': ''.join(host.split("/")[-1:])
                 }
             except KeyError:
                 self.userdb[channel] = {}
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': ''.join(host.split("/")[:-1])
+                    'account': ''.join(host.split("/")[-1:])
                 } 
 
     def on_whospcrpl(self, event, irc):
