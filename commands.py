@@ -108,7 +108,7 @@ def ping(bot, event, irc, args):
 @add_cmd("join", admin=True, minArgs=1)
 def join(bot, event, irc, args):
     """Joins given channel"""
-    irc.join(args[0], key=args[1] or None)
+    irc.join(args[0], key=args[1] if len(args) >= 2 else None)
 
 
 @add_cmd("part", alias=["leave"], admin=True, minArgs=0)
