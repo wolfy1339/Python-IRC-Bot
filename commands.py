@@ -108,7 +108,7 @@ def ping(bot, event, irc, args):
 @add_cmd("join", admin=True, minArgs=1)
 def join(bot, event, irc, args):
     """Joins given channel"""
-    irc.join(args[0])
+    irc.join(args[0], key=args[1] or None)
 
 
 @add_cmd("part", alias=["leave"], admin=True, minArgs=0)
@@ -247,9 +247,9 @@ def remove(bot, event, irc, args):
                 message = "{0} says GTFO!".format(event.source.nick)
 
         for i in users:
-            irc.msg("REMOVE {0} {1} :{2}".format(channel, i, message))
+            irc.remove(channel, i, message)
     else:
-        irc.msg("REMOVE {0} {1} :{2}".format(event.target, args[0], " ".join(args[1:])))
+        irc.remove(event.target, args[0], " ".join(args[1:]))
 
 
 @add_cmd("unban", admin=True, minArgs=1)
