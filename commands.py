@@ -407,6 +407,8 @@ def hostmask(bot, event, irc, args):
 def permissions(bot, event, irc, args):
     """Replies with your permission level"""
     host = event.source.host
+    isBot = host.find("/bot/") != -1
+    isBotChannel = event.target in config.bots['channels']
 
     if host in config.owners:
         perms = 'Owner'
@@ -414,7 +416,7 @@ def permissions(bot, event, irc, args):
         perms = 'Admin'
     elif host in config.trusted:
         perms = 'Trusted'
-    elif host in config.bots['hosts'] or event.target in config.bots['channels'] and host.find("/bot/") != -1:
+    elif host in config.bots['hosts'] or (isBotChanel and isBot):
         perms = 'Bot'
     else:
         perms = 'User'
