@@ -37,6 +37,32 @@ def getUsersFromCommaList(args):
     return users
 
 
+def x(event, args):
+    if args[0].startswith("#"):
+        channel = args[0]
+        str_args = " ".join(args[1:])
+        if str_args.find(",") != -1:
+            users = getUsersFromCommaList(str_args)
+        else:
+            users = args[-1:]
+        if not " ".join(args[:-len(users)]) == '':
+            message = " ".join(args[:-len(users)])
+        else:
+            message = "{0}".format(event.source.nick)
+    else:
+        channel = event.target
+        str_args = " ".join(args)
+        if str_args.find(",") != -1:
+            users = getUsersFromCommaList(str_args)
+        else:
+            users = args[-1:]
+        if not " ".join(args[:-len(users)]) == '':
+            message = " ".join(args[:-len(users)])
+        else:
+            message = "{0}".format(event.source.nick)
+    return channel, users, message
+
+
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation"""
@@ -147,34 +173,12 @@ def kban(bot, event, irc, args):
     if len(args) > 1:
         setMode(event, irc, args, "+b")
 
-        if args[0].startswith("#"):
-            channel = args[0]
-            str_args = " ".join(args[1:])
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0}".format(event.source.nick)
-        else:
-            channel = event.target
-            str_args = " ".join(args)
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0}".format(event.source.nick)
-
+        channel, users, message = x(event, args)
         for i in users:
             try:
                 irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
             except KeyError:
-                irc.send("WHO {0} nuhs%nhu".format(event.target))
+                irc.send("WHO {0} nuhs%nhua".format(event.target))
                 irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
             irc.kick(channel, i, message)
     else:
@@ -188,28 +192,7 @@ def kick(bot, event, irc, args):
     Kicks a user
     """
     if len(args) > 1:
-        if args[0].startswith("#"):
-            channel = args[0]
-            str_args = " ".join(args[1:])
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0}".format(event.source.nick)
-        else:
-            channel = event.target
-            str_args = " ".join(args)
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0}".format(event.source.nick)
+        channel, users, message = x(event, args)
 
         for i in users:
             irc.kick(channel, i, message)
@@ -223,29 +206,9 @@ def remove(bot, event, irc, args):
     Forces a user to part the channel.
     """
     if len(args) > 1:
-        if args[0].startswith("#"):
-            channel = args[0]
-            str_args = " ".join(args[1:])
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0} says GTFO!".format(event.source.nick)
-        else:
-            channel = event.target
-            str_args = " ".join(args)
-            if str_args.find(",") != -1:
-                users = getUsersFromCommaList(str_args)
-            else:
-                users = args[-1:]
-            if not " ".join(args[:-len(users)]) == '':
-                message = " ".join(args[:-len(users)])
-            else:
-                message = "{0} says GTFO!".format(event.source.nick)
-
+        channel, users, message = x(event, args)
+        if message == event.source.nick:
+            message = "{0} says GTFO!".format(event.source.nick)
         for i in users:
             irc.remove(channel, i, message)
     else:
