@@ -40,13 +40,11 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?echo moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?host
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?join ##foo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user,user2,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list alias
