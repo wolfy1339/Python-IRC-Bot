@@ -114,7 +114,7 @@ class Bot(zirc.Client):
                     'hostmask': hostmask,
                     'host': host,
                     'account': ''.join(host.split("/")[-1:])
-                } 
+                }
 
     def on_whospcrpl(self, event, irc):
         (ident, host, nick) = event.arguments[1:4]
@@ -134,7 +134,7 @@ class Bot(zirc.Client):
                     'hostmask': hostmask,
                     'host': host,
                     'account': account
-                } 
+                }
 
     def on_315(self, event, irc):
         log.info("Received end of WHO reply from network")
