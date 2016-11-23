@@ -1,3 +1,4 @@
+import sys
 from zirc.test import TestCase
 import log as logging
 import utils
@@ -61,4 +62,9 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unvoice
 :user3!~user@user/user3 PRIVMSG zIRC-test :Hello there!"""
-bot.start(log)
+
+try:
+    bot.start(log)
+except Exception:
+    logging.exception('An exception happened')
+    sys.exit(1)
