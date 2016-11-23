@@ -9,4 +9,9 @@ python:
   - "3.6-dev"
 install: 
   - pip install -r requirements.txt
-script: python test.py
+  - pip install coverage codacy-coverage
+script: 
+  - coverage run test.py
+on_success:
+  - coverage xml
+  - python-codacy-coverage -r coverage.xml
