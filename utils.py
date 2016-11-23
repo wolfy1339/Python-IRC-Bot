@@ -107,17 +107,20 @@ def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
 
 def PrintError(irc, event):
     log.exception("An unknown error occured")
-    try:
-        syntax = "py3tb" if PY3 else "pytb"
-        r = requests.post("http://dpaste.com/api/v2/",
-                          data={
-                              "content": str(traceback.format_exc()),
-                              "syntax": syntax,
-                              "expiry-days": "10"
-                            },
-                          allow_redirects=True,
-                          timeout=60)
-        irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
-    except Exception:
-        irc.msg('##wolfy1339', config.tracebackPostError)
-        log.exception(config.tracebackPostError)
+    if not config.ci:
+        try:
+            syntax = "py3tb" if PY3 else "pytb"
+            r = requests.post("http://dpaste.com/api/v2/",
+                              data={
+                                  "content": str(traceback.format_exc()),
+                                  "syntax": syntax,
+                                  "expiry-days": "10"
+                                },
+                              allow_redirects=True,
+                              timeout=60)
+            irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
+        except Exception:
+            irc.msg('##wolfy1339', config.tracebackPostError)
+            log.exception(config.tracebackPostError)
+    else:
+        __import__('sys').exit(1)
