@@ -134,7 +134,7 @@ def calc(bot, event, irc, args):
 
 
 @add_cmd("eval", alias=['py', '>>'], minArgs=1, owner=True, hide=True)
-def repl(bot, event, irc, args):
+def Eval(bot, event, irc, args):
     """Help text"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
