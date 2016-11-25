@@ -49,7 +49,7 @@ def exnToString(exn):
     """Turns a simple exception instance into a string (better than str(e))"""
     strE = str(exn)
     if strE:
-        return '%s: %s' % (exn.__class__.__name__, strE)
+        return '{0!s}: {1!s}'.format(exn.__class__.__name__, strE)
     else:
         return exn.__class__.__name__
 
@@ -63,7 +63,7 @@ def stackTrace(frame=None, compact=True):
             lineno = frame.f_lineno
             funcname = frame.f_code.co_name
             filename = os.path.basename(frame.f_code.co_filename)
-            L.append('[%s|%s|%s]' % (filename, funcname, lineno))
+            L.append('[{0!s}|{1!s}|{2!s}]'.format(filename, funcname, lineno))
             frame = frame.f_back
 
         return textwrap.fill(' '.join(L))
@@ -178,8 +178,8 @@ class Logger(logging.Logger):
         (E, er, tb) = sys.exc_info()
         del er
         tbinfo = traceback.extract_tb(tb)
-        path = '[%s]' % '|'.join(map(operator.itemgetter(2), tbinfo))
-        eStrId = '%s:%s' % (E, path)
+        path = '[{0!s}]'.format('|'.join(map(operator.itemgetter(2), tbinfo)))
+        eStrId = '{0!s}:{1!s}'.format(E, path)
         eId = hex(hash(eStrId) & 0xFFFFF)
         logging.Logger.exception(self, *args)
         self.error('Exception id: %s', eId)
