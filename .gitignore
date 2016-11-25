@@ -3,3 +3,4 @@
 bot.private.py
 password
 *.sav
+*.log
