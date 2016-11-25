@@ -111,7 +111,9 @@ def calc(bot, event, irc, args):
         "factorial": math.factorial
     }
     builtins = {'__builtins__': None}
-    console = repl.Repl({**safe_dict, **builtins})
+    safe = safe_dict.copy()
+    safe.update(builtins)
+    console = repl.Repl(safe)
     try:
         constant = {
            "e": str(math.e),
