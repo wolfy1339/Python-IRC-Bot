@@ -21,7 +21,8 @@ class botTest(TestCase):
         if nick == 'zIRC-test':
             irc.join(event.target)
 
-    def on_join(self, event, irc):
+    @staticmethod
+    def on_join(event, irc):
         irc.send("WHO {0} nuhs%nhu".format(event.target))
 
     @staticmethod
