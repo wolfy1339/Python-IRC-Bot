@@ -105,11 +105,13 @@ def calc(bot, event, irc, args):
         "acos": math.acos,
         "atan": math.atan,
         "abs": abs,
+        "sum": sum,
         "log": math.log,
         "fact": math.factorial,
         "factorial": math.factorial
     }
-
+    builtins = {'__builtins__': None}
+    console = repl.Repl({**safe_dict, **builtins})
     try:
         constant = {
            "e": str(math.e),
@@ -123,11 +125,11 @@ def calc(bot, event, irc, args):
             m = re.sub(p, subst, m)
             m = re.sub('\\b{0}\\b'.format(c), constant[c], m)
 
-        output = format(eval(m, {"__builtins__": None}, safe_dict), ",d")
+        output = format(console.run(m), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
-    except ValueError:
+    except (ValueError, TypeError):
         irc.reply(event, "\x034Invalid Input")
 
 
