@@ -26,6 +26,15 @@ def normalizeWhitespace(s, removeNewline=True):
     return s
 
 
+def formatCmdDocs(docs, name):
+    doclines = docs.splitlines()
+    s = '%s %s' % (name, doclines.pop(0))
+    if doclines:
+        doc = ' '.join(doclines)
+        s = '(%s) -- %s' % ('\x02' + s + '\x0F', doc)
+    return normalizeWhitespace(s)
+
+
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
@@ -355,18 +364,12 @@ def Help(bot, event, irc, args):
     if len(args) >= 1:
         try:
             doc = utils.commands[args[0]]['func'].__doc__
-            doclines = doc.splitlines()
-            s = '%s %s' % (name, doclines.pop(0))
-            if doclines:
-                help = ' '.join(doclines)
-                s = '(%s) -- %s' % ('\x02' + s + '\x0F', help)
-
-            irc.reply(event, normalizeWhitespace(s))
+            irc.reply(event, formatCmdDocs(doc, args[0]))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
         doc = utils.commands["help"]['func'].__doc__
-        irc.reply(event, "Usage: {0}".format(doc))
+        irc.reply(event, formatCmdDocs(doc, 'help'))
 
 
 @add_cmd("list", minArgs=0, alias=["ls"])
