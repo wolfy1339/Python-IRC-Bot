@@ -73,7 +73,8 @@ class Bot(zirc.Client):
         else:
             irc.send("WHO {0} nuhs%nhuac".format(event.source.nick))
 
-    def on_invite(self, event, irc):
+    @staticmethod
+    def on_invite(event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.host
             log.info("Invited to %s by %s", event.arguments[1], hostmask)
@@ -91,9 +92,11 @@ class Bot(zirc.Client):
         irc.notice("wolfy1339", "Banned from {0}".format(channel))
         log.warning("Banned from %s", channel)
 
+    @staticmethod
     def on_endofmotd(event, irc):
         log.info("Received MOTD from network")
 
+    @staticmethod
     def on_welcome(event, irc):
         log.info("Connected to network")
 
@@ -136,7 +139,8 @@ class Bot(zirc.Client):
                     'account': account
                 }
 
-    def on_315(self, event, irc):
+    @staticmethod
+    def on_315(event, irc):
         log.info("Received end of WHO reply from network")
 
 Bot()

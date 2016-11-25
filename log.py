@@ -151,7 +151,8 @@ testing = False
 class Formatter(logging.Formatter):
     _fmtConf = config.logFormat
 
-    def formatTime(self, record, datefmt=None):
+    @staticmethod
+    def formatTime(record, datefmt=None):
         return timestamp(record.created)
 
     def formatException(self, exc_info):
@@ -359,8 +360,8 @@ class MetaFirewall(type):
                 classdict[attr] = firewall(classdict[attr], errorHandler)
         return super(MetaFirewall, mcs).__new__(mcs, name, bases, classdict)
 
-    @classmethod
-    def getErrorHandler(mcs, dictOrTuple, name):
+    @staticmethod
+    def getErrorHandler(dictOrTuple, name):
         if isinstance(dictOrTuple, dict):
             return dictOrTuple[name]
         else:

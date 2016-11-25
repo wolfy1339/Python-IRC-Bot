@@ -15,7 +15,8 @@ class botTest(TestCase):
         if " ".join(arguments).startswith(config.commandChar):
             utils.call_command(self, event, irc, arguments)
 
-    def on_kick(self, event, irc):
+    @staticmethod
+    def on_kick(event, irc):
         nick = event.raw.split(" ")[3]
         if nick == 'zIRC-test':
             irc.join(event.target)
@@ -23,7 +24,8 @@ class botTest(TestCase):
     def on_join(self, event, irc):
         irc.send("WHO {0} nuhs%nhu".format(event.target))
 
-    def on_invite(self, event, irc):
+    @staticmethod
+    def on_invite(event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.hostmask
             irc.join(event.target)
