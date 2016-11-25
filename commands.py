@@ -2,6 +2,7 @@ import math
 import time
 import os
 import re
+from zirc.util import repl
 import log
 from utils import add_cmd
 import utils
@@ -130,11 +131,12 @@ def calc(bot, event, irc, args):
         irc.reply(event, "\x034Invalid Input")
 
 
-@add_cmd("eval", alias=['py'], minArgs=1, owner=True, hide=True)
+@add_cmd("eval", alias=['py', '>>'], minArgs=1, owner=True, hide=True)
 def repl(bot, event, irc, args):
     """Help text"""
+    console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
-        irc.reply(event, repr(eval(" ".join(args))))
+        irc.reply(event, repr(console.run(" ".join(args))))
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
         utils.PrintError(irc, event)
