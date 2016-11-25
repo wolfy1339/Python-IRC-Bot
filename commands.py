@@ -416,7 +416,7 @@ def permissions(bot, event, irc, args):
         perms = 'Admin'
     elif host in config.trusted:
         perms = 'Trusted'
-    elif host in config.bots['hosts'] or (isBotChanel and isBot):
+    elif host in config.bots['hosts'] or (isBotChannel and isBot):
         perms = 'Bot'
     else:
         perms = 'User'
