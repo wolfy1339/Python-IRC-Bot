@@ -28,10 +28,10 @@ def normalizeWhitespace(s, removeNewline=True):
 
 def formatCmdDocs(docs, name):
     doclines = docs.splitlines()
-    s = '%s %s' % (name, doclines.pop(0))
+    s = '{0!s} {1!s}'.format(name, doclines.pop(0))
     if doclines:
         doc = ' '.join(doclines)
-        s = '(%s) -- %s' % ('\x02' + s + '\x0F', doc)
+        s = '({0!s}) -- {1!s}'.format('\x02' + s + '\x0F', doc)
     return normalizeWhitespace(s)
 
 
