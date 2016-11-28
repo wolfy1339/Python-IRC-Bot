@@ -437,7 +437,7 @@ def permissions(bot, event, irc, args):
 def version(bot, event, irc, args):
     sysver = "".join(__import__("sys").version.split("\n"))
     gitver = __import__("subprocess").check_output(['git', 'rev-parse', '--short', 'HEAD']).decode().split()[0]
-    botver = "A zIRC bot v{0}-{1}, running on Python {2}".format("0.1", gitver, sysver)
+    botver = "A zIRC bot v{0}@{1}, running on Python {2}".format("0.1", gitver, sysver)
     irc.reply(event, botver)
 
 
