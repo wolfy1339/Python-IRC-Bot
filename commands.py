@@ -137,7 +137,7 @@ def calc(bot, event, irc, args):
 
 @add_cmd("eval", alias=['py', '>>'], minArgs=1, owner=True, hide=True)
 def Eval(bot, event, irc, args):
-    """Help text"""
+    """Admin console"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
         irc.reply(event, repr(console.run(" ".join(args))))
@@ -160,7 +160,7 @@ def rainbow(bot, event, irc, args):
 
 @add_cmd("ping", minArgs=0)
 def ping(bot, event, irc, args):
-    """Help text"""
+    """Responds with pong"""
     irc.reply(event, "PONG!")
 
 
@@ -172,7 +172,7 @@ def join(bot, event, irc, args):
 
 @add_cmd("part", alias=["leave"], admin=True, minArgs=0)
 def part(bot, event, irc, args):
-    """Parts the given channel or the current channel"""
+    """Parts the given or the current channel"""
     if len(args):
         irc.part(args[0])
     else:
@@ -181,6 +181,7 @@ def part(bot, event, irc, args):
 
 @add_cmd("cycle", alias=["rejoin"], admin=True, minArgs=0)
 def cycle(bot, event, irc, args):
+    """Parts then joins the given or the current channel"""
     if len(args):
         irc.part(args[0])
         irc.join(args[0])
@@ -191,7 +192,8 @@ def cycle(bot, event, irc, args):
 
 @add_cmd("ban", admin=True, minArgs=1)
 def ban(bot, event, irc, args):
-    """Bans a user"""
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Bans a user"""
     if len(args) > 1:
         setMode(event, irc, args, "+b")
     else:
@@ -250,7 +252,8 @@ def remove(bot, event, irc, args):
 
 @add_cmd("unban", admin=True, minArgs=1)
 def unban(bot, event, irc, args):
-    """Help text"""
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Unbans a user"""
     if len(args) > 1:
         setMode(event, irc, args, "-b")
     else:
@@ -259,7 +262,8 @@ def unban(bot, event, irc, args):
 
 @add_cmd("op", admin=True, minArgs=0)
 def op(bot, event, irc, args):
-    """Help text"""
+    """[<channel>] <nick>[, <nick>, ...]
+    Give operator status to a user"""
     if len(args):
         if len(args) > 1:
             setMode(event, irc, args, "+o")
@@ -271,7 +275,8 @@ def op(bot, event, irc, args):
 
 @add_cmd("deop", admin=True, minArgs=0)
 def deop(bot, event, irc, args):
-    """Help text"""
+    """[<channel>] <nick>[, <nick>, ...]
+    Remove operator status from a user"""
     if len(args):
         if len(args) > 1:
             setMode(event, irc, args, "-o")
@@ -283,7 +288,8 @@ def deop(bot, event, irc, args):
 
 @add_cmd("voice", admin=True, minArgs=0)
 def voice(bot, event, irc, args):
-    """"Help text"""
+    """[<channel>] <nick>[, <nick>, ...]
+    Give voiced status a user"""
     if len(args):
         if len(args) > 1:
             setMode(event, irc, args, "+v")
@@ -295,7 +301,8 @@ def voice(bot, event, irc, args):
 
 @add_cmd("unvoice", admin=True, minArgs=0)
 def unvoice(bot, event, irc, args):
-    """Help text"""
+    """[<channel>] <nick>[, <nick>, ...]
+    Remove voiced status a user"""
     if len(args):
         if len(args) > 1:
             setMode(event, irc, args, "-v")
@@ -307,14 +314,16 @@ def unvoice(bot, event, irc, args):
 
 @add_cmd("nick", owner=True, minArgs=1)
 def nick(bot, event, irc, args):
-    """Help text"""
+    """<nick>
+    Changes the bot's nickname"""
     bot.config['nickname'] = args[0]
     irc.nick(args[0])
 
 
 @add_cmd("log.level", admin=True, minArgs=1)
 def logLevel(bot, event, irc, args):
-    """Help text"""
+    """<level>
+    Changes the logging level"""
     if args[0] == "debug":
         level = 10
         irc.reply(event, "Set log level to {0}".format(args[0]))
@@ -338,7 +347,8 @@ def logLevel(bot, event, irc, args):
 
 @add_cmd("config", admin=True, minArgs=1, alias=['cfg'])
 def Config(bot, event, irc, args):
-    """Help"""
+    """<nick>
+    Changes or displays a config variable"""
     if len(args) > 1:
         if hasattr(config, args[0]):
             setattr(config, args[0], args[1])
@@ -357,7 +367,8 @@ def Config(bot, event, irc, args):
 
 @add_cmd("quit", admin=True, minArgs=0)
 def Quit(bot, event, irc, args):
-    """(\x02quit <text>\x0F) -- Exits the bot with the QUIT message <text>."""
+    """<text>
+    Exits the bot with the QUIT message <text>."""
     irc.quit("zIRC - https://github.com/itslukej/zirc" if (
         not args) else " ".join(args))
     time.sleep(1)
