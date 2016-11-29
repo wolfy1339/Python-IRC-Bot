@@ -140,7 +140,7 @@ def Eval(bot, event, irc, args):
     """Admin console"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
-        irc.reply(event, repr(console.run(" ".join(args))))
+        irc.reply(event, console.run(" ".join(args)))
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
         utils.PrintError(irc, event)
