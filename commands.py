@@ -102,7 +102,7 @@ def calc(bot, event, irc, args):
         }
         r = utils.post("http://api.mathjs.org/v1/", json=payload)
         r.raise_for_status()
-        output = format(float(r.json()['result']), ",d")
+        output = format(int(r.json()['result']), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
