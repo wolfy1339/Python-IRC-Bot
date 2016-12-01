@@ -113,7 +113,7 @@ def PrintError(irc, event):
         try:
             syntax = "py3tb" if PY3 else "pytb"
             tb = traceback.format_exc().strip()
-           r = post("http://dpaste.com/api/v2/",
+            r = post("http://dpaste.com/api/v2/",
                               data={
                                   "title": "zIRCBot Error: {0}".format(tb.split("\n")[-1]),
                                   "content": tb,
