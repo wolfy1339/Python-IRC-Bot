@@ -25,7 +25,7 @@ class Bot(zirc.Client):
         self.ctcp = {
             'VERSION': utils.version,
             'TIME': __import__('time').localtime(),
-            'FINGER': "Don't finger me"
+            'FINGER': "Don't finger me",
             'USERINFO': 'An IRC bot built using zIRC on Python',
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
