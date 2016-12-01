@@ -44,11 +44,6 @@ class Bot(zirc.Client):
     @staticmethod
     def on_ctcp(irc, event, raw):
         log.info("Received CTCP reply " + raw)
-        if event.arguments == 'VERSION':
-            sysver = "".join(__import__("sys").version.split("\n"))
-            gitver = __import__("subprocess").check_output(['git', 'rev-parse', '--short', 'HEAD']).decode().split()[0]
-            messsage = "A zIRC bot v{0}@{1}, running on Python {2}".format("0.1", gitver, sysver)
-        irc.notice(event.source.nick, "\x01" + message + "\x01")
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
