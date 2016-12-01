@@ -448,10 +448,7 @@ def permissions(bot, event, irc, args):
 
 @add_cmd("version", minArgs=0)
 def version(bot, event, irc, args):
-    sysver = "".join(__import__("sys").version.split("\n"))
-    gitver = __import__("subprocess").check_output(['git', 'rev-parse', '--short', 'HEAD']).decode().split()[0]
-    botver = "A zIRC bot v{0}@{1}, running on Python {2}".format("0.1", gitver, sysver)
-    irc.reply(event, botver)
+    irc.reply(event, utils.version)
 
 
 @add_cmd("flushq", alias=['flush'], minArgs=0, admin=True)
