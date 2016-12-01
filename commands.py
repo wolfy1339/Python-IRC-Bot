@@ -127,7 +127,7 @@ def calc(bot, event, irc, args):
             m = re.sub(p, subst, m)
             m = re.sub('\\b{0}\\b'.format(c), constant[c], m)
 
-        output = format(console.run(m), ",d")
+        output = format(float(console.run(m)), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
