@@ -94,6 +94,8 @@ def x(event, args):
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation"""
+    # To-Do: replace this horrible implementation with something safer
+    # and that limits the integer length, so that the bot won't crash
     arguments = "".join(args)
     safe_dict = {
         "sqrt": math.sqrt,
