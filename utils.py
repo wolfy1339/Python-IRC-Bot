@@ -110,11 +110,14 @@ def PrintError(irc, event):
     if not config.ci:
         try:
             syntax = "py3tb" if PY3 else "pytb"
+            tb = traceback.format_exc().strip()
             r = requests.post("http://dpaste.com/api/v2/",
                               data={
-                                  "content": str(traceback.format_exc()),
+                                  "title": "zIRCBot Error: {0}".format(tb.split("\n")[-1]),
+                                  "content": tb,
                                   "syntax": syntax,
-                                  "expiry-days": "10"
+                                  "expiry-days": "10",
+                                  "poster": "wolfy1339"
                                 },
                               allow_redirects=True,
                               timeout=60)
