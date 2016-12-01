@@ -1,5 +1,6 @@
 import socket
 import ssl
+import sys
 
 import commands
 import config
@@ -47,11 +48,31 @@ class Bot(zirc.Client):
         if data.find("%") == -1:
             log.debug(data)
 
+    def on_quit(self, event, irc):
+        nick = event.source.nick
+        if nick == self.config['nickname']:
+            sys.exit(1)
+        else:
+            try:
+                self.userdb[event.target].pop(nick)
+            except KeyError:
+                for c in self.userdb:
+                    for i in c:
+                        if i['host'] == event.source.host:
+                            self.userdb[c].pop(i['hostmask'].split("!")[0])
+
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
         if nick == self.config['nickname']:
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
+        else:
+            try:
+                self.userdb[event.target].pop(nick)
+            except KeyError:
+                for i in self.userdb[event.target]:
+                    if i['host'] == event.source.host:
+                        self.userdb[event.target].pop(i['hostmask'].split("!")[0])
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
