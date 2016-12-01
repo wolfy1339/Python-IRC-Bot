@@ -11,6 +11,8 @@ PY2 = six.PY2
 commands = {}
 cmd_list = []
 alias_list = []
+get = requests.get
+post = requests.post
 
 
 def add_cmd(name, minArgs=1, alias=None, owner=False,
@@ -111,7 +113,7 @@ def PrintError(irc, event):
         try:
             syntax = "py3tb" if PY3 else "pytb"
             tb = traceback.format_exc().strip()
-            r = requests.post("http://dpaste.com/api/v2/",
+           r = post("http://dpaste.com/api/v2/",
                               data={
                                   "title": "zIRCBot Error: {0}".format(tb.split("\n")[-1]),
                                   "content": tb,
