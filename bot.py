@@ -22,7 +22,13 @@ class Bot(zirc.Client):
                                      realname="A zIRC bot",
                                      channels=config.channels,
                                      caps=config.caps)
-
+        self.ctcp = {
+            'VERSION': utils.version,
+            'TIME': __import__('time').localtime(),
+            'FINGER': "Don't finger me"
+            'USERINFO': 'An IRC bot built using zIRC on Python',
+            'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
+        }
         self.connect(self.config)
         self.start()
 
@@ -36,8 +42,13 @@ class Bot(zirc.Client):
                 log.debug(event.raw)
 
     @staticmethod
-    def on_ctcp(irc, raw):
+    def on_ctcp(irc, event, raw):
         log.info("Received CTCP reply " + raw)
+        if event.arguments == 'VERSION':
+            sysver = "".join(__import__("sys").version.split("\n"))
+            gitver = __import__("subprocess").check_output(['git', 'rev-parse', '--short', 'HEAD']).decode().split()[0]
+            messsage = "A zIRC bot v{0}@{1}, running on Python {2}".format("0.1", gitver, sysver)
+        irc.notice(event.source.nick, "\x01" + message + "\x01")
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
