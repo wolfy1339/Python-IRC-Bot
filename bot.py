@@ -59,13 +59,10 @@ class Bot(zirc.Client):
         if nick == self.config['nickname']:
             sys.exit(1)
         else:
-            try:
-                self.userdb[event.target].pop(nick)
-            except KeyError:
-                for c in self.userdb:
-                    for i in c:
-                        if i['host'] == event.source.host:
-                            self.userdb[c].pop(i['hostmask'].split("!")[0])
+            for chan in self.userdb.keys():
+                for u in chan.keys():
+                    if u['host'] == event.source.host:
+                        self.userdb[chan].pop(u['hostmask'].split("!")[0])
 
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
