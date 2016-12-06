@@ -125,9 +125,15 @@ class Bot(zirc.Client):
             irc.join(event.arguments[1])
 
     # Numeric events
+    def on_unavailresource(self, event, irc):
+        log.error("Nick unavailable, trying alternative")
+        irc.nick(self.config['nickname'] + "_")
+        self.config['nickname'] = self.config['nickname'] + "_"
+
     def on_nicknameinuse(self, event, irc):
         log.error("Nick already in use, trying alternative")
         irc.nick(self.config['nickname'] + "_")
+        self.config['nickname'] = self.config['nickname'] + "_"
 
     @staticmethod
     def on_bannedfromchan(event, irc):
