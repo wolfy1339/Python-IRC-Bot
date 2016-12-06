@@ -54,13 +54,24 @@ class Bot(zirc.Client):
         if data.find("%") == -1:
             log.debug(data)
 
+    def on_nick(self, event, irc):
+        nick = event.source.nick
+        to_nick = event.target
+        for chan in self.userdb.keys():
+            for u in chan.keys():
+                if u['host'] == event.source.host:
+                    self.userdb[chan][to_nick] = self.userdb[chan][nick]
+                    del self.userdb[chan][nick]
+
     def on_quit(self, event, irc):
         nick = event.source.nick
         if nick == self.config['nickname']:
             sys.exit(1)
         else:
             for chan in self.userdb.keys():
-                del self.userdb[chan][nick]
+                for u in chan.keys():
+                    if u['host'] == event.source.host:
+                        del self.userdb[chan][nick]
 
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
@@ -69,11 +80,11 @@ class Bot(zirc.Client):
             irc.join(event.target)
         else:
             try:
-                self.userdb[event.target].pop(nick)
+                del self.userdb[event.target][nick]
             except KeyError:
                 for i in self.userdb[event.target].keys():
                     if i['host'] == event.source.host:
-                        self.userdb[event.target].pop(i['hostmask'].split("!")[0])
+                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
@@ -82,14 +93,19 @@ class Bot(zirc.Client):
                 log.warning("Removed from %s, trying to re-join", event.target)
                 irc.join(event.target)
             else:
-                del self.userdb[event.target]
+                try:
+                    del self.userdb[event.target][nick]
+                except KeyError:
+                    for i in self.userdb[event.target].keys():
+                        if i['host'] == event.source.host:
+                            del self.userdb[event.target][i['hostmask'].split("!")[0]]
         else:
             try:
-                self.userdb[event.target].pop(event.source.nick)
+                del self.userdb[event.target][event.source.nick]
             except KeyError:
                 for i in self.userdb[event.target].keys():
                     if i['host'] == event.source.host:
-                        self.userdb[event.target].pop(i['hostmask'].split("!")[0])
+                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
