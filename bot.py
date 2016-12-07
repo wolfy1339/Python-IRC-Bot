@@ -65,6 +65,8 @@ class Bot(zirc.Client):
                     hostmask = self.userdb[chan][to_nick]['hostmask'].split("!")[1]
                     self.userdb[chan][to_nick]['hostmask'] = nick + hostmask
                     del self.userdb[chan][nick]
+                    break
+            break
 
     def on_quit(self, event, irc):
         nick = event.source.nick
@@ -75,6 +77,8 @@ class Bot(zirc.Client):
                 for u in self.userdb[chan].values():
                     if u['host'] == event.source.host:
                         del self.userdb[chan][nick]
+                        break
+                break
 
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
@@ -88,6 +92,7 @@ class Bot(zirc.Client):
                 for i in self.userdb[event.target].values():
                     if i['host'] == event.source.host:
                         del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        break
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
@@ -102,6 +107,7 @@ class Bot(zirc.Client):
                     for i in self.userdb[event.target].values():
                         if i['host'] == event.source.host:
                             del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                            break
         else:
             try:
                 del self.userdb[event.target][event.source.nick]
@@ -109,6 +115,7 @@ class Bot(zirc.Client):
                 for i in self.userdb[event.target].values():
                     if i['host'] == event.source.host:
                         del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        break
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
