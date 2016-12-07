@@ -9,8 +9,6 @@ import log
 import utils
 import zirc
 
-here = path.dirname(path.abspath(__file__))
-
 
 class Bot(zirc.Client):
     def __init__(self):
@@ -32,7 +30,7 @@ class Bot(zirc.Client):
             'USERINFO': 'An IRC bot built using zIRC on Python',
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
-        self.connect(self.config, certfile=path.join(here, "user.pem"))
+        self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 
     # Non-numeric events
