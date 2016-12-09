@@ -151,7 +151,7 @@ def Eval(bot, event, irc, args):
 @add_cmd("echo", minArgs=1)
 def echo(bot, event, irc, args):
     """Responds with given text"""
-    irc.reply(event, ' '.join(args))
+    irc.reply(event, '\u200b' + ' '.join(args))
 
 
 @add_cmd("rainbow", minArgs=1)
