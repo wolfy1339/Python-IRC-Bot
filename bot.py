@@ -56,8 +56,8 @@ class Bot(zirc.Client):
             log.debug(data)
 
     def on_nick(self, event, irc):
-        nick = event.arguments[0]
-        to_nick = event.target
+        nick = event.source.nick
+        to_nick = event.arguments[0]
         for chan in self.userdb.keys():
             for u in self.userdb[chan].values():
                 if u['host'] == event.source.host:
