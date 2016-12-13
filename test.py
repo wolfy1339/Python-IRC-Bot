@@ -24,12 +24,11 @@ class botTest(TestCase):
 
     @staticmethod
     def on_join(event, irc):
-        irc.send("WHO {0} nuhs%nhu".format(event.target))
+        irc.send("WHO {0} nuhs%nhua".format(event.target))
 
     @staticmethod
     def on_invite(event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
-            hostmask = event.source.hostmask
             irc.join(event.target)
 
 
