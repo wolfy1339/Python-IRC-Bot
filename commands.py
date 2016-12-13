@@ -375,13 +375,14 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
 def Reload(bot, event, irc, args):
     """Help text"""
-    global reload
     if utils.PY34:
         reload = __import__("importlib").reload
     elif utils.PY3:
         reload = __import__("imp").reload
+    elif utils.PY2:
+        reload = __builtins__.reload
 
-    if args[0] in ['commands', 'utils', 'config']:
+    if args[0] in ['commands', 'utils', 'config', 'log']:
         try:
             reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
