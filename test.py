@@ -1,3 +1,4 @@
+import sys
 from zirc.test import TestCase
 import log as logging
 import utils
@@ -23,12 +24,11 @@ class botTest(TestCase):
 
     @staticmethod
     def on_join(event, irc):
-        irc.send("WHO {0} nuhs%nhu".format(event.target))
+        irc.send("WHO {0} nuhs%nhua".format(event.target))
 
     @staticmethod
     def on_invite(event, irc):
         if utils.checkPerms(event.source.host, trusted=True):
-            hostmask = event.source.hostmask
             irc.join(event.target)
 
 
@@ -39,13 +39,11 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?echo moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?host
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?join ##foo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user,user2,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list alias
@@ -61,4 +59,9 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unvoice
 :user3!~user@user/user3 PRIVMSG zIRC-test :Hello there!"""
-bot.start(log)
+
+try:
+    bot.start(log)
+except Exception:
+    logging.exception('An exception happened')
+    sys.exit(1)
