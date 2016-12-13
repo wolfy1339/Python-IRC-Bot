@@ -28,9 +28,8 @@ version = "A zIRC bot v{0}@{1}, running on Python {2}".format("0.1",
 def add_cmd(name, minArgs=1, alias=None, owner=False,
             admin=False, trusted=False, hide=False):
     def real_command(func):
-        global commands
-        global cmd_list
         global alias_list
+        global cmd_list
 
         commands[name] = {
             'perms': [trusted, admin, owner],
