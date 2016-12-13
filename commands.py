@@ -93,43 +93,16 @@ def x(event, args):
 
 @add_cmd("calc", alias=["math"], minArgs=1)
 def calc(bot, event, irc, args):
-    """Command to do some math calculation"""
-    # To-Do: replace this horrible implementation with something safer
-    # and that limits the integer length, so that the bot won't crash
+    """Command to do some math calculation using the math.js web API"""
     arguments = "".join(args)
-    safe_dict = {
-        "sqrt": math.sqrt,
-        "pow": math.pow,
-        "sin": math.sin,
-        "cos": math.cos,
-        "tan": math.tan,
-        "asin": math.asin,
-        "acos": math.acos,
-        "atan": math.atan,
-        "abs": abs,
-        "sum": sum,
-        "log": math.log,
-        "fact": math.factorial,
-        "factorial": math.factorial
-    }
-    builtins = {'__builtins__': None}
-    safe = safe_dict.copy()
-    safe.update(builtins)
-    console = repl.Repl(safe)
     try:
-        constant = {
-           "e": str(math.e),
-           "pi": str(math.pi),
+        payload = {
+            'expr': arguments,
+            'precision': 10
         }
-
-        for c in constant:
-            m = arguments.replace("){0}".format(c), ") * {0}".format(constant[c]))
-            p = re.compile(r'([:]?\d*\.\d+|\d+){0}'.format(c))
-            subst = "\\1 * " + constant[c]
-            m = re.sub(p, subst, m)
-            m = re.sub('\\b{0}\\b'.format(c), constant[c], m)
-
-        output = format(float(console.run(m)), ",d")
+        r = utils.post("http://api.mathjs.org/v1/", json=payload)
+        r.raise_for_status()
+        output = format(int(r.json()['result']), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
         irc.reply(event, "\x034Number undefined or too large.")
