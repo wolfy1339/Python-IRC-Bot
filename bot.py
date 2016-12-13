@@ -13,6 +13,9 @@ import zirc
 class Bot(zirc.Client):
     def __init__(self):
         self.userdb = {}
+        for i in config.channels:
+            self.userdb[i] = {}
+
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
                                       wrapper=ssl.wrap_socket)
@@ -102,7 +105,7 @@ class Bot(zirc.Client):
                 irc.join(event.target)
             else:
                 try:
-                    del self.userdb[event.target][nick]
+                    del self.userdb[event.target][event.source.nick]
                 except KeyError:
                     for i in self.userdb[event.target].values():
                         if i['host'] == event.source.host:
@@ -120,6 +123,7 @@ class Bot(zirc.Client):
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
+            self.userdb[event.target] = {}
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
         else:
             irc.send("WHO {0} nuhs%nhuac".format(event.source.nick))
@@ -129,6 +133,7 @@ class Bot(zirc.Client):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.host
             log.info("Invited to %s by %s", event.arguments[1], hostmask)
+            self.userdb[event.arguments[1]] = {}
             irc.join(event.arguments[1])
 
     # Numeric events
@@ -162,19 +167,11 @@ class Bot(zirc.Client):
         channel = event.arguments[0]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         if nick != "ChanServ":
-            try:
-                self.userdb[channel][nick] = {
-                    'hostmask': hostmask,
-                    'host': host,
-                    'account': host.split("/")[-1]
-                }
-            except KeyError:
-                self.userdb[channel] = {}
-                self.userdb[channel][nick] = {
-                    'hostmask': hostmask,
-                    'host': host,
-                    'account': host.split("/")[-1]
-                }
+            self.userdb[channel][nick] = {
+                'hostmask': hostmask,
+                'host': host,
+                'account': host.split("/")[-1].split('.')[-1]
+            }
 
     def on_whospcrpl(self, event, irc):
         (ident, host, nick) = event.arguments[1:4]
@@ -182,19 +179,11 @@ class Bot(zirc.Client):
         channel = event.arguments[0]
         account = event.arguments[4]
         if nick != "ChanServ":
-            try:
-                self.userdb[channel][nick] = {
-                    'hostmask': hostmask,
-                    'host': host,
-                    'account': account if account != "0" else None
-                }
-            except KeyError:
-                self.userdb[channel] = {}
-                self.userdb[channel][nick] = {
-                    'hostmask': hostmask,
-                    'host': host,
-                    'account': account if account != "0" else None
-                }
+            self.userdb[channel][nick] = {
+                'hostmask': hostmask,
+                'host': host,
+                'account': account if account != "0" else None
+            }
 
     @staticmethod
     def on_315(event, irc):
