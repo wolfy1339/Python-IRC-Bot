@@ -1,5 +1,7 @@
+from os import path
 import socket
 import ssl
+import sys
 
 import commands
 import config
@@ -21,8 +23,14 @@ class Bot(zirc.Client):
                                      realname="A zIRC bot",
                                      channels=config.channels,
                                      caps=config.caps)
-
-        self.connect(self.config)
+        self.ctcp = {
+            'VERSION': utils.version,
+            'TIME': __import__('time').localtime(),
+            'FINGER': "Don't finger me",
+            'USERINFO': 'An IRC bot built using zIRC on Python',
+            'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
+        }
+        self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 
     # Non-numeric events
@@ -35,7 +43,7 @@ class Bot(zirc.Client):
                 log.debug(event.raw)
 
     @staticmethod
-    def on_ctcp(irc, raw):
+    def on_ctcp(irc, event, raw):
         log.info("Received CTCP reply " + raw)
 
     def on_privmsg(self, event, irc, arguments):
@@ -47,24 +55,67 @@ class Bot(zirc.Client):
         if data.find("%") == -1:
             log.debug(data)
 
+    def on_nick(self, event, irc):
+        nick = event.source.nick
+        to_nick = event.arguments[0]
+        for chan in self.userdb.keys():
+            for u in self.userdb[chan].values():
+                if u['host'] == event.source.host:
+                    self.userdb[chan][to_nick] = self.userdb[chan][nick]
+                    hostmask = self.userdb[chan][to_nick]['hostmask'].split("!")[1]
+                    self.userdb[chan][to_nick]['hostmask'] = nick + hostmask
+                    del self.userdb[chan][nick]
+                    break
+            break
+
+    def on_quit(self, event, irc):
+        nick = event.source.nick
+        if nick == self.config['nickname']:
+            sys.exit(1)
+        else:
+            for chan in self.userdb.keys():
+                for u in self.userdb[chan].values():
+                    if u['host'] == event.source.host:
+                        del self.userdb[chan][nick]
+                        break
+                break
+
     def on_kick(self, event, irc):
         nick = event.raw.split(" ")[3]
         if nick == self.config['nickname']:
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
+        else:
+            try:
+                del self.userdb[event.target][nick]
+            except KeyError:
+                for i in self.userdb[event.target].values():
+                    if i['host'] == event.source.host:
+                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        break
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
-        if event.source.nick == self.config['nickname'] and requested:
-            log.warning("Removed from %s, trying to re-join", event.target)
-            irc.join(event.target)
+        if event.source.nick == self.config['nickname']:
+            if requested:
+                log.warning("Removed from %s, trying to re-join", event.target)
+                irc.join(event.target)
+            else:
+                try:
+                    del self.userdb[event.target][nick]
+                except KeyError:
+                    for i in self.userdb[event.target].values():
+                        if i['host'] == event.source.host:
+                            del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                            break
         else:
             try:
-                self.userdb[event.target].pop(event.source.nick)
+                del self.userdb[event.target][event.source.nick]
             except KeyError:
-                for i in self.userdb[event.target]:
+                for i in self.userdb[event.target].values():
                     if i['host'] == event.source.host:
-                        self.userdb[event.target].pop(i['hostmask'].split("!")[0])
+                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        break
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
@@ -81,9 +132,15 @@ class Bot(zirc.Client):
             irc.join(event.arguments[1])
 
     # Numeric events
+    def on_unavailresource(self, event, irc):
+        log.error("Nick unavailable, trying alternative")
+        irc.nick(self.config['nickname'] + "_")
+        self.config['nickname'] = self.config['nickname'] + "_"
+
     def on_nicknameinuse(self, event, irc):
         log.error("Nick already in use, trying alternative")
         irc.nick(self.config['nickname'] + "_")
+        self.config['nickname'] = self.config['nickname'] + "_"
 
     @staticmethod
     def on_bannedfromchan(event, irc):
@@ -109,14 +166,14 @@ class Bot(zirc.Client):
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': ''.join(host.split("/")[-1:])
+                    'account': host.split("/")[-1]
                 }
             except KeyError:
                 self.userdb[channel] = {}
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': ''.join(host.split("/")[-1:])
+                    'account': host.split("/")[-1]
                 }
 
     def on_whospcrpl(self, event, irc):
@@ -129,14 +186,14 @@ class Bot(zirc.Client):
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': account
+                    'account': account if account != "0" else None
                 }
             except KeyError:
                 self.userdb[channel] = {}
                 self.userdb[channel][nick] = {
                     'hostmask': hostmask,
                     'host': host,
-                    'account': account
+                    'account': account if account != "0" else None
                 }
 
     @staticmethod
