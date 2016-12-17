@@ -104,9 +104,9 @@ def calc(bot, event, irc, args):
         output = format(int(r.json()['result']), ",d")
         irc.reply(event, "The answer is: {0}".format(output))
     except ArithmeticError:
-        irc.reply(event, "\x034Number undefined or too large.")
+        irc.reply(event, "$REDNumber undefined or too large.")
     except (ValueError, TypeError):
-        irc.reply(event, "\x034Invalid Input")
+        irc.reply(event, "$REDInvalid Input")
 
 
 @add_cmd("eval", alias=['py', '>>'], minArgs=1, owner=True, hide=True)
@@ -185,10 +185,10 @@ def kban(bot, event, irc, args):
         channel, users, message = x(event, args)
         for i in users:
             try:
-                irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
+                irc.ban(channel, "*!*@" + bot.userdb[channel][i]['host'])
             except KeyError:
                 irc.send("WHO {0} nuhs%nhua".format(event.target))
-                irc.ban(channel, "*!*@" + bot.userdb[i]['host'])
+                irc.ban(channel, "*!*@" + bot.userdb[i][channel]['host'])
             irc.kick(channel, i, message)
     else:
         irc.ban(event.target, args[0])
