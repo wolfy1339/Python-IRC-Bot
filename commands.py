@@ -1,11 +1,13 @@
 import time
 import os
 import re
+
 from zirc.util import repl
+
+import config
 import log
 from utils import add_cmd
 import utils
-import config
 
 
 def normalizeWhitespace(s, removeNewline=True):
@@ -94,19 +96,17 @@ def x(event, args):
 def calc(bot, event, irc, args):
     """Command to do some math calculation using the math.js web API"""
     arguments = "".join(args)
-    try:
-        payload = {
-            'expr': arguments,
-            'precision': 10
-        }
-        r = utils.post("http://api.mathjs.org/v1/", json=payload)
-        r.raise_for_status()
+    payload = {
+        'expr': arguments,
+        'precision': 10
+    }
+    r = utils.post("http://api.mathjs.org/v1/", json=payload)
+    if not r.json()['error']:
         output = format(int(r.json()['result']), ",d")
-        irc.reply(event, "The answer is: {0}".format(output))
-    except ArithmeticError:
-        irc.reply(event, "$REDNumber undefined or too large.")
-    except (ValueError, TypeError):
-        irc.reply(event, "$REDInvalid Input")
+        message = "The answer is: {0}".format(output)
+    else:
+        message = r.json()['error']
+    irc.reply(event, message)
 
 
 @add_cmd("eval", alias=['py', '>>'], minArgs=1, owner=True, hide=True)
