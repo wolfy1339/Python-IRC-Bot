@@ -133,7 +133,6 @@ class Bot(zirc.Client):
         if utils.checkPerms(event.source.host, trusted=True):
             hostmask = event.source.host
             log.info("Invited to %s by %s", event.arguments[1], hostmask)
-            self.userdb[event.arguments[1]] = {}
             irc.join(event.arguments[1])
 
     # Numeric events
