@@ -79,7 +79,8 @@ def call_command(bot, event, irc, arguments):
                         log.info("%s called %s in %s", event.source, name, target)
                     commands[name]['func'](bot, event, irc, args)
             else:
-                irc.reply(event, config.noPerms)
+                if not event.source.host.find("/bot/"):
+                    irc.reply(event, config.noPerms)
         except KeyError:
             irc.notice(event.source.nick, config.invalidCmd.format(name))
         except Exception:
