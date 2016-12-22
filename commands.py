@@ -66,7 +66,7 @@ def getUsersFromCommaList(args):
     return users
 
 
-def x(event, args):
+def getInfoTuple(event, args):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
@@ -175,7 +175,15 @@ def ban(bot, event, irc, args):
     if len(args) > 1:
         setMode(event, irc, args, "+b")
     else:
-        irc.ban(event.target, args[0])
+        if args[0].find('@') == -1:
+            host = args[0]
+        else:
+            try:
+                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+            except KeyError:
+                irc.send("WHO {0} nuhs%nhuac".format(event.target))
+                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+        irc.ban(event.target, host)
 
 
 @add_cmd("kban", admin=True, minArgs=1)
@@ -186,17 +194,25 @@ def kban(bot, event, irc, args):
     if len(args) > 1:
         setMode(event, irc, args, "+b")
 
-        channel, users, message = x(event, args)
+        channel, users, message = getInfoTuple(event, args)
         for i in users:
             try:
                 irc.ban(channel, "*!*@" + bot.userdb[channel][i]['host'])
             except KeyError:
-                irc.send("WHO {0} nuhs%nhua".format(event.target))
-                irc.ban(channel, "*!*@" + bot.userdb[i][channel]['host'])
+                irc.send("WHO {0} nuhs%nhuac".format(event.target))
+                irc.ban(channel, "*!*@" + bot.userdb[channel][i]['host'])
             irc.kick(channel, i, message)
     else:
-        irc.ban(event.target, args[0])
-        irc.kick(event.target, args[0], " ".join(args[1:]))
+        if args[0].find('@') == -1:
+            host = args[0]
+        else:
+            try:
+                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+            except KeyError:
+                irc.send("WHO {0} nuhs%nhuac".format(event.target))
+                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+        irc.ban(event.target, host)
+        irc.kick(event.target, args[0], " ".join(args[1:] or event.source.nick))
 
 
 @add_cmd("kick", admin=True, minArgs=1)
@@ -205,7 +221,7 @@ def kick(bot, event, irc, args):
     Kicks a user
     """
     if len(args) > 1:
-        channel, users, message = x(event, args)
+        channel, users, message = getInfoTuple(event, args)
 
         for i in users:
             irc.kick(channel, i, message)
@@ -219,7 +235,7 @@ def remove(bot, event, irc, args):
     Forces a user to part the channel.
     """
     if len(args) > 1:
-        channel, users, message = x(event, args)
+        channel, users, message = getInfoTuple(event, args)
         if message == event.source.nick:
             message = "{0} says GTFO!".format(event.source.nick)
         for i in users:
