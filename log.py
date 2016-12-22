@@ -41,6 +41,14 @@ import six
 import ansi
 import config
 
+def exnToString(exn):
+    """Turns a simple exception instance into a string (better than str(e))"""
+    strE = str(exn)
+    if strE:
+        return '{0!s}: {1!s}'.format(exn.__class__.__name__, strE)
+    else:
+        return exn.__class__.__name__
+
 def stackTrace(frame=None, compact=True):
     if frame is None:
         frame = sys._getframe()
