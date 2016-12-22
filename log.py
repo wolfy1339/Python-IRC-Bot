@@ -27,32 +27,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ###
 
-import os
-import sys
-import time
 import atexit
 import logging
-import operator
+import os
+import sys
 import textwrap
-import threading
+import time
 import traceback
+import operator
 
-import config
 import six
+
 import ansi
-
-
-###
-# supybot.utils.gen
-###
-def exnToString(exn):
-    """Turns a simple exception instance into a string (better than str(e))"""
-    strE = str(exn)
-    if strE:
-        return '{0!s}: {1!s}'.format(exn.__class__.__name__, strE)
-    else:
-        return exn.__class__.__name__
-
+import config
 
 def stackTrace(frame=None, compact=True):
     if frame is None:
@@ -69,84 +56,8 @@ def stackTrace(frame=None, compact=True):
         return textwrap.fill(' '.join(L))
     else:
         return traceback.format_stack(frame)
-###
-# supybot.utils.python
-###
-import types
-
-def changeFunctionName(f, name, doc=None):
-    if doc is None:
-        doc = f.__doc__
-
-    if hasattr(f, '__closure__'):
-        closure = f.__closure__
-    else:
-        # Pypy
-        closure = f.func_closure
-    newf = types.FunctionType(f.__code__, f.__globals__, name,
-                              f.__defaults__, closure)
-    newf.__doc__ = doc
-    return newf
-
-class Object(object):
-    def __ne__(self, other):
-        return not self == other
-
-class MetaSynchronized(type):
-    METHODS = '__synchronized__'
-    LOCK = '_MetaSynchronized_rlock'
-
-    def __new__(mcs, name, bases, dictionnary):
-        sync = set()
-        for base in bases:
-            if hasattr(base, MetaSynchronized.METHODS):
-                sync.update(getattr(base, MetaSynchronized.METHODS))
-
-        if MetaSynchronized.METHODS in dictionnary:
-            sync.update(dictionnary[MetaSynchronized.METHODS])
-
-        if sync:
-            def synchronized(f):
-                def g(self, *args, **kwargs):
-                    lock = getattr(self, MetaSynchronized.LOCK)
-                    lock.acquire()
-
-                    try:
-                        f(self, *args, **kwargs)
-                    finally:
-                        lock.release()
-
-                return changeFunctionName(g, f.__name__, f.__doc__)
-
-            for attr in sync:
-                if attr in dictionnary:
-                    dict[attr] = synchronized(dictionnary[attr])
-            original__init__ = dictionnary.get('__init__')
-
-            def __init__(self, *args, **kwargs):
-                if not hasattr(self, MetaSynchronized.LOCK):
-                    setattr(self, MetaSynchronized.LOCK, threading.RLock())
-
-                if original__init__:
-                    original__init__(self, *args, **kwargs)
-                else:
-                    # newclass is defined below.
-                    super(MetaSynchronized, self).__init__(*args, **kwargs)
-
-            dictionnary['__init__'] = __init__
-        newclass = super(MetaSynchronized, mcs).__new__(mcs, name, bases, dictionnary)
-
-        return newclass
-Synchronized = MetaSynchronized('Synchronized', (), {})
 
 deadlyExceptions = [KeyboardInterrupt, SystemExit]
-
-###
-# This is for testing, of course.  Mostly it just disables the firewall code
-# so exceptions can propagate.
-###
-testing = False
-
 
 class Formatter(logging.Formatter):
     _fmtConf = config.logFormat
@@ -167,11 +78,6 @@ class Formatter(logging.Formatter):
         if hasattr(self, '_style'):  # Python 3
             self._style._fmt = self._fmtConf
         return logging.Formatter.format(self, record)
-
-
-class PluginFormatter(Formatter):
-    _fmtConf = config.logFormat
-
 
 class Logger(logging.Logger):
     def exception(self, *args):
@@ -286,15 +192,11 @@ try:
     messagesLogFilename = 'messages.log'
     _handler = BetterFileHandler(messagesLogFilename, encoding='utf8')
 except EnvironmentError as e:
-    raise SystemExit('Error opening messages logfile (%s).  ' \
-          'Generally, this is because you are running Supybot in a directory ' \
-          'you don\'t have permissions to add files in, or you\'re running ' \
-          'Supybot as a different user than you normal do.  The original ' \
-          'error was: %s' % (messagesLogFilename, exnToString(e)))
+    raise SystemExit('Error opening messages logfile ({0}). The original ' \
+          'error was: {1}'.format(messagesLogFilename, exnToString(e)))
 
 # These are public.
 formatter = Formatter('NEVER SEEN; IF YOU SEE THIS, FILE A BUG!')
-pluginFormatter = PluginFormatter('NEVER SEEN; IF YOU SEE THIS, FILE A BUG!')
 
 # These are not.
 logging.setLoggerClass(Logger)
@@ -313,66 +215,11 @@ setLevel = _logger.setLevel
 
 atexit.register(logging.shutdown)
 
-
 def timestamp(when=None):
     if when is None:
         when = time.time()
     t = time.localtime(when)
     return time.strftime(config.timestampFormat, t)
-
-
-def firewall(f, errorHandler=None):
-    def logException(self, s=None):
-        if s is None:
-            s = 'Uncaught exception'
-        if hasattr(self, 'log'):
-            logging_function = self.log.exception
-        else:
-            logging_function = exception
-        logging_function('%s in %s.%s:', s, self.__class__.__name__,
-                         f.__name__)
-
-    def m(self, *args, **kwargs):
-        try:
-            return f(self, *args, **kwargs)
-        except Exception:
-            if testing:
-                raise
-            logException(self)
-            if errorHandler is not None:
-                try:
-                    return errorHandler(self, *args, **kwargs)
-                except Exception:
-                    logException(self, 'Uncaught exception in errorHandler')
-    m = changeFunctionName(m, f.__name__, f.__doc__)
-    return m
-
-
-class MetaFirewall(type):
-    def __new__(mcs, name, bases, classdict):
-        firewalled = {}
-        for base in bases:
-            if hasattr(base, '__firewalled__'):
-                mcs.updateFirewalled(firewalled, base.__firewalled__)
-        mcs.updateFirewalled(firewalled, classdict.get('__firewalled__', []))
-        for (attr, errorHandler) in firewalled.items():
-            if attr in classdict:
-                classdict[attr] = firewall(classdict[attr], errorHandler)
-        return super(MetaFirewall, mcs).__new__(mcs, name, bases, classdict)
-
-    @staticmethod
-    def getErrorHandler(dictOrTuple, name):
-        if isinstance(dictOrTuple, dict):
-            return dictOrTuple[name]
-        else:
-            return None
-
-    @classmethod
-    def updateFirewalled(mcs, firewalled, __firewalled__):
-        for attr in __firewalled__:
-            firewalled[attr] = mcs.getErrorHandler(__firewalled__, attr)
-Firewalled = MetaFirewall('Firewalled', (), {})
-
 
 _handler.setFormatter(formatter)
 
