@@ -102,10 +102,11 @@ def calc(bot, event, irc, args):
     }
     r = utils.post("http://api.mathjs.org/v1/", json=payload)
     if not r.json()['error']:
-        if not r.json['result'].find('.'):
-            output = format(int(r.json()['result']), ",d")
+        result = r.json()['result']
+        if not result.find('.'):
+            output = format(int(result), ",d")
         else:
-            output = r.json()['result']
+            output = result
         message = "The answer is: {0}".format(output)
     else:
         message = r.json()['error']
