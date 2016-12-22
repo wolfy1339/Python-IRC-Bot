@@ -1,4 +1,4 @@
-git+https://github.com/itslukej/zirc.git@b9c1abef1a1e5afd2ae470d9f7d75bff9a136ff5#egg=zirc
+git+https://github.com/itslukej/zirc.git@d8334c04d5a8aa2b888ab011bddb16ac3af9a6aa#egg=zirc
 #zirc>=1.2.4
 requests>=2.12.4
 six>=1.10.0
