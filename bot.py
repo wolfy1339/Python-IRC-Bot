@@ -130,10 +130,10 @@ class Bot(zirc.Client):
 
     @staticmethod
     def on_invite(event, irc):
-        if utils.checkPerms(event.source.host, trusted=True):
-            hostmask = event.source.host
-            log.info("Invited to %s by %s", event.arguments[1], hostmask)
-            irc.join(event.arguments[1])
+        hostmask = event.source.host
+        if utils.checkPerms(hostmask, trusted=True):
+            log.info("Invited to %s by %s", event.arguments[0], hostmask)
+            irc.join(event.arguments[0])
 
     # Numeric events
     def on_unavailresource(self, event, irc):
