@@ -43,7 +43,7 @@ def chunks(l, n):
         yield l[i:i+n]
 
 
-def setMode(irc, channel, users mode):
+def setMode(irc, channel, users, mode):
     for block in chunks(users, 4):
         modes = "".join(mode[1:]) * len(block)
         irc.mode(channel, " ".join(block), mode[0] + modes)
