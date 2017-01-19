@@ -179,10 +179,10 @@ def ban(bot, event, irc, args):
             host = args[0]
         else:
             try:
-                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
             except KeyError:
                 irc.send("WHO {0} nuhs%nhuac".format(event.target))
-                host = "*!*@" + bot.userdb[channel][args[0]]['host']
+                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
         irc.ban(event.target, host)
 
 
