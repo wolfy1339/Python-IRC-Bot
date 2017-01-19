@@ -189,7 +189,7 @@ def kban(bot, event, irc, args):
     """
     if len(args) > 1:
         channel, users, message = getInfoTuple(event, args)
-        setMode(irc, channel users, "+b")
+        setMode(irc, channel, users, "+b")
         for i in users:
             irc.kick(channel, i, message)
     else:
