@@ -62,10 +62,11 @@ class Bot(zirc.Client):
         nick = event.source.nick
         to_nick = event.arguments[0]
         for chan in self.userdb.keys():
-            for u in self.userdb[chan].values():
+            chandb = self.userdb[chan]
+            for u in chandb.values():
                 if u['host'] == event.source.host:
-                    self.userdb[chan][to_nick] = self.userdb[chan][nick]
-                    hostmask = self.userdb[chan][to_nick]['hostmask'].split("!")[1]
+                    self.userdb[chan][to_nick] = chandb[nick]
+                    hostmask = chandb[nick]['hostmask'].split("!")[1]
                     self.userdb[chan][to_nick]['hostmask'] = to_nick + '!' + hostmask
                     del self.userdb[chan][nick]
                     break
@@ -94,7 +95,7 @@ class Bot(zirc.Client):
             except KeyError:
                 for i in self.userdb[event.target].values():
                     if i['host'] == event.source.host:
-                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        del self.userdb[event.target][nick]
                         break
 
     def on_part(self, event, irc):
@@ -109,7 +110,8 @@ class Bot(zirc.Client):
                 except KeyError:
                     for i in self.userdb[event.target].values():
                         if i['host'] == event.source.host:
-                            del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                            nick = i['hostmask'].split("!")[0]
+                            del self.userdb[event.target][nick]
                             break
         else:
             try:
@@ -117,7 +119,8 @@ class Bot(zirc.Client):
             except KeyError:
                 for i in self.userdb[event.target].values():
                     if i['host'] == event.source.host:
-                        del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                        nick = i['hostmask'].split("!")[0]
+                        del self.userdb[event.target][nick]
                         break
 
     def on_join(self, event, irc):
