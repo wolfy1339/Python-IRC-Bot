@@ -17,6 +17,7 @@ pylint:
     - too-many-arguments
     - too-few-public-methods
     - arguments-differ
+    - anomalous-backslash-in-string
 mccabe:
   disable:
     - MC0001
