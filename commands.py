@@ -236,7 +236,8 @@ def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
     if len(args) > 1:
-        setMode(event, irc, args, "-b")
+        channel, users, message = getInfoTuple(event, args)
+        setMode(irc, channel, users, "-b")
     else:
         irc.unban(event.target, args[0])
 
@@ -247,7 +248,8 @@ def op(bot, event, irc, args):
     Give operator status to a user"""
     if len(args):
         if len(args) > 1:
-            setMode(event, irc, args, "+o")
+            channel, users, message = getInfoTuple(event, args)
+            setMode(irc, channel, users, "+o")
         else:
             irc.op(event.target, args[0])
     else:
@@ -260,7 +262,8 @@ def deop(bot, event, irc, args):
     Remove operator status from a user"""
     if len(args):
         if len(args) > 1:
-            setMode(event, irc, args, "-o")
+            channel, users, message = getInfoTuple(event, args)
+            setMode(irc, channel, users, "-o")
         else:
             irc.deop(event.target, args[0])
     else:
@@ -273,7 +276,8 @@ def voice(bot, event, irc, args):
     Give voiced status a user"""
     if len(args):
         if len(args) > 1:
-            setMode(event, irc, args, "+v")
+            channel, users, message = getInfoTuple(event, args)
+            setMode(irc, channel, users, "+v")
         else:
             irc.deop(event.target, args[0])
     else:
@@ -286,7 +290,8 @@ def unvoice(bot, event, irc, args):
     Remove voiced status a user"""
     if len(args):
         if len(args) > 1:
-            setMode(event, irc, args, "-v")
+            channel, users, message = getInfoTuple(event, args)
+            setMode(irc, channel, users, "-v")
         else:
             irc.unvoice(event.target, args[0])
     else:
