@@ -187,23 +187,10 @@ def kban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
-    if len(args) > 1:
-        channel, users, message = getInfoTuple(event, args)
-        setMode(irc, channel, users, "+b")
-        for i in users:
-            irc.kick(channel, i, message)
-    else:
-        if args[0].find('@') == -1:
-            host = args[0]
-        else:
-            try:
-                host = "*!*@" + bot.userdb[channel][args[0]]['host']
-            except KeyError:
-                irc.send("WHO {0} nuhs%nhuac".format(event.target))
-                host = "*!*@" + bot.userdb[channel][args[0]]['host']
-        irc.ban(event.target, host)
-        irc.kick(event.target, args[0], " ".join(args[1:]) or event.source.nick)
-
+    channel, users, message = getInfoTuple(event, args)
+    setMode(irc, channel, users, "+b")
+    for i in users:
+        irc.kick(channel, i, message)
 
 @add_cmd("kick", admin=True, minArgs=1)
 def kick(bot, event, irc, args):
@@ -221,25 +208,19 @@ def remove(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Forces a user to part the channel.
     """
-    if len(args) > 1:
-        channel, users, message = getInfoTuple(event, args)
-        if message == event.source.nick:
-            message = "{0} says GTFO!".format(event.source.nick)
-        for i in users:
-            irc.remove(channel, i, message)
-    else:
-        irc.remove(event.target, args[0], " ".join(args[1:]))
+    channel, users, message = getInfoTuple(event, args)
+    if message == event.source.nick:
+        message = "{0} says GTFO!".format(event.source.nick)
+    for i in users:
+        irc.remove(channel, i, message)
 
 
 @add_cmd("unban", admin=True, minArgs=1)
 def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
-    if len(args) > 1:
-        channel, users, message = getInfoTuple(event, args)
-        setMode(irc, channel, users, "-b")
-    else:
-        irc.unban(event.target, args[0])
+    channel, users, message = getInfoTuple(event, args)
+    setMode(irc, channel, users, "-b")
 
 
 @add_cmd("op", admin=True, minArgs=0)
@@ -247,11 +228,8 @@ def op(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give operator status to a user"""
     if len(args):
-        if len(args) > 1:
-            channel, users, message = getInfoTuple(event, args)
-            setMode(irc, channel, users, "+o")
-        else:
-            irc.op(event.target, args[0])
+        channel, users, message = getInfoTuple(event, args)
+        setMode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
 
@@ -261,11 +239,8 @@ def deop(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove operator status from a user"""
     if len(args):
-        if len(args) > 1:
-            channel, users, message = getInfoTuple(event, args)
-            setMode(irc, channel, users, "-o")
-        else:
-            irc.deop(event.target, args[0])
+        channel, users, message = getInfoTuple(event, args)
+        setMode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
 
@@ -275,11 +250,8 @@ def voice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give voiced status a user"""
     if len(args):
-        if len(args) > 1:
-            channel, users, message = getInfoTuple(event, args)
-            setMode(irc, channel, users, "+v")
-        else:
-            irc.deop(event.target, args[0])
+        channel, users, message = getInfoTuple(event, args)
+        setMode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
 
@@ -289,11 +261,8 @@ def unvoice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove voiced status a user"""
     if len(args):
-        if len(args) > 1:
-            channel, users, message = getInfoTuple(event, args)
-            setMode(irc, channel, users, "-v")
-        else:
-            irc.unvoice(event.target, args[0])
+        channel, users, message = getInfoTuple(event, args)
+        setMode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
 
