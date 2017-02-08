@@ -168,7 +168,7 @@ def ban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
     if len(args) > 1:
-        channel, users, message = getInfoTuple(event, args)
+        channel, users = getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "+b")
     else:
         if args[0].find('@') == -1:
@@ -219,7 +219,7 @@ def remove(bot, event, irc, args):
 def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
-    channel, users, message = getInfoTuple(event, args)
+    channel, users = getInfoTuple(event, args)[:-1]
     setMode(irc, channel, users, "-b")
 
 
@@ -228,7 +228,7 @@ def op(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give operator status to a user"""
     if len(args):
-        channel, users, message = getInfoTuple(event, args)
+        channel, users = getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
@@ -239,7 +239,7 @@ def deop(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove operator status from a user"""
     if len(args):
-        channel, users, message = getInfoTuple(event, args)
+        channel, users = getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
@@ -250,7 +250,7 @@ def voice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give voiced status a user"""
     if len(args):
-        channel, users, message = getInfoTuple(event, args)
+        channel, users = getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
@@ -261,7 +261,7 @@ def unvoice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove voiced status a user"""
     if len(args):
-        channel, users, message = getInfoTuple(event, args)
+        channel, users = getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
