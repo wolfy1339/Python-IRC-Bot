@@ -10,6 +10,7 @@ logging.setLevel(30)
 class botTest(TestCase):
     def __init__(self):
         self.config = {}
+        self.userdb = {}
         self.config['nickname'] = 'zIRC-test'
 
     def on_privmsg(self, event, irc, arguments):
@@ -64,4 +65,4 @@ try:
     bot.start(log)
 except Exception:
     logging.exception('An exception happened')
-    sys.exit(1)
+    sys.exit(-1)
