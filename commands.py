@@ -18,9 +18,9 @@ def normalizeWhitespace(s, removeNewline=True):
     ends_with_space = (s[-1] in ' \n\t\r')
     if removeNewline:
         newline_re = re.compile('[\r\n]+')
-        s = ' '.join([bool(i) for i in newline_re.split(s)])
-    s = ' '.join([bool(i) for i in s.split('\t')])
-    s = ' '.join([bool(i) for i in s.split(' ')])
+        s = ' '.join([i for i in newline_re.split(s) if bool(i)])
+    s = ' '.join([i for i in s.split('\t') if bool(i)])
+    s = ' '.join([i for i in s.split(' ') if bool(i)])
     if starts_with_space:
         s = ' ' + s
     if ends_with_space:
