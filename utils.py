@@ -69,8 +69,8 @@ def call_command(bot, event, irc, arguments):
             perms = commands[name]['perms']
             minArgs = commands[name]['minArgs']
 
-            if checkPerms(host, owner=perms[2], admin=perms[1],
-                          trusted=perms[0], channel=chan):
+            if checkPerms(host, chan, owner=perms[2], admin=perms[1],
+                          trusted=perms[0]):
                 if len(args) < minArgs:
                     irc.reply(event, config.argsMissing)
                 else:
@@ -88,21 +88,29 @@ def call_command(bot, event, irc, arguments):
             PrintError(irc, event)
 
 
-def checkPerms(host, owner=False, admin=False, trusted=False, channel=False):
+def checkPerms(host, channel, owner=False, admin=False, trusted=False):
+    try:
+        admins = config.admins['global'] + config.admins[channel]
+    except KeyError:
+        admins = config.admins['global']
+
+    try:
+        trusted = config.trusted['global'] + config.trusted[channel]
+    except KeyError:
+        trusted = config.trusted['global']
     isOwner = host in config.owners
-    isAdmin = host in config.admins
+    isAdmin = host in admins
     isTrusted = host in config.trusted
     isBot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
     ignoreChans = list(config.ignores["channels"].keys())
 
-    if channel:
-        if channel in ignoreChans:
-            ignores.extend(config.ignores["channels"][channel])
+    if channel in ignoreChans:
+        ignores.extend(config.ignores["channels"][channel])
 
-        if channel in config.bots['channels']:
-            isBot = False
+    if channel in config.bots['channels']:
+        isBot = False
     isIgnored = host in ignores
 
     if owner and isOwner:
