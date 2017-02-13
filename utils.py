@@ -90,12 +90,12 @@ def call_command(bot, event, irc, arguments):
 
 def checkPerms(host, channel, owner=False, admin=False, trusted=False):
     try:
-        admins = config.admins['global'] + config.admins[channel]
+        admins = config.admins['global'] + config.admins['channels'][channel]
     except KeyError:
         admins = config.admins['global']
 
     try:
-        trusted = config.trusted['global'] + config.trusted[channel]
+        trusted = config.trusted['global'] + config.trusted['channels'][channel]
     except KeyError:
         trusted = config.trusted['global']
     isOwner = host in config.owners
