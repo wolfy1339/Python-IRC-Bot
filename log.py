@@ -231,7 +231,7 @@ def timestamp(when=None):
 
 _handler.setFormatter(formatter)
 
-_handler.setLevel(config.logLevel)
+_handler.setLevel(logging.DEBUG)
 _logger.addHandler(_handler)
 _logger.setLevel(-1)
 
