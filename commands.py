@@ -382,6 +382,7 @@ def hostmask(bot, event, irc, args):
 @add_cmd("perms", minArgs=0)
 def permissions(bot, event, irc, args):
     """Replies with your permission level"""
+    channel = event.target
     try:
         admins = config.admins['global'] + config.admins[channel]
     except KeyError:
