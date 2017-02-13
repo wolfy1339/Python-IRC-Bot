@@ -66,8 +66,7 @@ class Bot(zirc.Client):
             for u in chandb.values():
                 if u['host'] == event.source.host:
                     self.userdb[chan][to_nick] = chandb[nick]
-                    hostmask = chandb[nick]['hostmask'].split("!")[1]
-                    self.userdb[chan][to_nick]['hostmask'] = to_nick + '!' + hostmask
+                    self.userdb[chan][to_nick]['hostmask'] = event.source
                     del self.userdb[chan][nick]
                     break
             break
