@@ -21,8 +21,18 @@ stdoutWrap = True
 # Bot
 commandChar = '?'
 owners = ['botters/wolfy1339']
-admins = []
-trusted = []
+admins = {
+    'global': [],
+    'channels': {
+        '##lazy-valoran': []
+    }
+}
+trusted = {
+    'global': [],
+    'channels': {
+        '##lazy-valoran': []
+    }
+}
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
     'channels': ['##jeffl35', '##wolfy1339']
