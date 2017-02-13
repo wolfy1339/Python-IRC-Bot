@@ -32,6 +32,7 @@ trusted = {
     'channels': {
         '##lazy-valoran': []
     }
+}
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
     'channels': ['##jeffl35', '##wolfy1339']
