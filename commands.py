@@ -382,15 +382,24 @@ def hostmask(bot, event, irc, args):
 @add_cmd("perms", minArgs=0)
 def permissions(bot, event, irc, args):
     """Replies with your permission level"""
+    try:
+        admins = config.admins['global'] + config.admins[channel]
+    except KeyError:
+        admins = config.admins['global']
+
+    try:
+        trusted = config.trusted['global'] + config.trusted[channel]
+    except KeyError:
+        trusted = config.trusted['global']
     host = event.source.host
     isBot = host.find("/bot/") != -1
     isBotChannel = event.target in config.bots['channels']
 
     if host in config.owners:
         perms = 'Owner'
-    elif host in config.admins:
+    elif host in admins:
         perms = 'Admin'
-    elif host in config.trusted:
+    elif host in trusted:
         perms = 'Trusted'
     elif host in config.bots['hosts'] or (isBotChannel and isBot):
         perms = 'Bot'
