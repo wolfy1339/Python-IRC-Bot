@@ -120,7 +120,7 @@ def echo(bot, event, irc, args):
 @add_cmd("rainbow", minArgs=1)
 def rainbow(bot, event, irc, args):
     """Responds with given text colored in rainbow"""
-    irc.reply(event, ' '.join(args), color="rainbow")
+    irc.reply(event, ' '.join(args), rainbow=True)
 
 
 @add_cmd("ping", minArgs=0)
