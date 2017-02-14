@@ -342,9 +342,9 @@ def List(bot, event, irc, args):
     if len(args) and args[0] == "alias":
         irc.reply(event, ", ".join(utils.alias_list))
     else:
-        isOwner = utils.checkPerms(event.source, event.target, owner=True)
-        isAdmin = utils.checkPerms(event.source, event.target, admin=True)
-        isTrusted = utils.checkPerms(event.source, event.target, trusted=True)
+        isOwner = utils.checkPerms(event.source.host, event.target, owner=True)
+        isAdmin = utils.checkPerms(event.source.host, event.target, admin=True)
+        isTrusted = utils.checkPerms(event.source.host, event.target, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         for i in utils.cmd_list:
             if utils.commands[i]['perms'][2]:
