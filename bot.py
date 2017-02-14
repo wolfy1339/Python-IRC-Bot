@@ -161,17 +161,19 @@ class Bot(zirc.Client):
         log.info("Connected to network")
 
     def on_whoreply(self, event, irc):
+        nick = event.arguments[4]
         if nick != "ChanServ":
-            (ident, host, nick) = event.arguments[1:3] + event.arguments[4:5]
+            (ident, host) = event.arguments[1:3]
             channel = event.arguments[0]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             account = host.split("/")[-1].split('.')[-1]
             self.addEntry(channel, nick, hostmask, host, account)
 
     def on_whospcrpl(self, event, irc):
+        nick = event.args[3]
         if nick != "ChanServ":
             args = event.arguments
-            (ident, host, nick) = args[1:4]
+            (ident, host) = args[1:3]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             channel = args[0]
             account = args[4] if args[4] != "0" else None
