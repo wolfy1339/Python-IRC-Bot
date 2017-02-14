@@ -105,7 +105,7 @@ class Bot(zirc.Client):
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
         else:
-            removeEntry(event, nick)
+            self.removeEntry(event, nick)
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
@@ -117,7 +117,7 @@ class Bot(zirc.Client):
             else:
                 del self.userdb[event.target]
         else:
-            removeEntry(event, nick)
+            self.removeEntry(event, nick)
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
@@ -161,20 +161,23 @@ class Bot(zirc.Client):
         log.info("Connected to network")
 
     def on_whoreply(self, event, irc):
-        (ident, host, nick) = event.arguments[1:3] + event.arguments[4:5]
-        channel = event.arguments[0]
-        hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-        account = host.split("/")[-1].split('.')[-1]
         if nick != "ChanServ":
-            addEntry(channel, nick, hostmask, host, account)
+            (ident, host, nick) = event.arguments[1:3] + event.arguments[4:5]
+            channel = event.arguments[0]
+            hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+            account = host.split("/")[-1].split('.')[-1]
+            self.addEntry(channel, nick, hostmask, host, account)
 
     def on_whospcrpl(self, event, irc):
-        (ident, host, nick) = event.arguments[1:4]
-        hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-        channel = event.arguments[0]
-        account = event.arguments[4] if account != "0" else None
         if nick != "ChanServ":
-            addEntry(channel, nick, hostmask, host, account)
+            (ident, host, nick) = event.arguments[1:4]
+            hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+            channel = event.arguments[0]
+            if account != "0":
+                account = event.arguments[4]
+            else:
+                account = None
+            self.addEntry(channel, nick, hostmask, host, account)
 
     @staticmethod
     def on_315(event, irc):
