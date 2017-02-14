@@ -92,7 +92,8 @@ class Logger(logging.Logger):
         (E, er, tb) = sys.exc_info()
         del er
         tbinfo = traceback.extract_tb(tb)
-        path = '[{0!s}]'.format('|'.join([i for i in operator.itemgetter(2)(tbinfo)]))
+        tb_path = '|'.join([i for i in operator.itemgetter(2)(tbinfo)])
+        path = '[{0!s}]'.format(tb_path)
         eStrId = '{0!s}:{1!s}'.format(E, path)
         eId = hex(hash(eStrId) & 0xFFFFF)
         logging.Logger.exception(self, *args)
