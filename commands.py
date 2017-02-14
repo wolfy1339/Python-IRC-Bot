@@ -346,6 +346,7 @@ def List(bot, event, irc, args):
         isAdmin = utils.checkPerms(event.source.host, event.target, admin=True)
         isTrusted = utils.checkPerms(event.source.host, event.target, trusted=True)
         owner, admin, trusted, users = [], [], [], []
+        text = "Commands({}): "
         for i in utils.cmd_list:
             if utils.commands[i]['perms'][2]:
                 owner.append(i)
@@ -356,13 +357,17 @@ def List(bot, event, irc, args):
             else:
                 users.append(i)
         if isOwner:
-            irc.reply(event, ", ".join(owner + admin + trusted + users))
+            text.format('Owner')
+            irc.reply(event, text + ", ".join(owner + admin + trusted + users))
         elif isAdmin:
-            irc.reply(event, ", ".join(admin + trusted + users))
+            text.format('Admin')
+            irc.reply(event, text + ", ".join(admin + trusted + users))
         elif isTrusted:
-            irc.reply(event, ", ".join(trusted + users))
+            text.format('Trusted')
+            irc.reply(event, text + ", ".join(trusted + users))
         else:
-            irc.reply(event, ", ".join(users))
+            text.format('User')
+            irc.reply(event, text + ", ".join(users))
 
 
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
