@@ -305,7 +305,7 @@ def Config(bot, event, irc, args):
     else:
         if hasattr(config, args[0]):
             if args[0] == 'password' and event.target.startswith('#'):
-                irc.reply(event, "Are you sure you want this to be diplayed in a public channel?")
+                irc.reply(event, config.secretConfigEntry)
             else:
                 irc.reply(event, repr(getattr(config, args[0])))
         else:

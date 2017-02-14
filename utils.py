@@ -89,15 +89,12 @@ def call_command(bot, event, irc, arguments):
 
 
 def checkPerms(host, channel, owner=False, admin=False, trusted=False):
-    try:
-        admins = config.admins['global'] + config.admins['channels'][channel]
-    except KeyError:
-        admins = config.admins['global']
+    admins = config.admins['global']
+    trusted = config.trusted['global']
 
-    try:
-        trusted = config.trusted['global'] + config.trusted['channels'][channel]
-    except KeyError:
-        trusted = config.trusted['global']
+    admins += config.admins['channels'].get(channel, [])
+    trusted += config.trusted['channels'].get(channel, [])
+
     isOwner = host in config.owners
     isAdmin = host in admins
     isTrusted = host in config.trusted
@@ -131,9 +128,10 @@ def PrintError(irc, event):
         try:
             syntax = "py3tb" if PY3 else "pytb"
             tb = traceback.format_exc().strip()
+            title = "zIRCBot Error: {0}"
             r = post("http://dpaste.com/api/v2/",
                               data={
-                                  "title": "zIRCBot Error: {0}".format(tb.split("\n")[-1]),
+                                  "title": title.format(tb.split("\n")[-1]),
                                   "content": tb,
                                   "syntax": syntax,
                                   "expiry-days": "10",
