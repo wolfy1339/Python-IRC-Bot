@@ -36,6 +36,22 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 
+    def removeEntry(self, event, nick):
+        try:
+            del self.userdb[event.target][nick]
+        except KeyError:
+            for i in self.userdb[event.target].values():
+                if i['host'] == event.source.host:
+                    del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                    break
+
+    def addEntry(self, channel, nick, hostmask, host, account):
+        self.userdb[channel][nick] = {
+            'hostmask': hostmask,
+            'host': host,
+            'account': account
+        }
+
     # Non-numeric events
     @staticmethod
     def on_all(event, irc):
@@ -89,38 +105,19 @@ class Bot(zirc.Client):
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
         else:
-            try:
-                del self.userdb[event.target][nick]
-            except KeyError:
-                for i in self.userdb[event.target].values():
-                    if i['host'] == event.source.host:
-                        del self.userdb[event.target][nick]
-                        break
+            removeEntry(event, nick)
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
-        if event.source.nick == self.config['nickname']:
+        nick = event.source.nick
+        if nick == self.config['nickname']:
             if requested:
                 log.warning("Removed from %s, trying to re-join", event.target)
                 irc.join(event.target)
             else:
-                try:
-                    del self.userdb[event.target][event.source.nick]
-                except KeyError:
-                    for i in self.userdb[event.target].values():
-                        if i['host'] == event.source.host:
-                            nick = i['hostmask'].split("!")[0]
-                            del self.userdb[event.target][nick]
-                            break
+                del self.userdb[event.target]
         else:
-            try:
-                del self.userdb[event.target][event.source.nick]
-            except KeyError:
-                for i in self.userdb[event.target].values():
-                    if i['host'] == event.source.host:
-                        nick = i['hostmask'].split("!")[0]
-                        del self.userdb[event.target][nick]
-                        break
+            removeEntry(event, nick)
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
@@ -167,24 +164,17 @@ class Bot(zirc.Client):
         (ident, host, nick) = event.arguments[1:3] + event.arguments[4:5]
         channel = event.arguments[0]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+        account = host.split("/")[-1].split('.')[-1]
         if nick != "ChanServ":
-            self.userdb[channel][nick] = {
-                'hostmask': hostmask,
-                'host': host,
-                'account': host.split("/")[-1].split('.')[-1]
-            }
+            addEntry(channel, nick, hostmask, host, account)
 
     def on_whospcrpl(self, event, irc):
         (ident, host, nick) = event.arguments[1:4]
         hostmask = "{0}!{1}@{2}".format(nick, ident, host)
         channel = event.arguments[0]
-        account = event.arguments[4]
+        account = event.arguments[4] if account != "0" else None
         if nick != "ChanServ":
-            self.userdb[channel][nick] = {
-                'hostmask': hostmask,
-                'host': host,
-                'account': account if account != "0" else None
-            }
+            addEntry(channel, nick, hostmask, host, account)
 
     @staticmethod
     def on_315(event, irc):
