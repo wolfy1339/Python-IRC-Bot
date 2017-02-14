@@ -29,7 +29,7 @@ class botTest(TestCase):
 
     @staticmethod
     def on_invite(event, irc):
-        if utils.checkPerms(event.source.host, trusted=True):
+        if utils.checkPerms(event.source.host, event.target, trusted=True):
             irc.join(event.target)
 
 
