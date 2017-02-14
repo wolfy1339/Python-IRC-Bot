@@ -170,13 +170,11 @@ class Bot(zirc.Client):
 
     def on_whospcrpl(self, event, irc):
         if nick != "ChanServ":
-            (ident, host, nick) = event.arguments[1:4]
+            args = event.arguments
+            (ident, host, nick) = args[1:4]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-            channel = event.arguments[0]
-            if account != "0":
-                account = event.arguments[4]
-            else:
-                account = None
+            channel = args[0]
+            account = args[4] if args[4] != "0" else None
             self.addEntry(channel, nick, hostmask, host, account)
 
     @staticmethod
