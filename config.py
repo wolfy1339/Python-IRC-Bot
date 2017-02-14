@@ -52,4 +52,4 @@ noPerms = " ".join(["Sorry,",
 argsMissing = "Oops, looks like you forgot an argument there."
 invalidCmd = 'Invalid command {0}'
 tracebackPostError = "An error happened while trying to post the traceback"
-privateConfigEntry = "Are you sure you want this to be diplayed in a public channel?"
+secretEntry = "Are you sure you want this to be diplayed in a public channel?"

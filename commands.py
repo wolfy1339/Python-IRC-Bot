@@ -305,7 +305,7 @@ def Config(bot, event, irc, args):
     else:
         if hasattr(config, args[0]):
             if args[0] == 'password' and event.target.startswith('#'):
-                irc.reply(event, config.secretConfigEntry)
+                irc.reply(event, config.secretEntry)
             else:
                 irc.reply(event, repr(getattr(config, args[0])))
         else:
