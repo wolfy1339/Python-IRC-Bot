@@ -357,17 +357,14 @@ def List(bot, event, irc, args):
             else:
                 users.append(i)
         if isOwner:
-            text.format('Owner')
-            irc.reply(event, text + ", ".join(owner + admin + trusted + users))
+            irc.reply(event, text.format('Owner') + ", ".join(owner + admin + trusted + users))
         elif isAdmin:
-            text.format('Admin')
-            irc.reply(event, text + ", ".join(admin + trusted + users))
+            irc.reply(event, text.format('Admin') + ", ".join(admin + trusted + users))
         elif isTrusted:
-            text.format('Trusted')
-            irc.reply(event, text + ", ".join(trusted + users))
+            text
+            irc.reply(event, text.format('Trusted') + ", ".join(trusted + users))
         else:
-            text.format('User')
-            irc.reply(event, text + ", ".join(users))
+            irc.reply(event, text.format('User') + ", ".join(users))
 
 
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
