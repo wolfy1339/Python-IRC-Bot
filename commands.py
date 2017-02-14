@@ -342,7 +342,27 @@ def List(bot, event, irc, args):
     if len(args) and args[0] == "alias":
         irc.reply(event, ", ".join(utils.alias_list))
     else:
-        irc.reply(event, ", ".join(utils.cmd_list))
+        isOwner = utils.checkPerms(event.source, event.target, owner=True)
+        isAdmin = utils.checkPerms(event.source, event.target, admin=True)
+        isTrusted = utils.checkPerms(event.source, event.target, trusted=True)
+        owner, admin, trusted, users = [], [], [], []
+        for i in utils.cmd_list:
+            if utils.commands[i]['perms'][2]:
+                owner.append(i)
+            elif utils.commands[i]['perms'][1]:
+                admin.append(i)
+            elif utils.commands[i]['perms'][0]:
+                trusted.append(i)
+            else:
+                users.append(i)
+        if isOwner:
+            irc.reply(event, ", ".join(owner + admin + trusted + users))
+        elif isAdmin:
+            irc.reply(event, ", ".join(admin + trusted + users))
+        elif isTrusted:
+            irc.reply(event, ", ".join(trusted + users))
+        else:
+            irc.reply(event, ", ".join(users))
 
 
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
