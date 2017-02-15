@@ -38,8 +38,8 @@ class Bot(zirc.Client):
         events = handlers.Events(self)
         for i in dir(events):
             func = getattr(events, i)
-            if callable(func) and not i.startswith("__"):
-                setattr(self, i, func)
+            if callable(func) and i.startswith("on_"):
+                self.listen(func, i.split("on_")[1])
 
     def removeEntry(self, event, nick):
         try:
