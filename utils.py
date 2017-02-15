@@ -76,7 +76,8 @@ def call_command(bot, event, irc, arguments):
                 else:
                     target = "a private message" if privmsg else event.target
                     if not config.ci:
-                        log.info("%s called %s in %s", event.source, name, target)
+                        source = event.source
+                        log.info("%s called %s in %s", source, name, target)
                     commands[name]['func'](bot, event, irc, args)
             else:
                 if not event.source.host.find("/bot/"):
