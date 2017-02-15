@@ -37,9 +37,10 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
         events = events.Events(self)
-        for func in dir(events):
-            if callable(getattr(events, func)) and not func.startswith("__"):
-                setattr(self, getattr(events, func))
+        for i in dir(events):
+            func = getattr(events, i)
+            if callable(func) and not i.startswith("__"):
+                setattr(self, i, func)
 
     def removeEntry(self, event, nick):
         try:
