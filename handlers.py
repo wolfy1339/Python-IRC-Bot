@@ -7,6 +7,8 @@ import utils
 class Events(object):
     def __init__(self, bot):
         self = bot
+        # This might seem dumb, but the linters absolutely want it used
+        self.config = bot.config
 
     @staticmethod
     def on_all(event, irc):
