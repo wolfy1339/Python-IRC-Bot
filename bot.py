@@ -1,12 +1,10 @@
 from os import path
 import socket
 import ssl
-import sys
 
 import commands
 import config
-import events
-import log
+import handlers
 import utils
 import zirc
 
@@ -36,7 +34,8 @@ class Bot(zirc.Client):
         }
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
-        events = events.Events(self)
+
+        events = handlers.Events(self)
         for i in dir(events):
             func = getattr(events, i)
             if callable(func) and not i.startswith("__"):

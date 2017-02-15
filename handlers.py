@@ -1,3 +1,7 @@
+import sys
+import log
+
+
 class Events(object):
     def __init__(self, bot):
         self = bot
