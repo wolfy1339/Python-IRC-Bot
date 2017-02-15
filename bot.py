@@ -35,11 +35,7 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 
-        events = handlers.Events(self)
-        for i in dir(events):
-            func = getattr(events, i)
-            if callable(func) and i.startswith("on_"):
-                self.listen(func, i.split("on_")[1])
+        self.events = handlers.Events(self)
 
     def removeEntry(self, event, nick):
         try:
@@ -57,5 +53,18 @@ class Bot(zirc.Client):
             'account': account
         }
 
+    def on_all(self, event, irc, arguments):
+        if event.raw.startswith("ERROR"):
+            log.error(" ".join(event.arguments))
+        else:
+            try:
+                getattr(self.events, "on_" + event.type)(event, irc, arguments)
+            except AttributeError:
+                try:
+                    getattr(self.events, "on_" + event.text_type)(event, irc, arguments)
+                except AttributeError:
+                    pass
 
+            if event.raw.find("%") == -1:
+                log.debug(event.raw)
 Bot()
