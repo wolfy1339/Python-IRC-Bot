@@ -361,7 +361,6 @@ def List(bot, event, irc, args):
         elif isAdmin:
             irc.reply(event, text.format('Admin') + ", ".join(admin + trusted + users))
         elif isTrusted:
-            text
             irc.reply(event, text.format('Trusted') + ", ".join(trusted + users))
         else:
             irc.reply(event, text.format('User') + ", ".join(users))
