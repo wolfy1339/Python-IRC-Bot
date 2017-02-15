@@ -63,7 +63,7 @@ class Bot(zirc.Client):
                 try:
                     getattr(self.events, "on_" + event.text_type)(event, irc, arguments)
                 except AttributeError:
-                    pass
+                    utils.PrintError(irc, event)
 
             if event.raw.find("%") == -1:
                 log.debug(event.raw)
