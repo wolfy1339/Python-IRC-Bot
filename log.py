@@ -178,6 +178,7 @@ class ColorizedFormatter(Formatter):
             return Formatter.formatException(self, (E, exn, tb))
 
     def format(self, record, *args, **kwargs):
+        formatter = Formatter.format
         if config.colorized:
             color = ''
             if record.levelno == logging.CRITICAL:
@@ -188,12 +189,12 @@ class ColorizedFormatter(Formatter):
                 color = ansi.YELLOW
             if color:
                 return ''.join([color,
-                                Formatter.format(self, record, *args, **kwargs),
+                                formatter(self, record, *args, **kwargs),
                                 ansi.RESET])
             else:
-                return Formatter.format(self, record, *args, **kwargs)
+                return formatter(self, record, *args, **kwargs)
         else:
-            return Formatter.format(self, record, *args, **kwargs)
+            return formatter(self, record, *args, **kwargs)
 
 
 try:
