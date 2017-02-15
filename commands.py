@@ -342,9 +342,11 @@ def List(bot, event, irc, args):
     if len(args) and args[0] == "alias":
         irc.reply(event, ", ".join(utils.alias_list))
     else:
-        isOwner = utils.checkPerms(event.source.host, event.target, owner=True)
-        isAdmin = utils.checkPerms(event.source.host, event.target, admin=True)
-        isTrusted = utils.checkPerms(event.source.host, event.target, trusted=True)
+        host = event.source.host
+        channel = event.target
+        isOwner = utils.checkPerms(host, channel, owner=True)
+        isAdmin = utils.checkPerms(host, channel, admin=True)
+        isTrusted = utils.checkPerms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({}): "
         for i in utils.cmd_list:
@@ -357,11 +359,14 @@ def List(bot, event, irc, args):
             else:
                 users.append(i)
         if isOwner:
-            irc.reply(event, text.format('Owner') + ", ".join(owner + admin + trusted + users))
+            cmd_list = owner + admin + trusted + users
+            irc.reply(event, text.format('Owner') + ", ".join(cmd_list))
         elif isAdmin:
-            irc.reply(event, text.format('Admin') + ", ".join(admin + trusted + users))
+            cmd_list = admin + trusted + users
+            irc.reply(event, text.format('Admin') + ", ".join(cmd_list))
         elif isTrusted:
-            irc.reply(event, text.format('Trusted') + ", ".join(trusted + users))
+            cmd_list = trusted + users
+            irc.reply(event, text.format('Trusted') + ", ".join(cmd_list))
         else:
             irc.reply(event, text.format('User') + ", ".join(users))
 
