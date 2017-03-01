@@ -15,26 +15,10 @@ class Bot(zirc.Client):
             self.userdb[i] = {}
 
         self.events = handlers.Events(self)
-        # Non numeric events
-        self.on_all = self.events.on_all
-        self.on_privmsg = self.events.on_privmsg
-        self.on_ctcp = self.events.on_ctcp
-        self.on_send = self.events.on_send
-        self.on_nick = self.events.on_nick
-        self.on_quit = self.events.on_quit
-        self.on_kick = self.events.on_kick
-        self.on_part = self.events.on_part
-        self.on_join = self.events.on_join
-        self.on_invite = self.events.on_invite
-        # Numeric events
-        self.on_unavailresource = self.events.on_unavailresource
-        self.on_nicknameinuse = self.events.on_nicknameinuse
-        self.on_bannedfromchan = self.events.on_bannedfromchan
-        self.on_endofmotd = self.events.on_endofmotd
-        self.on_welcome = self.events.on_welcome
-        self.on_whoreply = self.events.on_whoreply
-        self.on_whospcrpl = self.events.on_whospcrpl
-        self.on_315 = self.events.on_315
+        for i in dir(self.events):
+            func = getattr(self.events, i)
+            if callable(func) and not i.startswith("__"):
+                setattr(self, i, func)
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
