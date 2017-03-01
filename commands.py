@@ -1,6 +1,5 @@
 import time
 import os
-import re
 
 from zirc.util import repl
 
