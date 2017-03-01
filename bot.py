@@ -14,12 +14,6 @@ class Bot(zirc.Client):
         for i in config.channels:
             self.userdb[i] = {}
 
-        self.events = handlers.Events(self)
-        for i in dir(self.events):
-            func = getattr(self.events, i)
-            if callable(func) and not i.startswith("__"):
-                setattr(self, i, func)
-
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
                                       wrapper=ssl.wrap_socket)
@@ -37,6 +31,12 @@ class Bot(zirc.Client):
             'USERINFO': 'An IRC bot built using zIRC on Python',
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
+        # Event handlers
+        self.events = handlers.Events(self)
+        for i in dir(self.events):
+            func = getattr(self.events, i)
+            if callable(func) and not i.startswith("__"):
+                setattr(self, i, func)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 

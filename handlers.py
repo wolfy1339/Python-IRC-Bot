@@ -10,6 +10,8 @@ class Events(object):
         self.bot = bot
         self.config = self.bot.config
         self.userdb = self.bot.userdb
+        self.addEntry = self.bot.addEntry
+        self.removeEntry = self.bot.removeEntry
 
     @staticmethod
     def on_all(event, irc, arguments):
