@@ -15,7 +15,7 @@ class botTest(TestCase):
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
-            utils.call_command(self, event, irc, arguments)
+            utils.util.call_command(self, event, irc, arguments)
 
     @staticmethod
     def on_kick(event, irc):
@@ -29,7 +29,7 @@ class botTest(TestCase):
 
     @staticmethod
     def on_invite(event, irc):
-        if utils.checkPerms(event.source.host, event.target, trusted=True):
+        if utils.util.checkPerms(event.source.host, event.target, trusted=True):
             irc.join(event.target)
 
 
