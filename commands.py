@@ -143,7 +143,7 @@ def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
     channel, users = utils.irc.getInfoTuple(event, args)[:-1]
-    setMode(irc, channel, users, "-b")
+    utils.irc.setMode(irc, channel, users, "-b")
 
 
 @add_cmd("op", admin=True, minArgs=0)
@@ -152,7 +152,7 @@ def op(bot, event, irc, args):
     Give operator status to a user"""
     if len(args):
         channel, users = utils.irc.getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+o")
+        utils.irc.setMode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
 
@@ -163,7 +163,7 @@ def deop(bot, event, irc, args):
     Remove operator status from a user"""
     if len(args):
         channel, users = utils.irc.getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "-o")
+        utils.irc.setMode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
 
@@ -174,7 +174,7 @@ def voice(bot, event, irc, args):
     Give voiced status a user"""
     if len(args):
         channel, users = utils.irc.getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+v")
+        utils.irc.setMode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
 
@@ -185,7 +185,7 @@ def unvoice(bot, event, irc, args):
     Remove voiced status a user"""
     if len(args):
         channel, users = utils.irc.getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "-v")
+        utils.irc.setMode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
 
@@ -258,12 +258,12 @@ def Help(bot, event, irc, args):
     """Help text"""
     if len(args) >= 1:
         try:
-            doc = utils.commands[args[0]]['func'].__doc__
+            doc = utils.util.commands[args[0]]['func'].__doc__
             irc.reply(event, formatCmdDocs(doc, args[0]))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
-        doc = utils.commands["help"]['func'].__doc__
+        doc = utils.util.commands["help"]['func'].__doc__
         irc.reply(event, formatCmdDocs(doc, 'help'))
 
 
@@ -271,21 +271,21 @@ def Help(bot, event, irc, args):
 def List(bot, event, irc, args):
     """Help text"""
     if len(args) and args[0] == "alias":
-        irc.reply(event, ", ".join(utils.alias_list))
+        irc.reply(event, ", ".join(utils.util.alias_list))
     else:
         host = event.source.host
         channel = event.target
-        isOwner = utils.checkPerms(host, channel, owner=True)
-        isAdmin = utils.checkPerms(host, channel, admin=True)
-        isTrusted = utils.checkPerms(host, channel, trusted=True)
+        isOwner = utils.util.checkPerms(host, channel, owner=True)
+        isAdmin = utils.util.checkPerms(host, channel, admin=True)
+        isTrusted = utils.util.checkPerms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({}): "
-        for i in utils.cmd_list:
-            if utils.commands[i]['perms'][2]:
+        for i in utils.util.cmd_list:
+            if utils.util.commands[i]['perms'][2]:
                 owner.append(i)
-            elif utils.commands[i]['perms'][1]:
+            elif utils.util.commands[i]['perms'][1]:
                 admin.append(i)
-            elif utils.commands[i]['perms'][0]:
+            elif utils.util.commands[i]['perms'][0]:
                 trusted.append(i)
             else:
                 users.append(i)
