@@ -2,7 +2,6 @@ from os import path
 import socket
 import ssl
 
-import commands
 import config
 import handlers
 import utils
@@ -14,6 +13,28 @@ class Bot(zirc.Client):
         self.userdb = {}
         for i in config.channels:
             self.userdb[i] = {}
+
+        self.events = handlers.Events(self)
+        # Non numeric events
+        self.on_all = self.events.on_all
+        self.on_privmsg = self.events.on_privmsg
+        self.on_ctcp = self.events.on_ctcp
+        self.on_send = self.events.on_send
+        self.on_nick = self.events.on_nick
+        self.on_quit = self.events.on_quit
+        self.on_kick = self.events.on_kick
+        self.on_part = self.events.on_part
+        self.on_join = self.events.on_join
+        self.on_invite = self.events.on_invite
+        # Numeric events
+        self.on_unavailresource = self.events.on_unavailresource
+        self.on_nicknameinuse = self.events.on_nicknameinuse
+        self.on_bannedfromchan = self.events.on_bannedfromchan
+        self.on_endofmotd = self.events.on_endofmotd
+        self.on_welcome = self.events.on_welcome
+        self.on_whoreply = self.events.on_whoreply
+        self.on_whospcrpl = self.events.on_whospcrpl
+        self.on_315 = self.events.on_315
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
@@ -35,8 +56,6 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
 
-        self.events = handlers.Events(self)
-
     def removeEntry(self, event, nick):
         try:
             del self.userdb[event.target][nick]
@@ -53,18 +72,5 @@ class Bot(zirc.Client):
             'account': account
         }
 
-    def on_all(self, event, irc, arguments):
-        if event.raw.startswith("ERROR"):
-            log.error(" ".join(event.arguments))
-        else:
-            try:
-                getattr(self.events, "on_" + event.type)(event, irc, arguments)
-            except AttributeError:
-                try:
-                    getattr(self.events, "on_" + event.text_type)(event, irc, arguments)
-                except AttributeError:
-                    utils.PrintError(irc, event)
 
-            if event.raw.find("%") == -1:
-                log.debug(event.raw)
 Bot()

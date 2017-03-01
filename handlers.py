@@ -1,17 +1,16 @@
 import sys
 import config
+import commands
 import log
 import utils
 
 
 class Events(object):
     def __init__(self, bot):
-        self = bot
-        # This might seem dumb, but the linters absolutely want it used
-        self.config = bot.config
+        self.bot = bot
 
     @staticmethod
-    def on_all(event, irc):
+    def on_all(event, irc, arguments):
         if event.raw.startswith("ERROR"):
             log.error(" ".join(event.arguments))
         else:
@@ -24,7 +23,7 @@ class Events(object):
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
-            utils.call_command(self, event, irc, arguments)
+            utils.call_command(self.bot, event, irc, arguments)
 
     @staticmethod
     def on_send(data):
