@@ -6,7 +6,7 @@ from zirc.util import repl
 
 import config
 import log
-from utils import add_cmd
+from utils.util import add_cmd
 import utils
 
 
@@ -39,7 +39,7 @@ def Eval(bot, event, irc, args):
         irc.reply(event, console.run(" ".join(args)))
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
-        utils.PrintError(irc, event)
+        utils.util.PrintError(irc, event)
 
 
 @add_cmd("echo", minArgs=1)
@@ -91,8 +91,8 @@ def ban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
     if len(args) > 1:
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+b")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "+b")
     else:
         if args[0].find('@') == -1:
             host = args[0]
@@ -110,8 +110,8 @@ def kban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
-    channel, users, message = getInfoTuple(event, args)
-    setMode(irc, channel, users, "+b")
+    channel, users, message = utils.irc.getInfoTuple(event, args)
+    utils.irc.setMode(irc, channel, users, "+b")
     for i in users:
         irc.kick(channel, i, message)
 
@@ -120,7 +120,7 @@ def kick(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kicks a user
     """
-    channel, users, message = getInfoTuple(event, args)
+    channel, users, message = utils.irc.getInfoTuple(event, args)
 
     for i in users:
         irc.kick(channel, i, message)
@@ -131,7 +131,7 @@ def remove(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Forces a user to part the channel.
     """
-    channel, users, message = getInfoTuple(event, args)
+    channel, users, message = utils.irc.getInfoTuple(event, args)
     if message == event.source.nick:
         message = "{0} says GTFO!".format(event.source.nick)
     for i in users:
@@ -142,7 +142,7 @@ def remove(bot, event, irc, args):
 def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
-    channel, users = getInfoTuple(event, args)[:-1]
+    channel, users = utils.irc.getInfoTuple(event, args)[:-1]
     setMode(irc, channel, users, "-b")
 
 
@@ -151,7 +151,7 @@ def op(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give operator status to a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
@@ -162,7 +162,7 @@ def deop(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove operator status from a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
@@ -173,7 +173,7 @@ def voice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give voiced status a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
@@ -184,7 +184,7 @@ def unvoice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove voiced status a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
         setMode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
@@ -305,11 +305,11 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
 def Reload(bot, event, irc, args):
     """Help text"""
-    if utils.PY34:
+    if utils.util.PY34:
         reload = __import__("importlib").reload
-    elif utils.PY3:
+    elif utils.util.PY3:
         reload = __import__("imp").reload
-    elif utils.PY2:
+    elif utils.util.PY2:
         reload = __builtins__.reload
 
     if args[0] in ['commands', 'utils', 'config', 'log']:
@@ -317,7 +317,7 @@ def Reload(bot, event, irc, args):
             reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
-            utils.PrintError(irc, event)
+            utils.util.PrintError(irc, event)
     else:
         irc.reply(event, "Wrong module name")
 
@@ -336,11 +336,11 @@ def permissions(bot, event, irc, args):
 
     isBot = host.find("/bot/") != -1
     isBotChannel = channel in config.bots['channels']
-    if utils.checkPerms(host, channel, owner=True):
+    if utils.util.checkPerms(host, channel, owner=True):
         perms = 'Owner'
-    elif utils.checkPerms(host, channel, admin=True):
+    elif utils.util.checkPerms(host, channel, admin=True):
         perms = 'Admin'
-    elif utils.checkPerms(host, channel, trusted=True):
+    elif utils.util.checkPerms(host, channel, trusted=True):
         perms = 'Trusted'
     elif host in config.bots['hosts'] or (isBotChannel and isBot):
         perms = 'Bot'
