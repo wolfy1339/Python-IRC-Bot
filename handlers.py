@@ -8,6 +8,8 @@ import utils
 class Events(object):
     def __init__(self, bot):
         self.bot = bot
+        self.config = self.bot.config
+        self.userdb = self.bot.userdb
 
     @staticmethod
     def on_all(event, irc, arguments):
