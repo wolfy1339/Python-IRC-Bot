@@ -259,12 +259,12 @@ def Help(bot, event, irc, args):
     if len(args) >= 1:
         try:
             doc = utils.util.commands[args[0]]['func'].__doc__
-            irc.reply(event, utils.util.formatCmdDocs(doc, args[0]))
+            irc.reply(event, utils.irc.formatCmdDocs(doc, args[0]))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
         doc = utils.util.commands["help"]['func'].__doc__
-        irc.reply(event, utils.util.formatCmdDocs(doc, 'help'))
+        irc.reply(event, utils.irc.formatCmdDocs(doc, 'help'))
 
 
 @add_cmd("list", minArgs=0, alias=["ls"])
