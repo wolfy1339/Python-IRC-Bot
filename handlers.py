@@ -2,7 +2,7 @@ import sys
 import config
 import commands
 import log
-import utils
+from utils import util
 
 
 class Events(object):
@@ -27,7 +27,7 @@ class Events(object):
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
-            utils.call_command(self.bot, event, irc, arguments)
+            util.call_command(self.bot, event, irc, arguments)
 
     @staticmethod
     def on_send(data):
@@ -91,7 +91,7 @@ class Events(object):
     def on_invite(event, irc):
         hostmask = event.source.host
         channel = event.arguments[0]
-        if utils.checkPerms(hostmask, channel, trusted=True):
+        if util.checkPerms(hostmask, channel, trusted=True):
             log.info("Invited to %s by %s", channel, hostmask)
             irc.join(channel)
 

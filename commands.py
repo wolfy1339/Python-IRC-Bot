@@ -1,82 +1,12 @@
 import time
 import os
-import re
 
 from zirc.util import repl
 
 import config
 import log
-from utils import add_cmd
+from utils.util import add_cmd
 import utils
-
-
-def normalizeWhitespace(s, removeNewline=True):
-    """Normalizes the whitespace in a string; \s+ becomes one space."""
-    if not s:
-        return str(s)  # not the same reference
-    starts_with_space = (s[0] in ' \n\t\r')
-    ends_with_space = (s[-1] in ' \n\t\r')
-    if removeNewline:
-        newline_re = re.compile('[\r\n]+')
-        s = ' '.join([i for i in newline_re.split(s) if bool(i)])
-    s = ' '.join([i for i in s.split('\t') if bool(i)])
-    s = ' '.join([i for i in s.split(' ') if bool(i)])
-    if starts_with_space:
-        s = ' ' + s
-    if ends_with_space:
-        s += ' '
-    return s
-
-
-def formatCmdDocs(docs, name):
-    doclines = docs.splitlines()
-    s = '{0!s} {1!s}'.format(name, doclines.pop(0))
-    if doclines:
-        doc = ' '.join(doclines)
-        s = '({0!s}) -- {1!s}'.format('\x02' + s + '\x0F', doc)
-    return normalizeWhitespace(s)
-
-
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i+n]
-
-
-def setMode(irc, channel, users, mode):
-    for block in chunks(users, 4):
-        modes = "".join(mode[1:]) * len(block)
-        irc.mode(channel, " ".join(block), mode[0] + modes)
-
-
-def getUsersFromCommaList(args):
-    pos = args.rfind(",")
-    if args[pos + 1] != " ":
-        users = args[:pos].strip().split(",")
-    else:
-        users = args[:pos].strip().split(", ")
-    args = args[pos:].strip().split(" ")
-
-    users.append(args[0][1:])
-    return users
-
-
-def getInfoTuple(event, args):
-    if args[0].startswith("#"):
-        channel = args[0]
-        str_args = " ".join(args[1:])
-    else:
-        channel = event.target
-        str_args = " ".join(args)
-    if str_args.find(",") != -1:
-        users = getUsersFromCommaList(str_args)
-    else:
-        users = args[-1:]
-    if not " ".join(args[:-len(users)]) == '':
-        message = " ".join(args[:-len(users)])
-    else:
-        message = "{0}".format(event.source.nick)
-    return channel, users, message
 
 
 @add_cmd("calc", alias=["math"], minArgs=1)
@@ -87,7 +17,7 @@ def calc(bot, event, irc, args):
         'expr': arguments,
         'precision': 10
     }
-    r = utils.post("http://api.mathjs.org/v1/", json=payload)
+    r = utils.util.post("http://api.mathjs.org/v1/", json=payload)
     if not r.json()['error']:
         result = r.json()['result']
         if not result.find('.'):
@@ -108,7 +38,7 @@ def Eval(bot, event, irc, args):
         irc.reply(event, console.run(" ".join(args)))
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
-        utils.PrintError(irc, event)
+        utils.util.PrintError(irc, event)
 
 
 @add_cmd("echo", minArgs=1)
@@ -160,8 +90,8 @@ def ban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
     if len(args) > 1:
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+b")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "+b")
     else:
         if args[0].find('@') == -1:
             host = args[0]
@@ -179,8 +109,8 @@ def kban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
-    channel, users, message = getInfoTuple(event, args)
-    setMode(irc, channel, users, "+b")
+    channel, users, message = utils.irc.getInfoTuple(event, args)
+    utils.irc.setMode(irc, channel, users, "+b")
     for i in users:
         irc.kick(channel, i, message)
 
@@ -189,7 +119,7 @@ def kick(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kicks a user
     """
-    channel, users, message = getInfoTuple(event, args)
+    channel, users, message = utils.irc.getInfoTuple(event, args)
 
     for i in users:
         irc.kick(channel, i, message)
@@ -200,7 +130,7 @@ def remove(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Forces a user to part the channel.
     """
-    channel, users, message = getInfoTuple(event, args)
+    channel, users, message = utils.irc.getInfoTuple(event, args)
     if message == event.source.nick:
         message = "{0} says GTFO!".format(event.source.nick)
     for i in users:
@@ -211,8 +141,8 @@ def remove(bot, event, irc, args):
 def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
-    channel, users = getInfoTuple(event, args)[:-1]
-    setMode(irc, channel, users, "-b")
+    channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+    utils.irc.setMode(irc, channel, users, "-b")
 
 
 @add_cmd("op", admin=True, minArgs=0)
@@ -220,8 +150,8 @@ def op(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give operator status to a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+o")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
 
@@ -231,8 +161,8 @@ def deop(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove operator status from a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "-o")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
 
@@ -242,8 +172,8 @@ def voice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Give voiced status a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "+v")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
 
@@ -253,8 +183,8 @@ def unvoice(bot, event, irc, args):
     """[<channel>] <nick>[, <nick>, ...]
     Remove voiced status a user"""
     if len(args):
-        channel, users = getInfoTuple(event, args)[:-1]
-        setMode(irc, channel, users, "-v")
+        channel, users = utils.irc.getInfoTuple(event, args)[:-1]
+        utils.irc.setMode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
 
@@ -327,34 +257,34 @@ def Help(bot, event, irc, args):
     """Help text"""
     if len(args) >= 1:
         try:
-            doc = utils.commands[args[0]]['func'].__doc__
-            irc.reply(event, formatCmdDocs(doc, args[0]))
+            doc = utils.util.commands[args[0]]['func'].__doc__
+            irc.reply(event, utils.irc.formatCmdDocs(doc, args[0]))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
-        doc = utils.commands["help"]['func'].__doc__
-        irc.reply(event, formatCmdDocs(doc, 'help'))
+        doc = utils.util.commands["help"]['func'].__doc__
+        irc.reply(event, utils.irc.formatCmdDocs(doc, 'help'))
 
 
 @add_cmd("list", minArgs=0, alias=["ls"])
 def List(bot, event, irc, args):
     """Help text"""
     if len(args) and args[0] == "alias":
-        irc.reply(event, ", ".join(utils.alias_list))
+        irc.reply(event, ", ".join(utils.util.alias_list))
     else:
         host = event.source.host
         channel = event.target
-        isOwner = utils.checkPerms(host, channel, owner=True)
-        isAdmin = utils.checkPerms(host, channel, admin=True)
-        isTrusted = utils.checkPerms(host, channel, trusted=True)
+        isOwner = utils.util.checkPerms(host, channel, owner=True)
+        isAdmin = utils.util.checkPerms(host, channel, admin=True)
+        isTrusted = utils.util.checkPerms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({0!s}): {1!s}"
         for i in utils.cmd_list:
             if utils.commands[i]['perms'][2]:
                 owner.append(i)
-            elif utils.commands[i]['perms'][1]:
+            elif utils.util.commands[i]['perms'][1]:
                 admin.append(i)
-            elif utils.commands[i]['perms'][0]:
+            elif utils.util.commands[i]['perms'][0]:
                 trusted.append(i)
             else:
                 users.append(i)
@@ -374,11 +304,11 @@ def List(bot, event, irc, args):
 @add_cmd("reload", admin=True, minArgs=1, hide=True)
 def Reload(bot, event, irc, args):
     """Help text"""
-    if utils.PY34:
+    if utils.util.PY34:
         reload = __import__("importlib").reload
-    elif utils.PY3:
+    elif utils.util.PY3:
         reload = __import__("imp").reload
-    elif utils.PY2:
+    elif utils.util.PY2:
         reload = __builtins__.reload
 
     if args[0] in ['commands', 'utils', 'config', 'log']:
@@ -386,7 +316,7 @@ def Reload(bot, event, irc, args):
             reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
-            utils.PrintError(irc, event)
+            utils.util.PrintError(irc, event)
     else:
         irc.reply(event, "Wrong module name")
 
@@ -405,11 +335,11 @@ def permissions(bot, event, irc, args):
 
     isBot = host.find("/bot/") != -1
     isBotChannel = channel in config.bots['channels']
-    if utils.checkPerms(host, channel, owner=True):
+    if utils.util.checkPerms(host, channel, owner=True):
         perms = 'Owner'
-    elif utils.checkPerms(host, channel, admin=True):
+    elif utils.util.checkPerms(host, channel, admin=True):
         perms = 'Admin'
-    elif utils.checkPerms(host, channel, trusted=True):
+    elif utils.util.checkPerms(host, channel, trusted=True):
         perms = 'Trusted'
     elif host in config.bots['hosts'] or (isBotChannel and isBot):
         perms = 'Bot'
