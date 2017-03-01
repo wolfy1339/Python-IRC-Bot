@@ -127,7 +127,7 @@ def PrintError(irc, event):
                                   "syntax": syntax,
                                   "expiry-days": "10",
                                   "poster": "wolfy1339"
-                                },
+                                  },
                               allow_redirects=True,
                               timeout=60)
             irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
