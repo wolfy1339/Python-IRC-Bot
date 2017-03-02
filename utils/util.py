@@ -57,7 +57,7 @@ def call_command(bot, event, irc, arguments):
             min_args = commands[name]['minArgs']
 
             if check_perms(host, chan, owner=perms[2], admin=perms[1],
-                          trusted=perms[0]):
+                           trusted=perms[0]):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
                 else:
