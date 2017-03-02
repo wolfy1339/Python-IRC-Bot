@@ -38,7 +38,7 @@ def Eval(bot, event, irc, args):
         irc.reply(event, console.run(" ".join(args)))
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
-        utils.util.PrintError(irc, event)
+        utils.util.print_error(irc, event)
 
 
 @add_cmd("echo", minArgs=1)
@@ -274,9 +274,9 @@ def List(bot, event, irc, args):
     else:
         host = event.source.host
         channel = event.target
-        isOwner = utils.util.checkPerms(host, channel, owner=True)
-        isAdmin = utils.util.checkPerms(host, channel, admin=True)
-        isTrusted = utils.util.checkPerms(host, channel, trusted=True)
+        isOwner = utils.util.check_perms(host, channel, owner=True)
+        isAdmin = utils.util.check_perms(host, channel, admin=True)
+        isTrusted = utils.util.check_perms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({0!s}): {1!s}"
         for i in utils.cmd_list:
@@ -316,7 +316,7 @@ def Reload(bot, event, irc, args):
             reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
-            utils.util.PrintError(irc, event)
+            utils.util.print_error(irc, event)
     else:
         irc.reply(event, "Wrong module name")
 
@@ -335,11 +335,11 @@ def permissions(bot, event, irc, args):
 
     isBot = host.find("/bot/") != -1
     isBotChannel = channel in config.bots['channels']
-    if utils.util.checkPerms(host, channel, owner=True):
+    if utils.util.check_perms(host, channel, owner=True):
         perms = 'Owner'
-    elif utils.util.checkPerms(host, channel, admin=True):
+    elif utils.util.check_perms(host, channel, admin=True):
         perms = 'Admin'
-    elif utils.util.checkPerms(host, channel, trusted=True):
+    elif utils.util.check_perms(host, channel, trusted=True):
         perms = 'Trusted'
     elif host in config.bots['hosts'] or (isBotChannel and isBot):
         perms = 'Bot'
