@@ -1,7 +1,7 @@
 import re
 
 
-def normalizeWhitespace(s, removeNewline=True):
+def normalize_whitespace(s, remove_newline=True):
     """Normalizes the whitespace in a string; \s+ becomes one space."""
     if not s:
         return str(s)  # not the same reference
@@ -19,13 +19,13 @@ def normalizeWhitespace(s, removeNewline=True):
     return s
 
 
-def formatCmdDocs(docs, name):
+def format_cmd_docs(docs, name):
     doclines = docs.splitlines()
     s = '{0!s} {1!s}'.format(name, doclines.pop(0))
     if doclines:
         doc = ' '.join(doclines)
         s = '({0!s}) -- {1!s}'.format('\x02' + s + '\x0F', doc)
-    return normalizeWhitespace(s)
+    return normalize_whitespace(s)
 
 
 def chunks(l, n):
@@ -34,13 +34,13 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-def setMode(irc, channel, users, mode):
+def set_mode(irc, channel, users, mode):
     for block in chunks(users, 4):
         modes = "".join(mode[1:]) * len(block)
         irc.mode(channel, " ".join(block), mode[0] + modes)
 
 
-def getUsersFromCommaList(args):
+def get_users(args):
     pos = args.rfind(",")
     if args[pos + 1] != " ":
         users = args[:pos].strip().split(",")
@@ -52,7 +52,7 @@ def getUsersFromCommaList(args):
     return users
 
 
-def getInfoTuple(event, args):
+def get_info_tuple(event, args):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
@@ -60,7 +60,7 @@ def getInfoTuple(event, args):
         channel = event.target
         str_args = " ".join(args)
     if str_args.find(",") != -1:
-        users = getUsersFromCommaList(str_args)
+        users = get_users(str_args)
     else:
         users = args[-1:]
     if not " ".join(args[:-len(users)]) == '':
