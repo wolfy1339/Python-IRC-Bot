@@ -54,11 +54,11 @@ def call_command(bot, event, irc, arguments):
 
         try:
             perms = commands[name]['perms']
-            minArgs = commands[name]['minArgs']
+            min_args = commands[name]['minArgs']
 
             if checkPerms(host, chan, owner=perms[2], admin=perms[1],
                           trusted=perms[0]):
-                if len(args) < minArgs:
+                if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
                 else:
                     target = "a private message" if privmsg else event.target
@@ -83,10 +83,10 @@ def checkPerms(host, channel, owner=False, admin=False, trusted=False):
     admins += config.admins['channels'].get(channel, [])
     trusted += config.trusted['channels'].get(channel, [])
 
-    isOwner = host in config.owners
-    isAdmin = host in admins
-    isTrusted = host in config.trusted
-    isBot = host.find("/bot/") != -1 and host not in config.bots['hosts']
+    is_owner = host in config.owners
+    is_admin = host in admins
+    is_trusted = host in config.trusted
+    is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
     ignoreChans = list(config.ignores["channels"].keys())
@@ -95,16 +95,16 @@ def checkPerms(host, channel, owner=False, admin=False, trusted=False):
         ignores.extend(config.ignores["channels"][channel])
 
     if channel in config.bots['channels']:
-        isBot = False
-    isIgnored = host in ignores
+        is_bot = False
+    is_ignored = host in ignores
 
-    if owner and isOwner:
+    if owner and is_owner:
         return True
-    elif admin and (isAdmin or isOwner):
+    elif admin and (is_admin or is_owner):
         return True
-    elif trusted and (isTrusted or isAdmin or isOwner) and not isIgnored:
+    elif trusted and (is_trusted or is_admin or is_owner) and not is_ignored:
         return True
-    elif not (owner or admin or trusted) and not isIgnored and not isBot:
+    elif not (owner or admin or trusted) and not is_ignored and not is_bot:
         return True
     else:
         return False
@@ -117,14 +117,15 @@ def PrintError(irc, event):
             syntax = "py3tb" if PY3 else "pytb"
             tb = traceback.format_exc().strip()
             title = "zIRCBot Error: {0}"
+            data = {
+                "title": title.format(tb.split("\n")[-1]),
+                "content": tb,
+                "syntax": syntax,
+                "expiry-days": "10",
+                "poster": "wolfy1339"
+            }
             r = post("http://dpaste.com/api/v2/",
-                     data={
-                            "title": title.format(tb.split("\n")[-1]),
-                            "content": tb,
-                            "syntax": syntax,
-                            "expiry-days": "10",
-                            "poster": "wolfy1339"
-                        },
+                     data=data,
                      allow_redirects=True,
                      timeout=60)
             irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
