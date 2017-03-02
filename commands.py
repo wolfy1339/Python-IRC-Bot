@@ -280,7 +280,7 @@ def List(bot, event, irc, args):
         is_trusted = utils.util.check_perms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({0!s}): {1!s}"
-        for i in utils.cmd_list:
+        for i in utils.util.cmd_list:
             if utils.commands[i]['perms'][2]:
                 owner.append(i)
             elif utils.util.commands[i]['perms'][1]:
