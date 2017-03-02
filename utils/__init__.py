@@ -1,5 +1,8 @@
+# pylint: disable=unused-import
 from . import util
 from . import irc
+# pylint: enable=unused-import
+
 sysver = "".join(__import__("sys").version.split("\n"))
 gitver = __import__("subprocess").check_output(['git',
                                                 'rev-parse',
