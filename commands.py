@@ -114,6 +114,7 @@ def kban(bot, event, irc, args):
     for i in users:
         irc.kick(channel, i, message)
 
+
 @add_cmd("kick", admin=True, min_args=1)
 def kick(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
