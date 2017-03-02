@@ -1,6 +1,7 @@
 import sys
 import config
-import commands
+# This is required so that util.call_command works
+import commands # pylint: disable=unused-import
 import log
 from utils import util
 
