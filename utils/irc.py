@@ -7,7 +7,7 @@ def normalize_whitespace(s, remove_newline=True):
         return str(s)  # not the same reference
     starts_with_space = (s[0] in ' \n\t\r')
     ends_with_space = (s[-1] in ' \n\t\r')
-    if removeNewline:
+    if remove_newline:
         newline_re = re.compile('[\r\n]+')
         s = ' '.join([i for i in newline_re.split(s) if bool(i)])
     s = ' '.join([i for i in s.split('\t') if bool(i)])
