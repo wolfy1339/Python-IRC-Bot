@@ -16,7 +16,7 @@ get = requests.get
 post = requests.post
 
 
-def add_cmd(name, minArgs=1, alias=None, owner=False,
+def add_cmd(name, min_args=1, alias=None, owner=False,
             admin=False, trusted=False, hide=False):
     def real_command(func):
         global alias_list
@@ -56,7 +56,7 @@ def call_command(bot, event, irc, arguments):
             perms = commands[name]['perms']
             min_args = commands[name]['minArgs']
 
-            if checkPerms(host, chan, owner=perms[2], admin=perms[1],
+            if check_perms(host, chan, owner=perms[2], admin=perms[1],
                           trusted=perms[0]):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
@@ -89,9 +89,9 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
     is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
-    ignoreChans = list(config.ignores["channels"].keys())
+    ignore_chans = list(config.ignores["channels"].keys())
 
-    if channel in ignoreChans:
+    if channel in ignore_chans:
         ignores.extend(config.ignores["channels"][channel])
 
     if channel in config.bots['channels']:
