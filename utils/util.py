@@ -16,7 +16,7 @@ get = requests.get
 post = requests.post
 
 
-def add_cmd(name, minArgs=1, alias=None, owner=False,
+def add_cmd(name, min_args=1, alias=None, owner=False,
             admin=False, trusted=False, hide=False):
     def real_command(func):
         global alias_list
@@ -25,7 +25,7 @@ def add_cmd(name, minArgs=1, alias=None, owner=False,
         commands[name] = {
             'perms': [trusted, admin, owner],
             'func': func,
-            'minArgs': minArgs,
+            'minArgs': min_args,
             'hide': hide
         }
 
@@ -54,11 +54,11 @@ def call_command(bot, event, irc, arguments):
 
         try:
             perms = commands[name]['perms']
-            minArgs = commands[name]['minArgs']
+            min_args = commands[name]['minArgs']
 
-            if checkPerms(host, chan, owner=perms[2], admin=perms[1],
+            if check_perms(host, chan, owner=perms[2], admin=perms[1],
                           trusted=perms[0]):
-                if len(args) < minArgs:
+                if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
                 else:
                     target = "a private message" if privmsg else event.target
@@ -73,58 +73,59 @@ def call_command(bot, event, irc, arguments):
             irc.notice(event.source.nick, config.invalidCmd.format(name))
         except Exception:
             irc.reply(event, 'Oops, an error occured!')
-            PrintError(irc, event)
+            print_error(irc, event)
 
 
-def checkPerms(host, channel, owner=False, admin=False, trusted=False):
+def check_perms(host, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
     trusted = config.trusted['global']
 
     admins += config.admins['channels'].get(channel, [])
     trusted += config.trusted['channels'].get(channel, [])
 
-    isOwner = host in config.owners
-    isAdmin = host in admins
-    isTrusted = host in config.trusted
-    isBot = host.find("/bot/") != -1 and host not in config.bots['hosts']
+    is_owner = host in config.owners
+    is_admin = host in admins
+    is_trusted = host in config.trusted
+    is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     ignores = config.ignores["global"]
 
-    ignoreChans = list(config.ignores["channels"].keys())
+    ignore_chans = list(config.ignores["channels"].keys())
 
-    if channel in ignoreChans:
+    if channel in ignore_chans:
         ignores.extend(config.ignores["channels"][channel])
 
     if channel in config.bots['channels']:
-        isBot = False
-    isIgnored = host in ignores
+        is_bot = False
+    is_ignored = host in ignores
 
-    if owner and isOwner:
+    if owner and is_owner:
         return True
-    elif admin and (isAdmin or isOwner):
+    elif admin and (is_admin or is_owner):
         return True
-    elif trusted and (isTrusted or isAdmin or isOwner) and not isIgnored:
+    elif trusted and (is_trusted or is_admin or is_owner) and not is_ignored:
         return True
-    elif not (owner or admin or trusted) and not isIgnored and not isBot:
+    elif not (owner or admin or trusted) and not is_ignored and not is_bot:
         return True
     else:
         return False
 
 
-def PrintError(irc, event):
+def print_error(irc, event):
     log.exception("An unknown error occured")
     if not config.ci:
         try:
             syntax = "py3tb" if PY3 else "pytb"
             tb = traceback.format_exc().strip()
             title = "zIRCBot Error: {0}"
+            data = {
+                "title": title.format(tb.split("\n")[-1]),
+                "content": tb,
+                "syntax": syntax,
+                "expiry-days": "10",
+                "poster": "wolfy1339"
+            }
             r = post("http://dpaste.com/api/v2/",
-                     data={
-                            "title": title.format(tb.split("\n")[-1]),
-                            "content": tb,
-                            "syntax": syntax,
-                            "expiry-days": "10",
-                            "poster": "wolfy1339"
-                        },
+                     data=data,
                      allow_redirects=True,
                      timeout=60)
             irc.msg('##wolfy1339', "Error: {0}".format(r.text.split("\n")[0]))
