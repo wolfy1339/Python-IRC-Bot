@@ -281,7 +281,7 @@ def List(bot, event, irc, args):
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({0!s}): {1!s}"
         for i in utils.util.cmd_list:
-            if utils.commands[i]['perms'][2]:
+            if utils.util.commands[i]['perms'][2]:
                 owner.append(i)
             elif utils.util.commands[i]['perms'][1]:
                 admin.append(i)
