@@ -73,7 +73,7 @@ def call_command(bot, event, irc, arguments):
             irc.notice(event.source.nick, config.invalidCmd.format(name))
         except Exception:
             irc.reply(event, 'Oops, an error occured!')
-            PrintError(irc, event)
+            print_error(irc, event)
 
 
 def check_perms(host, channel, owner=False, admin=False, trusted=False):
