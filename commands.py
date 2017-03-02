@@ -91,7 +91,7 @@ def ban(bot, event, irc, args):
     Bans a user"""
     if len(args) > 1:
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-        utils.irc.setMode(irc, channel, users, "+b")
+        utils.irc.set_mode(irc, channel, users, "+b")
     else:
         if args[0].find('@') == -1:
             host = args[0]
@@ -110,7 +110,7 @@ def kban(bot, event, irc, args):
     Kick-bans a user
     """
     channel, users, message = utils.irc.get_info_tuple(event, args)
-    utils.irc.setMode(irc, channel, users, "+b")
+    utils.irc.set_mode(irc, channel, users, "+b")
     for i in users:
         irc.kick(channel, i, message)
 
@@ -143,7 +143,7 @@ def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
     channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-    utils.irc.setMode(irc, channel, users, "-b")
+    utils.irc.set_mode(irc, channel, users, "-b")
 
 
 @add_cmd("op", admin=True, min_args=0)
@@ -152,7 +152,7 @@ def op(bot, event, irc, args):
     Give operator status to a user"""
     if len(args):
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-        utils.irc.setMode(irc, channel, users, "+o")
+        utils.irc.set_mode(irc, channel, users, "+o")
     else:
         irc.op(event.target, event.source.nick)
 
@@ -163,7 +163,7 @@ def deop(bot, event, irc, args):
     Remove operator status from a user"""
     if len(args):
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-        utils.irc.setMode(irc, channel, users, "-o")
+        utils.irc.set_mode(irc, channel, users, "-o")
     else:
         irc.deop(event.target, event.source.nick)
 
@@ -174,7 +174,7 @@ def voice(bot, event, irc, args):
     Give voiced status a user"""
     if len(args):
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-        utils.irc.setMode(irc, channel, users, "+v")
+        utils.irc.set_mode(irc, channel, users, "+v")
     else:
         irc.voice(event.target, event.source.nick)
 
@@ -185,7 +185,7 @@ def unvoice(bot, event, irc, args):
     Remove voiced status a user"""
     if len(args):
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
-        utils.irc.setMode(irc, channel, users, "-v")
+        utils.irc.set_mode(irc, channel, users, "-v")
     else:
         irc.unvoice(event.target, event.source.nick)
 
