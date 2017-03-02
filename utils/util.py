@@ -76,7 +76,7 @@ def call_command(bot, event, irc, arguments):
             PrintError(irc, event)
 
 
-def checkPerms(host, channel, owner=False, admin=False, trusted=False):
+def check_perms(host, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
     trusted = config.trusted['global']
 
@@ -110,7 +110,7 @@ def checkPerms(host, channel, owner=False, admin=False, trusted=False):
         return False
 
 
-def PrintError(irc, event):
+def print_error(irc, event):
     log.exception("An unknown error occured")
     if not config.ci:
         try:
