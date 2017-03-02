@@ -25,7 +25,7 @@ def add_cmd(name, min_args=1, alias=None, owner=False,
         commands[name] = {
             'perms': [trusted, admin, owner],
             'func': func,
-            'minArgs': minArgs,
+            'minArgs': min_args,
             'hide': hide
         }
 
