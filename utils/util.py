@@ -31,12 +31,8 @@ def add_cmd(name, minArgs=1, alias=None, owner=False,
 
         if alias:
             for i in alias:
-                commands[i] = {
-                    'perms': [trusted, admin, owner],
-                    'func': func,
-                    'minArgs': minArgs,
-                    'hide': True
-                }
+                commands[i] = commands[name]
+                commands[i]['hide'] = True
                 alias_list.append(i)
 
         cmds = [i for i in commands.keys() if not commands[i]['hide']]
