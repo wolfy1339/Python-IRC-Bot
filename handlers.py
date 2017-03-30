@@ -96,8 +96,7 @@ class Events(object):
             log.info("Invited to %s by %s", channel, hostmask)
             irc.join(channel)
 
-    @staticmethod
-    def on_notice(event, irc):
+    def on_notice(self, event, irc):
         source = event.source.host
         if not event.target == self.config['nickname']:
             channel = event.target
