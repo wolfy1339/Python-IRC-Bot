@@ -22,3 +22,6 @@ pylint:
 mccabe:
   disable:
     - MC0001
+pyflakes:
+  disable:
+    - F401
