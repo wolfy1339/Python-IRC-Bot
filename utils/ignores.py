@@ -21,6 +21,8 @@ def checkIgnored(event):
 
 def add_ignore(irc, event, args):
     host = args[0]
+    base_message = "Ignoring %s for %s seconds"
+    indefinite = "Ignoring %s indefinately"
     if len(args) > 1:
         if args[1] == 'random':
             duration = random.randrange(100, 10000)
@@ -43,11 +45,11 @@ def add_ignore(irc, event, args):
         i.append([host, expires])
     if expires is not None:
         if channel is not None:
-            logging.info("Ignoring %s for %s seconds in %s", host, time, channel)
+            logging.info(base_message + " in %s", host, duration, channel)
         else:
-            logging.info("Ignoring %s for %s seconds", host, time)
+            logging.info(base_message, host, duration)
     else:
         if channel is not None:
-            logging.info("Ignoring %s indefinately in %s", host, time, channel)
+            logging.info(indefinite + " in %s", host, channel)
         else:
-            logging.info("Ignoring %s indefinately", host, time)
+            logging.info(indefinite, host)
