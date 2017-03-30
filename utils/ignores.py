@@ -30,7 +30,7 @@ def add_ignore(irc, event, args):
             expires = duration + int(time.time())
     else:
         expires = None
-    channel = args[2] if len args > 2 else None
+    channel = args[2] if len(args) > 2 else None
 
     if channel is not None:
         try:
