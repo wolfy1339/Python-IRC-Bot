@@ -43,11 +43,11 @@ def add_ignore(irc, event, args):
         i.append([host, expires])
     if expires is not None:
         if channel is not None:
-            logging.info("Ignoring %s for %s seconds in %s", host, time channel)
+            logging.info("Ignoring %s for %s seconds in %s", host, time, channel)
         else:
             logging.info("Ignoring %s for %s seconds", host, time)
     else:
         if channel is not None:
-            logging.info("Ignoring %s indefinately in %s", host, time channel)
+            logging.info("Ignoring %s indefinately in %s", host, time, channel)
         else:
             logging.info("Ignoring %s indefinately", host, time)
