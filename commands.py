@@ -361,4 +361,4 @@ def flush(bot, event, irc, args):
     irc.reply(event, "Cleared IRC queue")
 
 def add_ignore(bot, event, irc, args):
-    utis.util.add_ignore(irc, event, args)
+    utis.ignores.add_ignore(irc, event, args)

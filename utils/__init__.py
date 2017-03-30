@@ -1,6 +1,7 @@
 # pylint: disable=unused-import
 from . import util
 from . import irc
+from . import ignores
 # pylint: enable=unused-import
 
 sysver = "".join(__import__("sys").version.split("\n"))
