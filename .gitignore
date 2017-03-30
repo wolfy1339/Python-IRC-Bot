@@ -5,3 +5,4 @@ password
 *.sav
 *.log
 *.pem
+.vs/*
