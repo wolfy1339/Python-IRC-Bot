@@ -5,7 +5,7 @@ import config
 import logging
 
 
-def checkIgnored(event):
+def check_ignored(event):
     for i in config.expires['global']:
         if (event.source.host == i[0] and
                 (i[1] is not None and time.time() > i[1])):
