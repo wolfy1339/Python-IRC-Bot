@@ -359,3 +359,6 @@ def version(bot, event, irc, args):
 def flush(bot, event, irc, args):
     bot.fp.irc_queue = []
     irc.reply(event, "Cleared IRC queue")
+
+def add_ignore(bot, event, irc, args):
+    utis.util.add_ignore(irc, event, args)
