@@ -96,6 +96,15 @@ class Events(object):
             log.info("Invited to %s by %s", channel, hostmask)
             irc.join(channel)
 
+    @staticmethod
+    def on_notice(event, irc):
+        source = event.source.host
+        if not event.target == self.config['nickname']:
+            channel = event.target
+            log.info("Received channel notice from %s in %s", source, channel)
+        else:
+            log.info("Received private notice from %s", source)
+
     # Numeric events
     def on_unavailresource(self, event, irc):
         log.error("Nick unavailable, trying alternative")
