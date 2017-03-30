@@ -1,13 +1,14 @@
 import requests
 import traceback
 import six
+
 import config
 import log
 
 print_ = six.print_
+PY2 = six.PY2
 PY3 = six.PY3
 PY34 = six.PY34
-PY2 = six.PY2
 commands = {}
 cmd_list = []
 alias_list = []
