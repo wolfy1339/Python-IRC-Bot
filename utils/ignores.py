@@ -9,14 +9,14 @@ def check_ignored(event):
     for i in config.expires['global']:
         duration = i[1] is not None
         # if duration is not None, check if it's in the past, else say True
-        is_past = time.time() > i[1] if duration == True else True
+        is_past = time.time() > i[1] if duration else True
         is_ignored = duration and is_past
         if event.source.host == i[0] and is_ignored:
             return True
 
     for (host, expires) in enumerate(config.expires['channel'].keys()):
         duration = expires is not None
-        is_past = time.time() > expires if duration == True else True
+        is_past = time.time() > expires if duration else True
         if event.source.host == host and is_past:
             return True
 
