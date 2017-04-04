@@ -361,7 +361,7 @@ def flush(bot, event, irc, args):
     irc.reply(event, "Cleared IRC queue")
 
 
-@add_cmd("ignore", min_arg=1, admin=True)
+@add_cmd("ignore", min_args=1, admin=True)
 def add_ignore(bot, event, irc, args):
     """<host> [<duration|random>] [<channel>]
     Adds an ignore for the specified host"""
