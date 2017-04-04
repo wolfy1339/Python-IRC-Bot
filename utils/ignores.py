@@ -5,23 +5,22 @@ import config
 import logging
 
 
-def check_ignored(event):
+def check_ignored(host, channel):
     for i in config.expires['global']:
-        host = event.source.host
         # if duration is not None, check if it's in the past, else say True
-        is_past = time.time() > i[1] if duration is not None else True
+        is_past = time.time() > i[1] if i[1] is not None else True
         if host == i[0] and is_past:
             return True
         elif host == i[0] and not is_past:
             del config.expires['global'][host]
             break
 
-    for (host, expires) in enumerate(config.expires['channel'].keys()):
-        is_past = time.time() > expires if duration is not None else True
-        if event.source.host == host and is_past:
+    for (ihost, expires) in config.expires['channel'][channel]:
+        is_past = time.time() > expires if expires is not None else True
+        if ihost == host and is_past:
             return True
-        elif event.source.host == host and not is_past:
-            del config.expires['channel'][event.target][host]
+        elif ihost == host and not is_past:
+            del config.expires['channel'][channel][host]
             break
 
     return False
