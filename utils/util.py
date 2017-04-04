@@ -89,7 +89,7 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
     is_admin = host in admins
     is_trusted = host in config.trusted
     is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
-    is_ignored = check_ignored(event)
+    is_ignored = check_ignored(host, channel)
 
     if owner and is_owner:
         return True
