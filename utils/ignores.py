@@ -12,7 +12,7 @@ def check_ignored(host, channel):
         if host == i[0] and is_past:
             return True
         elif host == i[0] and not is_past:
-            del config.expires['global'][host]
+            del config.ignores['global'][host]
             break
 
     for (ihost, expires) in config.expires['channel'][channel]:
@@ -20,7 +20,7 @@ def check_ignored(host, channel):
         if ihost == host and is_past:
             return True
         elif ihost == host and not is_past:
-            del config.expires['channel'][channel][host]
+            del config.ignores['channel'][channel][host]
             break
 
     return False
