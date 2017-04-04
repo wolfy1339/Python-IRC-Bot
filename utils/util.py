@@ -1,3 +1,4 @@
+from .ignores import check_ignored
 import requests
 import traceback
 import six
@@ -88,16 +89,7 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
     is_admin = host in admins
     is_trusted = host in config.trusted
     is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
-    ignores = config.ignores["global"]
-
-    ignore_chans = list(config.ignores["channels"].keys())
-
-    if channel in ignore_chans:
-        ignores.extend(config.ignores["channels"][channel])
-
-    if channel in config.bots['channels']:
-        is_bot = False
-    is_ignored = host in ignores
+    is_ignored = check_ignored(host, channel)
 
     if owner and is_owner:
         return True
