@@ -7,11 +7,16 @@ import config
 
 logging.setLevel(30)
 
+class fp(object):
+    def __init__(self):
+        self.irc_queue = []
+
 class botTest(TestCase):
     def __init__(self):
         self.config = {}
         self.userdb = {}
         self.config['nickname'] = 'zIRC-test'
+        self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
