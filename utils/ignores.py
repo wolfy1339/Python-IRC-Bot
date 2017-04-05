@@ -6,9 +6,9 @@ import logging
 
 
 def check_ignored(host, channel):
-    ignores = config.expires['global']
+    ignores = config.ignores['global']
     try:
-        ignores.extend(config.expires['channel'][channel])
+        ignores.extend(config.ignores['channel'][channel])
     except KeyError:
         pass
 
