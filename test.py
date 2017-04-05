@@ -46,6 +46,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
@@ -64,6 +65,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user,user2,user3
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user, user2, user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick #zirc foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ls
