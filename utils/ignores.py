@@ -6,22 +6,21 @@ import logging
 
 
 def check_ignored(host, channel):
-    for i in config.ignores['global']:
-        # if duration is not None, check if it's in the past, else say True
-        is_past = time.time() > i[1] if i[1] is not None else True
-        if host == i[0] and is_past:
-            return True
-        elif host == i[0] and not is_past:
-            del config.ignores['global'][host]
-            break
+    ignores = config.expires['global']
+    try:
+        ignores.extend(config.expires['channel'][channel])
+    except KeyError:
+        pass
 
-    for (ihost, expires) in config.ignores['channel'][channel]:
-        is_past = time.time() > expires if expires is not None else True
-        if ihost == host and is_past:
-            return True
-        elif ihost == host and not is_past:
-            del config.ignores['channel'][channel][host]
-            break
+    for i in ignores:
+        for (ihost, expires) in i:
+            # if duration is not None, check if it's in the past, else say True
+            is_past = time.time() > expires if expires is not None else True
+            if host == ihost and is_past:
+                return True
+            elif ihost == host and not is_past:
+                del config.ignores['channel'][channel][host]
+                break
 
     return False
 
