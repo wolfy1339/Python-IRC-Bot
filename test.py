@@ -76,6 +76,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?perms
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ping
+:wolfy1339bot!~wolfy1339@botters/wolfy/bot/mooobot PRIVMSG #zirc :?ping
+:bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 PRIVMSG ##wolfy1339 :?ping
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?quit
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove foo
@@ -86,6 +88,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> print("test")
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?py print("test")
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval print("test")
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
 :user3!~user@user/user3 PRIVMSG zIRC-test :Hello there!"""
 
 try:
