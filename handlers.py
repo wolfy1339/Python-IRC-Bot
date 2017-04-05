@@ -98,11 +98,12 @@ class Events(object):
 
     def on_notice(self, event, irc):
         source = event.source.host
-        if not event.target == self.config['nickname']:
-            channel = event.target
-            log.info("Received channel notice from %s in %s", source, channel)
-        else:
-            log.info("Received private notice from %s", source)
+        if not event.target == "*":
+            if not event.target == self.config['nickname']:
+                channel = event.target
+                log.info("Received channel notice from %s in %s", source, channel)
+            else:
+                log.info("Received private notice from %s", source)
 
     # Numeric events
     def on_unavailresource(self, event, irc):
