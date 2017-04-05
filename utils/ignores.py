@@ -13,14 +13,15 @@ def check_ignored(host, channel):
         pass
 
     for i in ignores:
-        for (ihost, expires) in i:
-            # if duration is not None, check if it's in the past, else say True
-            is_past = time.time() > expires if expires is not None else True
-            if host == ihost and is_past:
-                return True
-            elif ihost == host and not is_past:
-                del config.ignores['channel'][channel][host]
-                break
+        ihost = i[0]
+        expires = i[1]
+        # if duration is not None, check if it's in the past, else say True
+        is_past = time.time() > expires if expires is not None else True
+        if host == ihost and is_past:
+            return True
+        elif ihost == host and not is_past:
+            del config.ignores['channel'][channel][host]
+            break
 
     return False
 
