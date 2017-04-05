@@ -52,6 +52,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help kick
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?host
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf random
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf 999
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?join ##foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
