@@ -79,14 +79,14 @@ def call_command(bot, event, irc, arguments):
 
 def check_perms(host, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
-    trusted = config.trusted['global']
+    trustees = config.trusted['global']
 
     admins += config.admins['channels'].get(channel, [])
-    trusted += config.trusted['channels'].get(channel, [])
+    trustees += config.trusted['channels'].get(channel, [])
 
     is_owner = host in config.owners
     is_admin = host in admins
-    is_trusted = host in trusted
+    is_trusted = host in trustees
     is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
     if channel in config.bots['channels']:
         is_bot = False
