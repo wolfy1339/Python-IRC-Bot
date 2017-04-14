@@ -12,8 +12,8 @@ install:
   - pip install -r requirements.txt
   - pip install coverage codacy-coverage
 script: 
-  - coverage run test.py
+  - coverage run test.py --source="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
 after_success:
-  - coverage report
-  - coverage xml
+  - coverage report --source="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
+  - coverage xml --source="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
   - python-codacy-coverage -r coverage.xml
