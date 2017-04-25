@@ -81,15 +81,19 @@ def List(bot, event, irc, args):
         cmd_list = users
         if is_owner:
             cmd_list += owner + admin + trusted
-            irc.reply(event, text.format('Owner', ", ".join(sorted(cmd_list))))
+            msg = text.format('Owner', ", ".join(sorted(cmd_list)))
+            irc.reply(event, msg)
         elif is_admin:
             cmd_list += admin + trusted
-            irc.reply(event, text.format('Admin', ", ".join(sorted(cmd_list))))
+            msg = text.format('Admin', ", ".join(sorted(cmd_list)))
+            irc.reply(event, msg)
         elif is_trusted:
             cmd_list += trusted
-            irc.reply(event, text.format('Trusted', ", ".join(sorted(cmd_list))))
+            msg = text.format('Trusted', ", ".join(sorted(cmd_list)))
+            irc.reply(event, msg)
         else:
-            irc.reply(event, text.format('User', ", ".join(sorted(cmd_list))))
+            msg = text.format('User', ", ".join(sorted(cmd_list)))
+            irc.reply(event, msg)
 
 
 @add_cmd("perms", min_args=0)
