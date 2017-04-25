@@ -2,7 +2,7 @@ import sys
 from zirc.test import TestCase
 import log as logging
 from utils import util
-import commands
+import plugins
 import config
 
 logging.setLevel(30)
