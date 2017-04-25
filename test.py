@@ -2,7 +2,7 @@ import sys
 from zirc.test import TestCase
 import log as logging
 from utils import util
-import commands
+import plugins  # pylint: disable=unused-import
 import config
 
 logging.setLevel(30)
@@ -101,7 +101,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin #zirc
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload commands
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload plugins
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove #zirc foo,moo,bo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban
