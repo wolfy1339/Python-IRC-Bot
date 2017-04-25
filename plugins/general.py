@@ -118,6 +118,7 @@ def permissions(bot, event, irc, args):
 def version(bot, event, irc, args):
     irc.reply(event, utils.version)
 
+
 @add_cmd("host", min_args=0)
 def hostmask(bot, event, irc, args):
     """Replies with your host"""
