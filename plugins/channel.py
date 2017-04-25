@@ -1,1 +1,133 @@
+import utils
+from utils.util import add_cmd
 
+
+@add_cmd("join", admin=True, min_args=1)
+def join(bot, event, irc, args):
+    """Joins given channel"""
+    irc.join(args[0], key=args[1] if len(args) >= 2 else None)
+
+
+@add_cmd("part", alias=["leave"], admin=True, min_args=0)
+def part(bot, event, irc, args):
+    """Parts the given or the current channel"""
+    if len(args):
+        irc.part(args[0])
+    else:
+        irc.part(event.target)
+
+
+@add_cmd("cycle", alias=["rejoin"], admin=True, min_args=0)
+def cycle(bot, event, irc, args):
+    """Parts then joins the given or the current channel"""
+    if len(args):
+        irc.part(args[0])
+        irc.join(args[0])
+    else:
+        irc.part(event.target)
+        irc.join(event.target)
+
+
+@add_cmd("ban", admin=True, min_args=1)
+def ban(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Bans a user"""
+    if len(args) > 1:
+        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        utils.irc.set_mode(irc, channel, users, "+b")
+    else:
+        if args[0].find('@') == -1:
+            host = args[0]
+        else:
+            try:
+                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
+            except KeyError:
+                irc.send("WHO {0} nuhs%nhuac".format(event.target))
+                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
+        irc.ban(event.target, host)
+
+
+@add_cmd("kban", admin=True, min_args=1)
+def kban(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Kick-bans a user
+    """
+    channel, users, message = utils.irc.get_info_tuple(event, args)
+    utils.irc.set_mode(irc, channel, users, "+b")
+    for i in users:
+        irc.kick(channel, i, message)
+
+
+@add_cmd("kick", admin=True, min_args=1)
+def kick(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Kicks a user
+    """
+    channel, users, message = utils.irc.get_info_tuple(event, args)
+
+    for i in users:
+        irc.kick(channel, i, message)
+
+
+@add_cmd("remove", alias=['ninja'], admin=True, min_args=1)
+def remove(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Forces a user to part the channel.
+    """
+    channel, users, message = utils.irc.get_info_tuple(event, args)
+    if message == event.source.nick:
+        message = "{0} says GTFO!".format(event.source.nick)
+    for i in users:
+        irc.remove(channel, i, message)
+
+
+@add_cmd("unban", admin=True, min_args=1)
+def unban(bot, event, irc, args):
+    """[<channel>] [<message>] <nick>[, <nick>, ...]
+    Unbans a user"""
+    channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+    utils.irc.set_mode(irc, channel, users, "-b")
+
+
+@add_cmd("op", admin=True, min_args=0)
+def op(bot, event, irc, args):
+    """[<channel>] <nick>[, <nick>, ...]
+    Give operator status to a user"""
+    if len(args):
+        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        utils.irc.set_mode(irc, channel, users, "+o")
+    else:
+        irc.op(event.target, event.source.nick)
+
+
+@add_cmd("deop", admin=True, min_args=0)
+def deop(bot, event, irc, args):
+    """[<channel>] <nick>[, <nick>, ...]
+    Remove operator status from a user"""
+    if len(args):
+        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        utils.irc.set_mode(irc, channel, users, "-o")
+    else:
+        irc.deop(event.target, event.source.nick)
+
+
+@add_cmd("voice", admin=True, min_args=0)
+def voice(bot, event, irc, args):
+    """[<channel>] <nick>[, <nick>, ...]
+    Give voiced status a user"""
+    if len(args):
+        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        utils.irc.set_mode(irc, channel, users, "+v")
+    else:
+        irc.voice(event.target, event.source.nick)
+
+
+@add_cmd("unvoice", admin=True, min_args=0)
+def unvoice(bot, event, irc, args):
+    """[<channel>] <nick>[, <nick>, ...]
+    Remove voiced status a user"""
+    if len(args):
+        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        utils.irc.set_mode(irc, channel, users, "-v")
+    else:
+        irc.unvoice(event.target, event.source.nick)
