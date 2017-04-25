@@ -12,9 +12,9 @@ install:
   - pip install -r requirements.txt
   - pip install coverage codacy-coverage python-coveralls
 script: 
-  - coverage run test.py --source="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
+  - coverage run test.py --source="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
 after_success:
-  - coverage report --include="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
-  - coverage xml --include="test.py,commands.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
+  - coverage report --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
+  - coverage xml --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
   - python-codacy-coverage -r coverage.xml
   - coveralls
