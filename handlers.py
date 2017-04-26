@@ -92,7 +92,7 @@ class Events(object):
     def on_invite(event, irc):
         hostmask = event.source.host
         channel = event.arguments[0]
-        if util.checkPerms(hostmask, channel, trusted=True):
+        if util.check_perms(hostmask, channel, trusted=True):
             log.info("Invited to %s by %s", channel, hostmask)
             irc.join(channel)
 
