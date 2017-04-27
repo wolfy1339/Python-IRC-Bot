@@ -36,7 +36,7 @@ def ban(bot, event, irc, args):
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
         utils.irc.set_mode(irc, channel, users, "+b")
     else:
-        if args[0].find('@') == -1:
+        if args[0].find('@') != -1:
             host = args[0]
         else:
             try:
