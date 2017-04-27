@@ -52,6 +52,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3***sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
