@@ -93,6 +93,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?perms
+:bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 PRIVMSG ##wolfy1339 :?perms
+:wuser!~wolfy1339@unaffiliated/wolfy PRIVMSG #zirc :?perms
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ping
 :wolfy1339bot!~wolfy1339@botters/wolfy/bot/mooobot PRIVMSG #zirc :?ping
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 PRIVMSG ##wolfy1339 :?ping
