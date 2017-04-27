@@ -64,9 +64,6 @@ def List(bot, event, irc, args):
     else:
         host = event.source.host
         channel = event.target
-        is_owner = utils.util.check_perms(host, channel, owner=True)
-        is_admin = utils.util.check_perms(host, channel, admin=True)
-        is_trusted = utils.util.check_perms(host, channel, trusted=True)
         owner, admin, trusted, users = [], [], [], []
         text = "Commands({0!s}): {1!s}"
         for i in utils.util.cmd_list:
@@ -79,21 +76,18 @@ def List(bot, event, irc, args):
             else:
                 users.append(i)
         cmd_list = users
-        if is_owner:
+        if utils.util.check_perms(host, channel, owner=True):
             cmd_list += owner + admin + trusted
             msg = text.format('Owner', ", ".join(sorted(cmd_list)))
-            irc.reply(event, msg)
-        elif is_admin:
+        elif utils.util.check_perms(host, channel, admin=True):
             cmd_list += admin + trusted
             msg = text.format('Admin', ", ".join(sorted(cmd_list)))
-            irc.reply(event, msg)
-        elif is_trusted:
+        elif utils.util.check_perms(host, channel, trusted=True):
             cmd_list += trusted
             msg = text.format('Trusted', ", ".join(sorted(cmd_list)))
-            irc.reply(event, msg)
         else:
             msg = text.format('User', ", ".join(sorted(cmd_list)))
-            irc.reply(event, msg)
+        irc.reply(event, msg)
 
 
 @add_cmd("perms", min_args=0)
