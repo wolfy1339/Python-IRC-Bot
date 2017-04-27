@@ -14,7 +14,7 @@ def calc(bot, event, irc, args):
     r = utils.util.post("http://api.mathjs.org/v1/", json=payload)
     if not r.json()['error']:
         result = r.json()['result']
-        if result.find('.') != -1 or result.find("e") != -1:
+        if not result.find('.') != -1 or result.find("e") != -1:
             output = format(int(float(result)), ",d")
         else:
             output = result
