@@ -42,13 +42,15 @@ def set_mode(irc, channel, users, mode):
 
 def get_users(args):
     pos = args.rfind(",")
+    users_str = args[:pos].strip()
     if args[pos + 1] != " ":
-        users = args[:pos].strip().split(",")
+        users = users_str.split(",")
     else:
-        users = args[:pos].strip().split(", ")
+        users = users_str.split(", ")
+        pos += 1
     args = args[pos:].strip().split(" ")
 
-    users.append(args[0][1:])
+    users.append(args[0])
     return users
 
 
