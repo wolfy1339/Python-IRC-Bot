@@ -47,7 +47,7 @@ def get_users(args):
         users = users_str.split(",")
     else:
         users = users_str.split(", ")
-        pos += 1
+    pos += 1
     args = args[pos:].strip().split(" ")
 
     users.append(args[0])
@@ -58,6 +58,7 @@ def get_info_tuple(event, args):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
+        del args[0]
     else:
         channel = event.target
         str_args = " ".join(args)
