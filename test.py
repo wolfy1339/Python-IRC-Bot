@@ -5,6 +5,8 @@ from utils import util
 import plugins  # pylint: disable=unused-import
 import config
 
+config.admins['global'].append("user/user3")
+config.trusted['global'].append("user/user2")
 logging.setLevel(30)
 
 class fp(object):
@@ -45,6 +47,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :user2!~user@user/user2 PRIVMSG #zirc :How are you?
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> print("test")
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*,*!*@user/*,user3
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban wolfy1339
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc
@@ -61,6 +65,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flushq
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help kick
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help invalid
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?host
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf random
@@ -77,6 +82,9 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?leave
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?list alias
+:wuser!~wolfy1339@unaffiliated/wolfy PRIVMSG #zirc :?list
+:user2!~user@user/user2 PRIVMSG #zirc :?list
+:user3!~user@user/user3 PRIVMSG #zirc :?list
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level debug
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level info
@@ -95,6 +103,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?perms
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 PRIVMSG ##wolfy1339 :?perms
 :wuser!~wolfy1339@unaffiliated/wolfy PRIVMSG #zirc :?perms
+:user2!~user@user/user2 PRIVMSG #zirc :?perms
+:user3!~user@user/user3 PRIVMSG #zirc :?perms
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ping
 :wolfy1339bot!~wolfy1339@botters/wolfy/bot/mooobot PRIVMSG #zirc :?ping
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 PRIVMSG ##wolfy1339 :?ping
