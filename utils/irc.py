@@ -71,3 +71,12 @@ def get_info_tuple(event, args):
     else:
         message = "{0}".format(event.source.nick)
     return channel, users, message
+
+
+def get_user_host(irc, userdb, channel, nick):
+    try:
+        host = "*!*@" + userdb[channel][nick]['host']
+    except KeyError:
+        irc.send("WHO {0} nuhs%nhuac".format(channel))
+        host = "*!*@" + userdb[channel][nick]['host']
+    return host
