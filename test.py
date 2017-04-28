@@ -53,11 +53,15 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3***sqrt(4)
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3***sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3*sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3^200
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config invalid
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config trusted {'global':[],'channels':{}}
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config password
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop
@@ -116,7 +120,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin #zirc
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload plugins
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload commands
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload config
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove #zirc foo,moo,bo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban
