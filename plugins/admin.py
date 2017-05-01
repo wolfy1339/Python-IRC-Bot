@@ -58,7 +58,11 @@ def Config(bot, event, irc, args):
     Changes or displays a config variable"""
     if len(args) > 1:
         if hasattr(config, args[0]):
-            setattr(config, args[0], args[1])
+            try:
+                value = eval(args[1])
+            except Exception:
+                value = args[1]
+            setattr(config, args[0], value)
             irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
         else:
             irc.reply(event, "Invalid config variable {}".format(args[0]))
