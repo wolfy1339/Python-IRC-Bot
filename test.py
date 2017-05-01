@@ -60,7 +60,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config invalid
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config trusted {'global':[],'channels':{}}
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config trusted {'global':["user/user2"],'channels':{}}
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config password
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
