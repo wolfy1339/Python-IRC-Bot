@@ -17,6 +17,11 @@ class botTest(TestCase):
     def __init__(self):
         self.config = {}
         self.userdb = {}
+        self.userdb["#zirc"] = {}
+        self.userdb["#zirc"]["wolfy1339"] = {'hostmask':'wolfy1339!~wolfy1339@botters/wolfy1339','host':'botters/wolfy1339','account':'wolfy1339'}
+        self.userdb["#zirc"]["user"] = {'hostmask':'user!~user@user/user','host':'user/user','account':'user'}
+        self.userdb["#zirc"]["user2"] = {'hostmask':'user2!~user@user/user2','host':'user/user','account':'user2'}
+        self.userdb["#zirc"]["user3"] = {'hostmask':'user3!~user@user/user3','host':'user/user3','account':'user3'}
         self.config['nickname'] = 'zIRC-test'
         self.fp = fp()
 
@@ -53,15 +58,17 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 1+1
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3***sqrt(4)
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3***sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3*sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3^200
+:user!~user@user/user PRIVMSG #zirc :Please stop the bot spam, we can hardly hear each other!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
+:user2!~user@user/user2 PRIVMSG #zirc :What was that?
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config invalid
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config trusted {'global':["user/user2"],'channels':{}}
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config password
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config tracebackPostError BigWolfy1339
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cycle #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop
