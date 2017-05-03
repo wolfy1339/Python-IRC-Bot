@@ -35,7 +35,7 @@ def cycle(bot, event, irc, args):
 def ban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
-    if len(args) > 2:
+    if len(args) > 2 or " ".join(args).find(",") != -1:
         channel, users = utils.irc.get_info_tuple(event, args)[:-1]
         utils.irc.set_mode(irc, channel, users, "+b")
     else:
