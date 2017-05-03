@@ -2,15 +2,17 @@ import utils
 from utils.util import add_cmd
 
 
-@add_cmd("join", admin=True, min_args=1)
+@add_cmd("join", trusted=True, min_args=1)
 def join(bot, event, irc, args):
-    """Joins given channel"""
+    """<channel>
+    Joins given channel"""
     irc.join(args[0], key=args[1] if len(args) >= 2 else None)
 
 
-@add_cmd("part", alias=["leave"], admin=True, min_args=0)
+@add_cmd("part", alias=["leave"], trusted=True, min_args=0)
 def part(bot, event, irc, args):
-    """Parts the given or the current channel"""
+    """[<channel>]
+    Parts the given or the current channel"""
     if len(args):
         irc.part(args[0])
     else:
@@ -19,7 +21,8 @@ def part(bot, event, irc, args):
 
 @add_cmd("cycle", alias=["rejoin"], admin=True, min_args=0)
 def cycle(bot, event, irc, args):
-    """Parts then joins the given or the current channel"""
+    """[<channel>]
+    Parts then joins the given or the current channel"""
     if len(args):
         irc.part(args[0])
         irc.join(args[0])
