@@ -54,7 +54,7 @@ def get_users(args):
     return users
 
 
-def get_info_tuple(event, args):
+def get_info_tuple(event, args, userdb):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
@@ -64,8 +64,14 @@ def get_info_tuple(event, args):
         str_args = " ".join(args)
     if str_args.find(",") != -1:
         users = get_users(str_args)
+        for (i, v) in enumerate(users):
+            if v.find("!") != -1:
+                users[i] = "*!*" + userdb[event.target][i]['host']
     else:
         users = args[-1:]
+        for (i, v) in enumerate(users):
+            if v.find("!") != -1:
+                users[i] = "*!*" + userdb[event.target][i]['host']
     if not " ".join(args[:-len(users)]) == '':
         message = " ".join(args[:-len(users)])
     else:
