@@ -39,7 +39,8 @@ def ban(bot, event, irc, args):
         if args[0].find('@') != -1:
             host = args[0]
         else:
-            host = utils.irc.get_user_host(irc, bot.userdb, event.target, args[0])
+            channel = event.target
+            host = utils.irc.get_user_host(irc, bot.userdb, channel, args[0])
         irc.ban(event.target, host)
 
 
@@ -48,8 +49,10 @@ def kban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
-    ban(bot, event, irc, args)
-    kick(bot, event, irc, args)
+    channel, users, message = utils.irc.get_info_tuple(event, args)
+    utils.irc.set_mode(irc, channel, users, "+b")
+    for i in users:
+        irc.kick(channel, i, message)
 
 
 @add_cmd("kick", admin=True, min_args=1)
