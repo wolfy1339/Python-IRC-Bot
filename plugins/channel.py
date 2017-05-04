@@ -36,7 +36,7 @@ def ban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
     if len(args) > 2 or " ".join(args).find(",") != -1:
-        channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+        channel, users = utils.irc.get_info_tuple(event, args, bot.userdb)[:-1]
         utils.irc.set_mode(irc, channel, users, "+b")
     else:
         if args[0].find('@') != -1:
@@ -55,7 +55,7 @@ def kban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
-    channel, users, message = utils.irc.get_info_tuple(event, args)
+    channel, users, message = utils.irc.get_info_tuple(event, args, bot.userdb)
     utils.irc.set_mode(irc, channel, users, "+b")
     for i in users:
         irc.kick(channel, i, message)
@@ -88,7 +88,7 @@ def remove(bot, event, irc, args):
 def unban(bot, event, irc, args):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
-    channel, users = utils.irc.get_info_tuple(event, args)[:-1]
+    channel, users = utils.irc.get_info_tuple(event, args, bot.userdb)[:-1]
     utils.irc.set_mode(irc, channel, users, "-b")
 
 
