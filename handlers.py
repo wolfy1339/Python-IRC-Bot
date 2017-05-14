@@ -11,8 +11,6 @@ class Events(object):
         self.bot = bot
         self.config = self.bot.config
         self.userdb = self.bot.userdb
-        self.addEntry = self.bot.addEntry
-        self.removeEntry = self.bot.removeEntry
 
     @staticmethod
     def on_all(event, irc, arguments):
@@ -78,7 +76,7 @@ class Events(object):
             else:
                 del self.userdb[event.target]
         else:
-            self.removeEntry(event, nick)
+            self.userdb.removeEntry(event, nick)
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
@@ -138,7 +136,7 @@ class Events(object):
             channel = arguments[0]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             account = host.split("/")[-1].split('.')[-1]
-            self.addEntry(channel, nick, hostmask, host, account)
+            self.userdb.addEntry(channel, nick, hostmask, host, account)
 
     def on_whospcrpl(self, event, irc, arguments):
         nick = arguments[3]
@@ -148,7 +146,7 @@ class Events(object):
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             channel = args[0]
             account = args[4] if args[4] != "0" else None
-            self.addEntry(channel, nick, hostmask, host, account)
+            self.userdb.addEntry(channel, nick, hostmask, host, account)
 
     @staticmethod
     def on_315(event, irc):
