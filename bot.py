@@ -10,9 +10,7 @@ import zirc
 
 class Bot(zirc.Client):
     def __init__(self):
-        self.userdb = {}
-        for i in config.channels:
-            self.userdb[i] = {}
+        self.userdb = utils.database.Database(config.channels)
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
@@ -39,22 +37,5 @@ class Bot(zirc.Client):
                 setattr(self, i, func)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
-
-    def removeEntry(self, event, nick):
-        try:
-            del self.userdb[event.target][nick]
-        except KeyError:
-            for i in self.userdb[event.target].values():
-                if i['host'] == event.source.host:
-                    del self.userdb[event.target][i['hostmask'].split("!")[0]]
-                    break
-
-    def addEntry(self, channel, nick, hostmask, host, account):
-        self.userdb[channel][nick] = {
-            'hostmask': hostmask,
-            'host': host,
-            'account': account
-        }
-
 
 Bot()
