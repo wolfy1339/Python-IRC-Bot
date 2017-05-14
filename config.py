@@ -35,7 +35,7 @@ trusted = {
 }
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
-    'channels': ['##jeffl35', '##wolfy1339']
+    'channels': ['##lazy-valoran', '##wolfy1339', '#powder-bots']
 }
 ignores = {
     'global': [],
