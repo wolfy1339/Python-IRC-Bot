@@ -54,7 +54,7 @@ def get_users(args):
     return users
 
 
-def get_info_tuple(event, args, userdb=[]):
+def get_info_tuple(event, args, userdb=None):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
