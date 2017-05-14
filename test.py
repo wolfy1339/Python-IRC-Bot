@@ -2,6 +2,7 @@ import sys
 from zirc.test import TestCase
 import log as logging
 from utils import util
+from utils import database
 import plugins  # pylint: disable=unused-import
 import config
 
@@ -16,13 +17,12 @@ class fp(object):
 class botTest(TestCase):
     def __init__(self):
         self.config = {}
-        self.userdb = {}
-        self.userdb["#zirc"] = {}
+        self.config['nickname'] = 'zIRC-test'
+        self.userdb = database.Database(['#zirc'])
         self.userdb["#zirc"]["wolfy1339"] = {'hostmask':'wolfy1339!~wolfy1339@botters/wolfy1339','host':'botters/wolfy1339','account':'wolfy1339'}
         self.userdb["#zirc"]["user"] = {'hostmask':'user!~user@user/user','host':'user/user','account':'user'}
         self.userdb["#zirc"]["user2"] = {'hostmask':'user2!~user@user/user2','host':'user/user','account':'user2'}
         self.userdb["#zirc"]["user3"] = {'hostmask':'user3!~user@user/user3','host':'user/user3','account':'user3'}
-        self.config['nickname'] = 'zIRC-test'
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
@@ -43,6 +43,19 @@ class botTest(TestCase):
     def on_invite(event, irc):
         if util.checkPerms(event.source.host, event.target, trusted=True):
             irc.join(event.target)
+
+    def on_nick(self, event, irc):
+        nick = event.source.nick
+        to_nick = event.arguments[0]
+        for chan in self.userdb.keys():
+            chandb = self.userdb[chan]
+            for u in chandb.values():
+                if u['host'] == event.source.host:
+                    self.userdb[chan][to_nick] = chandb[nick]
+                    self.userdb[chan][to_nick]['hostmask'] = event.source
+                    del self.userdb[chan][nick]
+                    break
+            break
 
 
 bot = botTest()
@@ -81,6 +94,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help kick
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help invalid
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?host
+:doggy!~user@user/user NICK :user
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf random
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf 999
