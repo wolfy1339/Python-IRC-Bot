@@ -65,12 +65,12 @@ def get_info_tuple(event, args, userdb=None):
     if str_args.find(",") != -1:
         users = get_users(str_args)
         for (i, v) in enumerate(users):
-            if v.find("!") != -1:
+            if not v.find("!") != -1:
                 users[i] = "*!*" + userdb[event.target][i]['host']
     else:
         users = args[-1:]
         for (i, v) in enumerate(users):
-            if v.find("!") != -1:
+            if not v.find("!") != -1:
                 users[i] = "*!*" + userdb[event.target][i]['host']
     if not " ".join(args[:-len(users)]) == '':
         message = " ".join(args[:-len(users)])
