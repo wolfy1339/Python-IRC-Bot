@@ -37,3 +37,9 @@ class Database(object):
             return self.userdb[key]
         except KeyError:
             return default
+
+    def keys(self):
+        return self.userdb.keys()
+
+    def values(self):
+        return self.userdb.values()
