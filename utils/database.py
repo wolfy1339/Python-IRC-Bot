@@ -1,4 +1,4 @@
-class Database(Object):
+class Database(object):
     def __init__(self, channels):
         self.userdb = {}
         for i in channels:
@@ -13,7 +13,6 @@ class Database(Object):
                     del self.userdb[event.target][i['hostmask'].split("!")[0]]
                     break
 
-
     def addEntry(self, channel, nick, hostmask, host, account):
         self.userdb[channel][nick] = {
             'hostmask': hostmask,
@@ -23,3 +22,18 @@ class Database(Object):
 
     def __getitem__(self, key):
         return self.userdb[key]
+
+    def __delitem__(self, key):
+        del self.userdb[key]
+
+    def __setitem__(self, key, value):
+        self.userdb[key] = value
+
+    def __str__(self):
+        return self.userdb
+
+    def get(self, key, default=None):
+        try:
+            return self.userdb[key]
+        except KeyError:
+            return default
