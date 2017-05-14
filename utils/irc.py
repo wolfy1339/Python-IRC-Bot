@@ -54,7 +54,7 @@ def get_users(args):
     return users
 
 
-def get_info_tuple(event, args, userdb={}):
+def get_info_tuple(event, args, userdb=None):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
@@ -71,14 +71,6 @@ def get_info_tuple(event, args, userdb={}):
     else:
         message = "{0}".format(event.source.nick)
     for (i, v) in enumerate(users):
-        if not v.find("!") != -1:
-            users[i] = nick_to_hostmask(event.target, v, userdb)
+        if not v.find("!") != -1 and userdb is not None:
+            users[i] = get_user_host(irc, userdb, event.target, v)
     return channel, users, message
-
-def get_user_host(irc, userdb, channel, nick):
- +    try:
- +        host = "*!*@" + userdb[channel][nick]['host']
- +    except KeyError:
- +        irc.send("WHO {0} nuhs%nhuac".format(channel))
- +        host = "*!*@" + userdb[channel][nick]['host']
- +    return host
