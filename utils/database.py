@@ -30,7 +30,7 @@ class Database(object):
         self.userdb[key] = value
 
     def __str__(self):
-        return repr(self.userdb)
+        return str(self.userdb)
 
     def get(self, key, default=None):
         try:
