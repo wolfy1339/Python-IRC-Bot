@@ -40,6 +40,10 @@ def set_mode(irc, channel, users, mode):
         irc.mode(channel, " ".join(block), mode[0] + modes)
 
 
+def nick_to_hostmask(channel, user, userdb):
+    return "*!*" + userdb[channel][user]['host']
+
+
 def get_users(args):
     pos = args.rfind(",")
     users_str = args[:pos].strip()
@@ -64,16 +68,13 @@ def get_info_tuple(event, args, userdb=None):
         str_args = " ".join(args)
     if str_args.find(",") != -1:
         users = get_users(str_args)
-        for (i, v) in enumerate(users):
-            if not v.find("!") != -1:
-                users[i] = "*!*" + userdb[event.target][i]['host']
     else:
         users = args[-1:]
-        for (i, v) in enumerate(users):
-            if not v.find("!") != -1:
-                users[i] = "*!*" + userdb[event.target][i]['host']
     if not " ".join(args[:-len(users)]) == '':
         message = " ".join(args[:-len(users)])
     else:
         message = "{0}".format(event.source.nick)
+    for (i, v) in enumerate(users):
+        if not v.find("!") != -1:
+            users[i] = nick_to_hostmask(event.target, v, userdb)
     return channel, users, message
