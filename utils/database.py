@@ -3,6 +3,12 @@ class Database(object):
         self.userdb = {}
         for i in channels:
             self.userdb[i] = {}
+        self.__getitem__ = self.userdb.__getitem__
+        self.__delitem__ = self.userdb.__delitem__
+        self.__setitem__ = self.userdb.__setitem__
+        self.__str__ = self.userdb.__str__
+        self.get = self.userdb.get
+        self.keys = self.userdb.keys
 
     def removeEntry(self, event, nick):
         try:
@@ -10,7 +16,8 @@ class Database(object):
         except KeyError:
             for i in self.userdb[event.target].values():
                 if i['host'] == event.source.host:
-                    del self.userdb[event.target][i['hostmask'].split("!")[0]]
+                    nick = i['hostmask'].split("!")[0]
+                    del self.userdb[event.target][nick]
                     break
 
     def addEntry(self, channel, nick, hostmask, host, account):
@@ -19,11 +26,3 @@ class Database(object):
             'host': host,
             'account': account
         }
-
-    __getitem__ = self.userdb.__getitem__
-    __delitem__ = self.userdb.__delitem__
-    __setitem__ = self.userdb.__setitem__
-    __str__ = self.userdb.__str__
-
-    get = self.userdb.get
-    keys = self.userdb.keys
