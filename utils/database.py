@@ -40,4 +40,3 @@ class Database(object):
 
     def keys(self):
         return self.userdb.keys()
-
