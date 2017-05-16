@@ -41,5 +41,3 @@ class Database(object):
     def keys(self):
         return self.userdb.keys()
 
-    def values(self):
-        return self.userdb.values()
