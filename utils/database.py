@@ -20,12 +20,26 @@ class Database(object):
             'account': account
         }
 
-    __getitem__ = self.userdb.__getitem__
-    __delitem__ = self.userdb.__delitem__
-    __setitem__ = self.userdb.__setitem__
-    __str__ = self.userdb.__str__
+    def __getitem__(self, key):
+        return self.userdb[key]
 
-    get = self.userdb.get
+    def __delitem__(self, key):
+        del self.userdb[key]
+
+    def __setitem__(self, key, value):
+        self.userdb[key] = value
+
+    def __str__(self):
+        return str(self.userdb)
+
+    def get(self, key, default=None):
+        try:
+            return self.userdb[key]
+        except KeyError:
+            return default
 
     def keys(self):
         return self.userdb.keys()
+
+    def values(self):
+        return self.userdb.values()
