@@ -26,4 +26,6 @@ class Database(object):
     __str__ = self.userdb.__str__
 
     get = self.userdb.get
-    keys = self.userdb.keys
+
+    def keys(self):
+        return self.userdb.keys()
