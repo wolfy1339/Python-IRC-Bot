@@ -141,6 +141,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rainbow mooo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?rejoin #zirc
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload plugins
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload commands
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload config
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove foo
