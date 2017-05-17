@@ -64,7 +64,7 @@ class Events(object):
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
         else:
-            self.removeEntry(event, nick)
+            self.userdb.removeEntry(event, nick)
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
