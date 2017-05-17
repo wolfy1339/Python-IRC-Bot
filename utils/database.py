@@ -24,10 +24,10 @@ class Database(object):
 
     def get_user_host(self, channel, nick):
         try:
-            host = "*!*@" + userdb[channel][nick]['host']
+            host = "*!*@" + self.userdb[channel][nick]['host']
         except KeyError:
             self.irc.send("WHO {0} nuhs%nhuac".format(channel))
-            host = "*!*@" + userdb[channel][nick]['host']
+            host = "*!*@" + self.userdb[channel][nick]['host']
         return host
 
     def __getitem__(self, key):
