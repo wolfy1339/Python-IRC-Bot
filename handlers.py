@@ -136,7 +136,7 @@ class Events(object):
             channel = arguments[0]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             account = host.split("/")[-1].split('.')[-1]
-            self.userdb.add_entry(channel, nick, hostmask, host, account)
+            self.userdb.add_entry(channel, nick, hostmask, account)
 
     def on_whospcrpl(self, event, irc, arguments):
         nick = arguments[3]
@@ -146,7 +146,7 @@ class Events(object):
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             channel = args[0]
             account = args[4] if args[4] != "0" else None
-            self.userdb.add_entry(channel, nick, hostmask, host, account)
+            self.userdb.add_entry(channel, nick, hostmask, account)
 
     @staticmethod
     def on_315(event, irc):
