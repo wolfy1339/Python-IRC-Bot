@@ -1,10 +1,11 @@
 class Database(object):
+    """Holds a dict that contains all the information about the users in a channel"""
     def __init__(self, channels):
         self.userdb = {}
         for i in channels:
             self.userdb[i] = {}
 
-    def removeEntry(self, event, nick):
+    def remove_entry(self, event, nick):
         try:
             del self.userdb[event.target][nick]
         except KeyError:
@@ -13,10 +14,10 @@ class Database(object):
                     del self.userdb[event.target][i['hostmask'].split("!")[0]]
                     break
 
-    def addEntry(self, channel, nick, hostmask, host, account):
+    def add_entry(self, channel, nick, hostmask, account):
         self.userdb[channel][nick] = {
             'hostmask': hostmask,
-            'host': host,
+            'host': hostmask.split("@")[1],
             'account': account
         }
 

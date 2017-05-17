@@ -64,7 +64,7 @@ class Events(object):
             log.warning("Kicked from %s, trying to re-join", event.target)
             irc.join(event.target)
         else:
-            self.userdb.removeEntry(event, nick)
+            self.userdb.remove_entry(event, nick)
 
     def on_part(self, event, irc):
         requested = "".join(event.arguments).startswith("requested")
@@ -76,7 +76,7 @@ class Events(object):
             else:
                 del self.userdb[event.target]
         else:
-            self.userdb.removeEntry(event, nick)
+            self.userdb.remove_entry(event, nick)
 
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
@@ -136,7 +136,7 @@ class Events(object):
             channel = arguments[0]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             account = host.split("/")[-1].split('.')[-1]
-            self.userdb.addEntry(channel, nick, hostmask, host, account)
+            self.userdb.add_entry(channel, nick, hostmask, host, account)
 
     def on_whospcrpl(self, event, irc, arguments):
         nick = arguments[3]
@@ -146,7 +146,7 @@ class Events(object):
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             channel = args[0]
             account = args[4] if args[4] != "0" else None
-            self.userdb.addEntry(channel, nick, hostmask, host, account)
+            self.userdb.add_entry(channel, nick, hostmask, host, account)
 
     @staticmethod
     def on_315(event, irc):
