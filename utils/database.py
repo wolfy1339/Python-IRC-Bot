@@ -1,6 +1,7 @@
 class Database(object):
     """Holds a dict that contains all the information about the users in a channel"""
-    def __init__(self, channels):
+    def __init__(self, channels, irc):
+        self.irc = irc
         self.userdb = {}
         for i in channels:
             self.userdb[i] = {}
@@ -20,6 +21,14 @@ class Database(object):
             'host': hostmask.split("@")[1],
             'account': account
         }
+
+    def get_user_host(self, channel, nick):
+        try:
+            host = "*!*@" + userdb[channel][nick]['host']
+        except KeyError:
+            self.irc.send("WHO {0} nuhs%nhuac".format(channel))
+            host = "*!*@" + userdb[channel][nick]['host']
+        return host
 
     def __getitem__(self, key):
         return self.userdb[key]
