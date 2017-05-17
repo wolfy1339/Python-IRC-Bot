@@ -10,7 +10,7 @@ import zirc
 
 class Bot(zirc.Client):
     def __init__(self):
-        self.userdb = utils.database.Database(config.channels)
+        self.userdb = utils.database.Database(config.channels, irc)
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
