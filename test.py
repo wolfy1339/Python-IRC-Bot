@@ -19,10 +19,10 @@ class botTest(TestCase):
         self.config = {}
         self.config['nickname'] = 'zIRC-test'
         self.userdb = database.Database(['#zirc'])
-        self.userdb["#zirc"]["wolfy1339"] = {'hostmask':'wolfy1339!~wolfy1339@botters/wolfy1339','host':'botters/wolfy1339','account':'wolfy1339'}
-        self.userdb["#zirc"]["user"] = {'hostmask':'user!~user@user/user','host':'user/user','account':'user'}
-        self.userdb["#zirc"]["user2"] = {'hostmask':'user2!~user@user/user2','host':'user/user','account':'user2'}
-        self.userdb["#zirc"]["user3"] = {'hostmask':'user3!~user@user/user3','host':'user/user3','account':'user3'}
+        self.userdb.add_entry("#zirc", "wolfy1339", 'wolfy1339!~wolfy1339@botters/wolfy1339', 'wolfy1339')
+        self.userdb.add_entry("#zirc", "user", 'user!~user@user/user', 'user')
+        self.userdb.add_entry("#zirc", "user2", 'user!~user@user/user2', 'user2')
+        self.userdb.add_entry("#zirc", "user3", 'user!~user@user/user3', 'user3')
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
@@ -63,7 +63,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 NOTICE #zirc :Channel notice
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 NOTICE zIRC-test :Priv notice
 :user2!~user@user/user2 PRIVMSG #zirc :How are you?
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> print("test")
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> print(self.userdb)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*,*!*@user/*,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban wolfy1339
@@ -87,7 +87,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?echo moo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval print("test")
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval self.userdb["##wolfy1339"] = {}
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flush
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flushq
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help
