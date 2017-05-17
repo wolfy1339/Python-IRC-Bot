@@ -64,6 +64,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :bot!~limnoria@botters/wolf1339/bot/bigwolfy1339 NOTICE zIRC-test :Priv notice
 :user2!~user@user/user2 PRIVMSG #zirc :How are you?
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> print(self.userdb)
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> self.userdb.get("#zirc")
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?>> self.userdb.get("##wolfy1339")
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban *!*@*,*!*@user/*,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ban wolfy1339
@@ -79,6 +81,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config ignores
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config invalid
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config invalid None
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config trusted {'global':["user/user2"],'channels':{}}
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config password
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?config tracebackPostError BigWolfy1339
@@ -126,6 +129,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?nick foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ninja #zirc foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?op
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?op user2
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?part #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?perms
@@ -154,6 +158,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unvoice #zirc foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?version
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
 :user3!~user@user/user3 PRIVMSG zIRC-test :Hello there!"""
 
