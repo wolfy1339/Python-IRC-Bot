@@ -53,6 +53,8 @@ def get_users(args):
     users.append(args[0])
     return users
 
+def get_user_host(userdb, channel, nick):
+    return userdb.get_user_host(channel, nick)
 
 def get_info_tuple(event, args, userdb=None):
     if args[0].startswith("#"):
