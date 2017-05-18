@@ -6,11 +6,12 @@ import config
 import handlers
 import utils
 import zirc
+from zirc.wrappers import connection_wrapper
 
 
 class Bot(zirc.Client):
     def __init__(self):
-        self.userdb = utils.database.Database(config.channels, irc)
+        self.userdb = utils.database.Database(config.channels, connection_wrapper(self))
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
