@@ -42,11 +42,8 @@ def ban(bot, event, irc, args):
         if args[0].find('@') != -1:
             host = args[0]
         else:
-            try:
-                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
-            except KeyError:
-                irc.send("WHO {0} nuhs%nhuac".format(event.target))
-                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
+            channel = event.target
+            host = utils.irc.get_user_host(irc, bot.userdb, channel, args[0])
         irc.ban(event.target, host)
 
 
