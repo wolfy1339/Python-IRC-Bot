@@ -57,7 +57,7 @@ def kban(bot, event, irc, args):
     """
     channel, users, message = utils.irc.get_info_tuple(event, args, bot.userdb)
     utils.irc.set_mode(irc, channel, users, "+b")
-    for i in users:
+    for i in utils.irc.get_users(" ".join(args)):
         irc.kick(channel, i, message)
 
 
