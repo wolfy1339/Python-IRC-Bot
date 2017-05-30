@@ -43,7 +43,7 @@ def ping(bot, event, irc, args):
 
 
 @add_cmd("help", min_args=0)
-def Help(bot, event, irc, args):
+def help_cmd(bot, event, irc, args):
     """Help text"""
     if len(args) >= 1:
         try:
@@ -57,7 +57,7 @@ def Help(bot, event, irc, args):
 
 
 @add_cmd("list", min_args=0, alias=["ls"])
-def List(bot, event, irc, args):
+def list_cmds(bot, event, irc, args):
     """Help text"""
     if len(args) and args[0] == "alias":
         irc.reply(event, ", ".join(utils.util.alias_list))
