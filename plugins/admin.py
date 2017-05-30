@@ -9,7 +9,7 @@ import utils
 
 
 @add_cmd("eval", alias=['py', '>>'], min_args=1, owner=True, hide=True)
-def Eval(bot, event, irc, args):
+def eval_cmd(bot, event, irc, args):
     """Admin console"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
@@ -28,7 +28,7 @@ def nick(bot, event, irc, args):
 
 
 @add_cmd("log.level", admin=True, min_args=1)
-def logLevel(bot, event, irc, args):
+def log_level(bot, event, irc, args):
     """<level>
     Changes the logging level"""
     if args[0] == "debug":
@@ -53,7 +53,7 @@ def logLevel(bot, event, irc, args):
 
 
 @add_cmd("config", admin=True, min_args=1, alias=['cfg'])
-def Config(bot, event, irc, args):
+def config_cmd(bot, event, irc, args):
     """<nick>
     Changes or displays a config variable"""
     if len(args) > 1:
@@ -77,7 +77,7 @@ def Config(bot, event, irc, args):
 
 
 @add_cmd("quit", admin=True, min_args=0)
-def Quit(bot, event, irc, args):
+def quit_cmd(bot, event, irc, args):
     """<text>
     Exits the bot with the QUIT message <text>."""
     irc.quit("zIRC - https://github.com/itslukej/zirc" if (
@@ -87,7 +87,7 @@ def Quit(bot, event, irc, args):
 
 
 @add_cmd("reload", admin=True, min_args=1, hide=True)
-def Reload(bot, event, irc, args):
+def reload_cmd(bot, event, irc, args):
     """Help text"""
     if utils.util.PY34:
         reload = __import__("importlib").reload
