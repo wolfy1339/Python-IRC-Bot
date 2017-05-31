@@ -46,8 +46,8 @@ class botTest(TestCase):
             irc.join(event.target)
 
     def on_nick(self, event, irc):
-        nick = event.source.nick
-        to_nick = event.arguments[0]
+        nick = event.arguments[0]
+        to_nick = event.source.nick
         for chan in self.userdb.keys():
             chandb = self.userdb[chan]
             for u in chandb.values():
@@ -104,8 +104,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf 999
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ignore botters/wolf 999 #zirc
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?join ##foo
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban #zirc GTFO! woof
-:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban #zirc GTFO! woof,moo,woo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban #zirc GTFO! user
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kban #zirc GTFO! user1,user2,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user,user2,user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?kick user, user2, user3
 :wuser!~wolfy1339@unaffiliated/wolfy PRIVMSG #zirc :?kick user, user2, user3
