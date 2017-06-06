@@ -42,7 +42,7 @@ class botTest(TestCase):
 
     @staticmethod
     def on_invite(event, irc):
-        if util.checkPerms(event.source.host, event.target, trusted=True):
+        if util.check_perms(event.source.host, event.target, trusted=True):
             irc.join(event.target)
 
     def on_nick(self, event, irc):
