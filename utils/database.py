@@ -15,7 +15,7 @@ class Database(dict):
                     break
 
     def add_entry(self, channel, nick, hostmask, account):
-        self.userdb[channel][nick] = {
+        self[channel][nick] = {
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account
