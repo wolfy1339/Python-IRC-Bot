@@ -11,8 +11,9 @@ from zirc.wrappers import connection_wrapper
 
 class Bot(zirc.Client):
     def __init__(self):
+        self.irc = connection_wrapper(self)
         self.userdb = utils.database.Database(config.channels,
-                                              connection_wrapper(self))
+                                              self.irc)
 
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
@@ -39,5 +40,8 @@ class Bot(zirc.Client):
                 setattr(self, i, func)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
+        utils.web.irc = self.irc
+        utils.web.bot = self
+        utils.web.app.run()
 
 Bot()

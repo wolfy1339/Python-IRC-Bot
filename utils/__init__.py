@@ -5,6 +5,7 @@ from . import ignores
 from . import database
 from . import commands
 from . import tasks
+from . import web
 # pylint: enable=unused-import
 
 sysver = "".join(__import__("sys").version.split("\n"))

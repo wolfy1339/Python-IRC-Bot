@@ -2,3 +2,4 @@ git+https://github.com/itslukej/zirc.git@f4beb90799a9c0a20f3bd62978ff3228b1238a4
 #zirc>=1.2.6
 requests>=2.12.4
 six>=1.10.0
+flask>=0.12.2
