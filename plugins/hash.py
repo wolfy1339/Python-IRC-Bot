@@ -1,5 +1,5 @@
 import hashlib
-from util import add_cmd
+from utils.util import add_cmd
 
 @add_cmd("md5", min_args=1)
 def md5(bot, irc, event, args):
