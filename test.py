@@ -32,7 +32,7 @@ class botTest(TestCase):
             util.call_command(self, event, irc, arguments)
 
     def on_part(self, event, irc):
-        self.userdb.remove_entry(event, nick)
+        self.userdb.remove_entry(event, event.source.nick)
 
     @staticmethod
     def on_kick(event, irc):
