@@ -8,13 +8,13 @@ python:
   - "3.5.2"
   - "3.6.1"
   - "nightly"
-install: 
+install:
   - pip install -r requirements.txt
   - pip install coverage codacy-coverage python-coveralls
-script: 
+script:
   - coverage run test.py --source="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
 after_success:
-  - coverage report --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
-  - coverage xml --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py"
+  - coverage report --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py" --omit="utils/tasks.py"
+  - coverage xml --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers.py,log.py" --omit="utils/tasks.py"
   - python-codacy-coverage -r coverage.xml
   - coveralls
