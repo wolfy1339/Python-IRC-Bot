@@ -173,7 +173,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
-:user3!~user@user/user3 QUIT :Hello there!"""
+:user3!~user@user/user3 QUIT :Hello there!
 
 try:
     bot.start(log)
