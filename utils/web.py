@@ -4,6 +4,7 @@ from struct import unpack
 
 import flask
 from flask import request
+from .util import reload_handlers
 
 irc = None
 bot = None
@@ -17,7 +18,7 @@ def main():
     iplow = ip2long('192.30.252.0')
     iphigh = ip2long('192.30.255.255')
     if request.remote_addr in range(iplow, iphigh):
-        payload = request.json
+        payload = request.get_json()
         if payload["repository"]["name"] == "Python-IRC-Bot":
             try:
                 subprocess.check_call(["git", "pull"])
@@ -25,11 +26,7 @@ def main():
                 irc.privmsg("##wolfy1339", "git pull failed!")
             else:
                 if "handlers.py" in payload['head_commit']['modified']:
-                    bot.events = __import__("handlers").Events(bot)
-                    for h in dir(bot.events):
-                        func = getattr(bot.events, h)
-                        if callable(func) and not h.startswith("__"):
-                            setattr(bot, h, func)
+                    reload_handlers(bot)
             return flask.Response("Thanks.", mimetype="text/plain")
         return flask.Response("Wrong repo.", mimetype="text/plain")
     else:
