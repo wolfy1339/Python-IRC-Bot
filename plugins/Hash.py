@@ -27,7 +27,7 @@ def sha512(bot, event, irc, args):
 
 
 @add_cmd("hash", min_args=2)
-def hash_cmd(bot, irc, event, args):
+def hash_cmd(bot, event, irc, args):
     """<hashing mechanism> <string to hash>
     Returns a hexadecimal digest of the hashed provided string"""
     if args[0] in hashlib.algorithms_available:
