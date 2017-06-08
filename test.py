@@ -22,13 +22,17 @@ class botTest(TestCase):
         self.userdb = database.Database(['#zirc'], connection_wrapper(self))
         self.userdb.add_entry("#zirc", "wolfy1339", 'wolfy1339!~wolfy1339@botters/wolfy1339', 'wolfy1339')
         self.userdb.add_entry("#zirc", "user", 'user!~user@user/user', 'user')
-        self.userdb.add_entry("#zirc", "user2", 'user!~user@user/user2', 'user2')
-        self.userdb.add_entry("#zirc", "user3", 'user!~user@user/user3', 'user3')
+        self.userdb.add_entry("#zirc", "user2", 'user2!~user@user/user2', 'user2')
+        self.userdb.add_entry("#zirc", "user3", 'user3!~user@user/user3', 'user3')
+        self.userdb.add_entry("#zirc", "user4", 'user4!~user@user/user4', 'user4')
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self, event, irc, arguments)
+
+    def on_part(self, event, irc):
+        self.userdb.remove_entry(event, nick)
 
     @staticmethod
     def on_kick(event, irc):
@@ -94,6 +98,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval self.userdb["##wolfy1339"] = {}
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flush
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flushq
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?hash sha224 moo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?hash invalid moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help kick
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?help invalid
@@ -125,8 +131,10 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level critical
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?log.level exception
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ls
+:user4!~user@user/user4 PART #zirc :Undefined
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ls alias
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 2**2
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?md5 moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?nick foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?ninja #zirc foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?op
@@ -151,6 +159,10 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?reload config
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?remove #zirc foo,moo,bo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?sha1 moo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?sha256 moo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?sha384 moo
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?sha512 moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?unban #zirc foo
@@ -161,7 +173,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
-:user3!~user@user/user3 PRIVMSG zIRC-test :Hello there!"""
+:user3!~user@user/user3 QUIT :Hello there!"""
 
 try:
     bot.start(log)
