@@ -2,7 +2,7 @@ import hashlib
 from utils.util import add_cmd
 
 @add_cmd("md5", min_args=1)
-def md5(bot, irc, event, args):
+def md5(bot, event, irc, args):
     irc.reply(event, hashlib.md5(" ".join(args).encode()).hexdigest())
 
 
