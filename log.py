@@ -47,8 +47,7 @@ def exnToString(exn):
     strE = str(exn)
     if strE:
         return '{0!s}: {1!s}'.format(exn.__class__.__name__, strE)
-    else:
-        return exn.__class__.__name__
+    return exn.__class__.__name__
 
 def stackTrace(frame=None, compact=True):
     if frame is None:
@@ -63,8 +62,7 @@ def stackTrace(frame=None, compact=True):
             frame = frame.f_back
 
         return textwrap.fill(' '.join(L))
-    else:
-        return traceback.format_stack(frame)
+    return traceback.format_stack(frame)
 
 deadlyExceptions = [KeyboardInterrupt, SystemExit]
 
@@ -174,8 +172,7 @@ class ColorizedFormatter(Formatter):
             return ''.join([ansi.RED,
                             Formatter.formatException(self, (E, exn, tb)),
                             ansi.RESET])
-        else:
-            return Formatter.formatException(self, (E, exn, tb))
+        return Formatter.formatException(self, (E, exn, tb))
 
     def format(self, record, *args, **kwargs):
         formatters = Formatter.format
@@ -191,9 +188,7 @@ class ColorizedFormatter(Formatter):
                 return ''.join([color,
                                 formatters(self, record, *args, **kwargs),
                                 ansi.RESET])
-            else:
-                return formatters(self, record, *args, **kwargs)
-        else:
+
             return formatters(self, record, *args, **kwargs)
 
 
