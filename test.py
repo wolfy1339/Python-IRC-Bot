@@ -25,6 +25,7 @@ class botTest(TestCase):
         self.userdb.add_entry("#zirc", "user2", 'user2!~user@user/user2', 'user2')
         self.userdb.add_entry("#zirc", "user3", 'user3!~user@user/user3', 'user3')
         self.userdb.add_entry("#zirc", "user4", 'user4!~user@user/user4', 'user4')
+        self.userdb.add_entry("#zirc", "user5", 'user5!~user@user/user5', 'user5')
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
@@ -174,6 +175,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
 :user3!~user@user/user3 QUIT :Hello there!
+:woof!~user@user/user5 PART #zirc :*.net *.split"""
 
 try:
     bot.start(log)
