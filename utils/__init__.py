@@ -1,10 +1,10 @@
 # pylint: disable=unused-import
-from . import util
-from . import irc
-from . import ignores
-from . import database
 from . import commands
+from . import database
+from . import ignores
+from . import irc
 from . import tasks
+from . import util
 from . import web
 # pylint: enable=unused-import
 
