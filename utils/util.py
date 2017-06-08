@@ -103,6 +103,19 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
     return False
 
 
+def reload_handlers(bot):
+    bot.events = __import__("handlers").Events(bot)
+    for h in dir(bot.events):
+        func = getattr(bot.events, h)
+        if callable(func) and not h.startswith("__"):
+            setattr(bot, h, func)
+
+
+def reload_plugins():
+    #reload(plugins)
+    pass
+
+
 def print_error(irc, event):
     log.exception("An unknown error occured")
     if not config.ci:
