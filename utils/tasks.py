@@ -29,11 +29,11 @@ class IntervalTask(Task):
         self.interval = interval
 
     def _task(self):
-     while True:
-        time.sleep(self.interval - time.time() % self.interval)
-        if self.is_stopped():
-            break
-        self.func(*self.args)
+        while True:
+            time.sleep(self.interval - time.time() % self.interval)
+            if self.is_stopped():
+                break
+            self.func(*self.args)
 
 class ScheduleTask(Task):
     def __init__(self, runtime, func, args=()):
