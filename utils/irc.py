@@ -1,4 +1,4 @@
-import re
+import time
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -50,7 +50,7 @@ def get_info_tuple(event, args, userdb=None):
         users = get_users(str_args)
     else:
         users = args[-1:]
-    if not " ".join(args[:-len(users)]) == '':
+    if " ".join(args[:-len(users)]) != '':
         message = " ".join(args[:-len(users)])
     else:
         message = "{0}".format(event.source.nick)

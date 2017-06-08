@@ -1,3 +1,6 @@
+import re
+
+
 def normalize_whitespace(s, remove_newline=True):
     """Normalizes the whitespace in a string; \s+ becomes one space."""
     if not s:

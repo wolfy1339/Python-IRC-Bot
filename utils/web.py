@@ -1,8 +1,9 @@
-import flask
-from flask import request
+import subprocess
 from socket import inet_aton
 from struct import unpack
-import subprocess
+
+import flask
+from flask import request
 
 irc = None
 bot = None
@@ -30,7 +31,6 @@ def main():
                         if callable(func) and not h.startswith("__"):
                             setattr(bot, h, func)
             return flask.Response("Thanks.", mimetype="text/plain")
-        else:
-            return flask.Response("Wrong repo.", mimetype="text/plain")
+        return flask.Response("Wrong repo.", mimetype="text/plain")
     else:
         flask.abort(403)

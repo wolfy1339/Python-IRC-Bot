@@ -1,6 +1,7 @@
 class Database(dict):
     """Holds a dict that contains all the information about the users in a channel"""
     def __init__(self, channels, irc):
+        super(Database, self).__init__()
         self.irc = irc
         for i in channels:
             self[i] = {}

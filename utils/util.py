@@ -1,10 +1,10 @@
-from .ignores import check_ignored
-import requests
 import traceback
+import requests
 import six
 
 import config
 import log
+from .ignores import check_ignored
 
 print_ = six.print_
 PY2 = six.PY2
@@ -100,8 +100,7 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
         return True
     elif not (owner or admin or trusted) and not is_ignored and not is_bot:
         return True
-    else:
-        return False
+    return False
 
 
 def print_error(irc, event):

@@ -2,5 +2,5 @@
 from . import admin
 from . import channel
 from . import general
-from . import hash
+from . import Hash
 # pylint: enable=unused-import

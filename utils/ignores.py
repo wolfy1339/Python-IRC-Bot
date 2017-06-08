@@ -2,7 +2,7 @@ import random
 import time
 
 import config
-import logging
+import log as logging
 
 
 def check_ignored(host, channel):

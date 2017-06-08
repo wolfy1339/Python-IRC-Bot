@@ -25,8 +25,8 @@ class Task(object):
 
 class IntervalTask(Task):
     def __init__(self, interval, func, args=()):
-     super(IntervalTask, self).__init__(func, args)
-     self.interval = interval
+        super(IntervalTask, self).__init__(func, args)
+        self.interval = interval
 
     def _task(self):
      while True:

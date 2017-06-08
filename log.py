@@ -1,3 +1,4 @@
+from __future__ import print_function
 ###
 # Copyright (c) 2002-2005, Jeremiah Fincher
 # All rights reserved.
@@ -116,7 +117,7 @@ class StdoutStreamHandler(logging.StreamHandler):
                 print(record.levelname)
                 print(stackTrace())
             prefixLen = len(record.levelname) + 1  # ' '
-            s = textwrap.fill(s, width=78, subsequent_indent=' '*prefixLen)
+            s = textwrap.fill(s, width=78, subsequent_indent=' ' * prefixLen)
             s.rstrip('\r\n')
         return s
 
@@ -200,8 +201,9 @@ try:
     messagesLogFilename = 'messages.log'
     _handler = BetterFileHandler(messagesLogFilename, encoding='utf8')
 except EnvironmentError as e:
-    raise SystemExit('Error opening messages logfile ({0}). The original ' \
-          'error was: {1}'.format(messagesLogFilename, exnToString(e)))
+    raise SystemExit('Error opening messages logfile ({0}). The original '
+                     'error was: {1}'.format(messagesLogFilename,
+                                             exnToString(e)))
 
 # These are public.
 formatter = Formatter('NEVER SEEN; IF YOU SEE THIS, FILE A BUG!')
