@@ -1,6 +1,7 @@
 from os import path
 import socket
 import ssl
+import threading
 
 import config
 import handlers
@@ -39,9 +40,9 @@ class Bot(zirc.Client):
             if callable(func) and not i.startswith("__"):
                 setattr(self, i, func)
         self.connect(self.config, certfile=path.abspath("user.pem"))
-        self.start()
         utils.web.irc = self.irc
         utils.web.bot = self
-        utils.web.app.run()
+        threading.Thread(target=utils.web.app.run).start()
+        threading.Thread(target=self.start).start()
 
 Bot()
