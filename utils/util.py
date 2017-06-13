@@ -77,6 +77,19 @@ def call_command(bot, event, irc, arguments):
             print_error(irc, event)
 
 
+def add_hook(func):
+    hooks[func.__name__] = func
+
+
+def call_hook(bot, event, irc, args):
+    try:
+        for i in hooks:
+            i(bot, event, irc, args)
+    except Exception:
+        irc.reply(event, 'Oops, an error occured!')
+        print_error(irc, event)
+
+
 def check_perms(host, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
     trustees = config.trusted['global']
