@@ -27,6 +27,8 @@ class Events(object):
     def on_privmsg(self, event, irc, arguments):
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self.bot, event, irc, arguments)
+        else:
+            util.call_hook(self.bot, event, irc, arguments)
 
     @staticmethod
     def on_send(data):
