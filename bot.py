@@ -42,7 +42,7 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         utils.web.irc = self.irc
         utils.web.bot = self
-        threading.Thread(target=utils.web.app.run).start()
+        threading.Thread(target=utils.web.app.run, args=('0.0.0.0')).start()
         threading.Thread(target=self.start).start()
 
 Bot()
