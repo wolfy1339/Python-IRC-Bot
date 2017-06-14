@@ -32,7 +32,8 @@ class Events(object):
         if len(event.tags):
             for i in event.tags:
                 try:
-                    timestamp = strptime(i['time'], '%Y-%m-%dT%H:%M:%S.%f').timetuple()
+                    f = '%Y-%m-%dT%H:%M:%S.%f'
+                    timestamp = strptime(i['time'], f).timetuple()
                     timestamp = time.mktime(timestamp)
                 except KeyError:
                     pass

@@ -13,6 +13,7 @@ PY34 = six.PY34
 commands = {}
 cmd_list = []
 alias_list = []
+hooks = []
 
 get = requests.get
 post = requests.post
@@ -78,7 +79,7 @@ def call_command(bot, event, irc, arguments):
 
 
 def add_hook(func):
-    hooks[func.__name__] = func
+    hooks.append(func)
 
 
 def call_hook(bot, event, irc, args):
