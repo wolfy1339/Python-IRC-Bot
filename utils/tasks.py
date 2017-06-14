@@ -12,7 +12,10 @@ class Task(object):
         self.thread.daemon = True
 
     def _task(self):
-        pass
+        while True:
+            if self.is_stopped():
+                break
+            self.func(*self.args)
 
     def start(self):
         self.thread.start()
