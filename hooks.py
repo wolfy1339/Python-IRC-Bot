@@ -8,8 +8,7 @@ def _replace(match, msg):
     if len(data) == 4:
         data = data[1:]
     output = msg.replace(data[1], data[2])
-    output = msg[0:min(len(output), 4096)]
-    log.info('Changing %s to %s', args, output)
+    return msg[0:min(len(output), 4096)]
 
 
 @add_hook
@@ -21,6 +20,7 @@ def self_correct(bot, event, irc, args):
     if match is not None:
         output = _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
+        log.info('Changing %s to %s', args, output)
     else:
         pass
 
@@ -34,5 +34,6 @@ def user_correct(bot, event, irc, args):
         msg = bot.userdb[channel][nick]['seen'][1]
         output = _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
+        log.info('Changing %s to %s', args, output)
     else:
         pass
