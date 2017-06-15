@@ -4,13 +4,13 @@ import log
 
 
 @add_hook
-def user_correct(bot, event, irc, args):
+def self_correct(bot, event, irc, args):
     nick = event.source.nick
     channel = event.target
     msg = bot.userdb[channel][nick]['seen'][1]
     match = re.match(r"^s[/].*[/].*$", " ".join(args))
     if match is not None:
-        data = match.split('/')
+        data = match.string.split('/')
         output = msg.replace(data[0], data[1])
         output = msg[0:min(len(output), 4096)]
 
