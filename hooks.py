@@ -14,8 +14,8 @@ def self_correct(bot, event, irc, args):
         output = msg.replace(data[0], data[1])
         output = msg[0:min(len(output), 4096)]
 
-        log.info('Changing {0} to {1}'.format(args, output))
-        irc.reply(event, '<{0}> {1}'.format(nick, output))
+        log.info('Changing %s to %s', args, output)
+        irc.reply(event, '<%s> %s', nick, output)
     else:
         pass
 
@@ -31,7 +31,7 @@ def user_correct(bot, event, irc, args):
         output = msg.replace(data[0], data[1])
         output = msg[0:min(len(output), 4096)]
 
-        log.info('Changing {0} to {1}'.format(args, output))
-        irc.reply(event, '<{0}> {1}'.format(nick, output))
+        log.info('Changing %s to %s', args, output)
+        irc.reply(event, '<%s> %s', nick, output)
     else:
         pass
