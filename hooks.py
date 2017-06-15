@@ -15,7 +15,7 @@ def self_correct(bot, event, irc, args):
         output = msg[0:min(len(output), 4096)]
 
         log.info('Changing %s to %s', args, output)
-        irc.reply(event, '<%s> %s', nick, output)
+        irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
 
@@ -32,6 +32,6 @@ def user_correct(bot, event, irc, args):
         output = msg[0:min(len(output), 4096)]
 
         log.info('Changing %s to %s', args, output)
-        irc.reply(event, '<%s> %s', nick, output)
+        irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
