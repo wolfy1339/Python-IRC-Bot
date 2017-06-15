@@ -3,7 +3,6 @@ from utils.util import add_hook
 import log
 
 
-
 def _replace(match, msg):
     data = match.string.split('/')
     if len(data) == 4:
@@ -20,7 +19,7 @@ def self_correct(bot, event, irc, args):
     msg = bot.userdb[channel][nick]['seen'][1]
     match = re.match(r"^s[/].*[/].*$", " ".join(args))
     if match is not None:
-        _replace(match, msg)
+        output = _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
@@ -33,7 +32,7 @@ def user_correct(bot, event, irc, args):
         nick = match.group(1)
         channel = event.target
         msg = bot.userdb[channel][nick]['seen'][1]
-        _replace(match, msg)
+        output = _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
