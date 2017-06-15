@@ -3,6 +3,16 @@ from utils.util import add_hook
 import log
 
 
+
+def _replace(match, msg):
+    data = match.string.split('/')
+    if len(data) == 4:
+        data = data[1:]
+    output = msg.replace(data[1], data[2])
+    output = msg[0:min(len(output), 4096)]
+    log.info('Changing %s to %s', args, output)
+
+
 @add_hook
 def self_correct(bot, event, irc, args):
     nick = event.source.nick
@@ -10,11 +20,7 @@ def self_correct(bot, event, irc, args):
     msg = bot.userdb[channel][nick]['seen'][1]
     match = re.match(r"^s[/].*[/].*$", " ".join(args))
     if match is not None:
-        data = match.string.split('/')
-        output = msg.replace(data[0], data[1])
-        output = msg[0:min(len(output), 4096)]
-
-        log.info('Changing %s to %s', args, output)
+        _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
@@ -27,11 +33,7 @@ def user_correct(bot, event, irc, args):
         nick = match.group(1)
         channel = event.target
         msg = bot.userdb[channel][nick]['seen'][1]
-        data = match.string.split('/')[2:]
-        output = msg.replace(data[0], data[1])
-        output = msg[0:min(len(output), 4096)]
-
-        log.info('Changing %s to %s', args, output)
+        _replace(match, msg)
         irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
