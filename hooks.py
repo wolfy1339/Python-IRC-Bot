@@ -19,6 +19,7 @@ def self_correct(bot, event, irc, args):
     else:
         pass
 
+
 @add_hook
 def user_correct(bot, event, irc, args):
         match = re.match(r"^u[/]([\w]+)[/].*[/].*$", " ".join(args))
