@@ -18,3 +18,19 @@ def self_correct(bot, event, irc, args):
         irc.reply(event, '<{0}> {1}'.format(nick, output))
     else:
         pass
+
+@add_hook
+def user_correct(bot, event, irc, args):
+        match = re.match(r"^u[/]([\w]+)[/].*[/].*$", " ".join(args))
+        if match is not None:
+            nick = match.group(1)
+            channel = event.target
+            msg = bot.userdb[channel][nick]['seen'][1]
+            data = match.string.split('/')[2:]
+            output = msg.replace(data[0], data[1])
+            output = msg[0:min(len(output), 4096)]
+
+            log.info('Changing {0} to {1}'.format(args, output))
+            irc.reply(event, '<{0}> {1}'.format(nick, output))
+        else:
+            pass
