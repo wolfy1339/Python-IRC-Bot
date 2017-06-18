@@ -32,7 +32,7 @@ class botTest(TestCase):
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self, event, irc, arguments)
         else:
-             util.call_hook(self, event, irc, arguments)
+            util.call_hook(self, event, irc, arguments)
 
     def on_part(self, event, irc):
         self.userdb.remove_entry(event, event.source.nick)
