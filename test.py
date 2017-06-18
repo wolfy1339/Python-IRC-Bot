@@ -1,4 +1,5 @@
 import sys
+import time
 from zirc.test import TestCase
 from zirc.wrappers import connection_wrapper
 import log as logging
