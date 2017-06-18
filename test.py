@@ -29,6 +29,10 @@ class botTest(TestCase):
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
+        nick = event.source.nick
+        str_args = ' '.join(arguments)
+        timestamp = time.time()
+        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self, event, irc, arguments)
         else:
