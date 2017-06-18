@@ -89,6 +89,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3*sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3^200
 :user!~user@user/user PRIVMSG #zirc :Please stop the bot spam, we can hardly hear each other!
+:user!~user@user/user PRIVMSG #zirc :s/bot/moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
 :user2!~user@user/user2 PRIVMSG #zirc :What was that?
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
