@@ -9,7 +9,7 @@ if not ci:
     caps = Caps(sasl, "multi-prefix")
 
 # IRC
-channels = ["##wolfy1339", "##powder-bots", "#valoran-bots"]
+channels = ["##wolfy1339", "##powder-bots", "##lazy-valoran", "#valoran-bots"]
 
 # Logging
 logFormat = '%(levelname)s %(asctime)s %(message)s'
@@ -33,6 +33,7 @@ trusted = {
         '##lazy-valoran': []
     }
 }
+hooks_whitelist = ["##lazy-valoran", "##wolfy1339"]
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
     'channels': ['##lazy-valoran', '##wolfy1339', '#powder-bots']
