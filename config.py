@@ -20,7 +20,7 @@ stdoutWrap = True
 
 # Bot
 commandChar = '?'
-owners = ['botters/wolfy1339']
+owners = ['zirc/botters.wolfy1339']
 admins = {
     'global': [],
     'channels': {
