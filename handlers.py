@@ -1,4 +1,4 @@
-from datetime.datetime import strptime
+import datetime
 import sys
 import time
 import config
@@ -7,7 +7,7 @@ import plugins  # pylint: disable=unused-import
 import log
 from utils import util
 
-
+strptime = datetime.datetime.strptime
 class Events(object):
     def __init__(self, bot):
         self.bot = bot
