@@ -13,6 +13,7 @@ PY34 = six.PY34
 commands = {}
 cmd_list = []
 alias_list = []
+hooks = []
 
 get = requests.get
 post = requests.post
@@ -75,6 +76,19 @@ def call_command(bot, event, irc, arguments):
         except Exception:
             irc.reply(event, 'Oops, an error occured!')
             print_error(irc, event)
+
+
+def add_hook(func):
+    hooks.append(func)
+
+
+def call_hook(bot, event, irc, args):
+    try:
+        for i in hooks:
+            i(bot, event, irc, args)
+    except Exception:
+        irc.reply(event, 'Oops, an error occured!')
+        print_error(irc, event)
 
 
 def check_perms(host, channel, owner=False, admin=False, trusted=False):

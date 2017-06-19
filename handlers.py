@@ -1,4 +1,6 @@
+from datetime.datetime import strptime
 import sys
+import time
 import config
 # This is required so that util.call_command works
 import plugins  # pylint: disable=unused-import
@@ -25,8 +27,23 @@ class Events(object):
         log.info("Received CTCP reply " + raw)
 
     def on_privmsg(self, event, irc, arguments):
+        nick = event.source.nick
+        str_args = ' '.join(arguments)
+        if len(event.tags):
+            for i in event.tags:
+                try:
+                    f = '%Y-%m-%dT%H:%M:%S.%f'
+                    timestamp = strptime(i['time'], f).timetuple()
+                    timestamp = time.mktime(timestamp)
+                except KeyError:
+                    pass
+        else:
+            timestamp = time.time()
+        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self.bot, event, irc, arguments)
+        else:
+            util.call_hook(self.bot, event, irc, arguments)
 
     @staticmethod
     def on_send(data):

@@ -1,4 +1,5 @@
 import sys
+import time
 from zirc.test import TestCase
 from zirc.wrappers import connection_wrapper
 import log as logging
@@ -29,8 +30,14 @@ class botTest(TestCase):
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
+        nick = event.source.nick
+        str_args = ' '.join(arguments)
+        timestamp = time.time()
+        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self, event, irc, arguments)
+        else:
+            util.call_hook(self, event, irc, arguments)
 
     def on_part(self, event, irc):
         self.userdb.remove_entry(event, event.source.nick)
@@ -82,6 +89,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3*sqrt(4)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?calc 2+3^200
 :user!~user@user/user PRIVMSG #zirc :Please stop the bot spam, we can hardly hear each other!
+:user!~user@user/user PRIVMSG #zirc :s/bot/moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?math 1+1
 :user2!~user@user/user2 PRIVMSG #zirc :What was that?
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?cfg ignores
