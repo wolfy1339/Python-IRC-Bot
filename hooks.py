@@ -1,6 +1,7 @@
 import re
 from utils.util import add_hook
 import log
+import utils
 
 
 def _replace(match, msg):
@@ -37,3 +38,12 @@ def user_correct(bot, event, irc, args):
         log.info('Changing %s to %s', args, output)
     else:
         pass
+
+@add_hook
+def titler(bot, event, irc, args):
+    match = re.match(r"(?:http:\/\/|https:\/\/)([^\s]+)")
+    if match is not None:
+        r = utils.util.get(match.string)
+        t = re.search(r"<title>(.*)</title>", utils.util.get(match.string).text)
+        url = match.group(1).split("/")[0]
+        irc.reply(event, "[{0!s}] - {1!s}".format(t, url))
