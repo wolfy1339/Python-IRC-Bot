@@ -27,6 +27,9 @@ class botTest(TestCase):
         self.userdb.add_entry("#zirc", "user3", 'user3!~user@user/user3', 'user3')
         self.userdb.add_entry("#zirc", "user4", 'user4!~user@user/user4', 'user4')
         self.userdb.add_entry("#zirc", "user5", 'user5!~user@user/user5', 'user5')
+        self.userdb.add_entry("#zirc", "wuser", "wuser!~wolfy1339@unaffiliated/wolfy", None)
+        self.userdb.add_entry("#zirc", "wolfy1339bot", "wolfy1339bot!~wolfy1339@botters/wolfy/bot/mooobot", None)
+        self.userdb.add_entry("##wolfy1339", "bot", "bot!~limnoria@botters/wolf1339/bot/bigwolfy1339", "BigWolfy1339")
         self.fp = fp()
 
     def on_privmsg(self, event, irc, arguments):
