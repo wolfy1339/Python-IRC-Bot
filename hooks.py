@@ -44,6 +44,6 @@ def titler(bot, event, irc, args):
     match = re.match(r"(?:http://|https://)([^\s]+)", " ".join(args))
     if match is not None and event.target != "##lazy-valoran":
         r = utils.util.get(match.string)
-        t = re.search(r"<title>(.*)</title>", utils.util.get(match.string).text)
+        t = re.search(r"<title>(.*)</title>", r.text)
         url = match.group(1).split("/")[0]
         irc.reply(event, "[{0!s}] - {1!s}".format(t, url))
