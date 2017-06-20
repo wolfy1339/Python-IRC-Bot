@@ -9,7 +9,7 @@ def _replace(match, msg):
     if len(data) == 4:
         data = data[1:]
     output = msg.replace(data[1], data[2])
-    return msg[0:min(len(output), 4096)]
+    return output[0:min(len(output), 4096)]
 
 
 @add_hook
@@ -41,7 +41,7 @@ def user_correct(bot, event, irc, args):
 
 @add_hook
 def titler(bot, event, irc, args):
-    match = re.match(r"(?:http:\/\/|https:\/\/)([^\s]+)")
+    match = re.match(r"(?:http://|https://)([^\s]+)", " ".join(args))
     if match is not None and event.target != "##lazy-valoran":
         r = utils.util.get(match.string)
         t = re.search(r"<title>(.*)</title>", utils.util.get(match.string).text)
