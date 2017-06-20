@@ -20,7 +20,7 @@ class botTest(TestCase):
     def __init__(self):
         self.config = {}
         self.config['nickname'] = 'zIRC-test'
-        self.userdb = database.Database(['#zirc'], connection_wrapper(self))
+        self.userdb = database.Database(connection_wrapper(self))
         self.userdb.add_entry("#zirc", "wolfy1339", 'wolfy1339!~wolfy1339@botters/wolfy1339', 'wolfy1339')
         self.userdb.add_entry("#zirc", "user", 'user!~user@user/user', 'user')
         self.userdb.add_entry("#zirc", "user2", 'user2!~user@user/user2', 'user2')
