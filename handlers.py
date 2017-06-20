@@ -39,7 +39,9 @@ class Events(object):
                     pass
         else:
             timestamp = time.time()
-        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
+        seen = self.userdb[event.target][nick]['seen']
+        seen[0] = timestamp
+        seen[1] = str_args
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self.bot, event, irc, arguments)
         else:
@@ -64,8 +66,11 @@ class Events(object):
             break
 
     def on_quit(self, event, irc):
+        import json
         nick = event.source.nick
         if nick == self.config['nickname']:
+            with open("userdb.json", "r") as f:
+                json.dump(self.userdb, f, indent=2, separators=(',', ': '))
             sys.exit(1)
         else:
             for chan in self.userdb.keys():

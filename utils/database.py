@@ -1,10 +1,11 @@
+import json
+
+
 class Database(dict):
     """Holds a dict that contains all the information about the users in a channel"""
-    def __init__(self, channels, irc):
-        super(Database, self).__init__()
+    def __init__(self, irc):
+        super(Database, self).__init__(json.load(open("userdb.json")))
         self.irc = irc
-        for i in channels:
-            self[i] = {}
 
     def remove_entry(self, event, nick):
         try:
@@ -19,7 +20,8 @@ class Database(dict):
         self[channel][nick] = {
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
-            'account': account
+            'account': account,
+            'seen': []
         }
 
     def get_user_host(self, channel, nick):
