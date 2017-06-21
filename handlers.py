@@ -3,7 +3,7 @@ import sys
 import time
 import config
 # This is required so that util.call_command works
-import plugins  # pylint: disable=unused-import
+import plugins, hooks  # pylint: disable=unused-import
 import log
 from utils import util
 
