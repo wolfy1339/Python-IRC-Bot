@@ -36,7 +36,7 @@ trusted = {
 hooks_whitelist = ["##lazy-valoran", "##wolfy1339"]
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
-    'channels': ['##lazy-valoran', '##wolfy1339', '#powder-bots']
+    'channels': ['##lazy-valoran', '##wolfy1339']
 }
 ignores = {
     'global': [],
