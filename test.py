@@ -10,6 +10,7 @@ import config
 
 config.admins['global'].append("user/user3")
 config.trusted['global'].append("user/user2")
+config.hooks_whitelist.append('#zirc')
 logging.setLevel(30)
 
 class fp(object):
