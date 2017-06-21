@@ -18,6 +18,11 @@ class Events(object):
     def on_all(event, irc, arguments):
         if event.raw.startswith("ERROR"):
             log.error(" ".join(event.arguments))
+            if " ".join(event.arguments).startswith("Closing Link"):
+                import json
+                with open("userdb.json", "r") as f:
+                    json.dump(self.userdb, f, indent=2, separators=(',', ': '))
+                sys.exit(1)
         else:
             if event.raw.find("%") == -1:
                 log.debug(event.raw)
