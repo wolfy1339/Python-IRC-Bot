@@ -44,9 +44,7 @@ class Events(object):
                     pass
         else:
             timestamp = time.time()
-        seen = self.userdb[event.target][nick]['seen']
-        seen[0] = timestamp
-        seen[1] = str_args
+        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
         if " ".join(arguments).startswith(config.commandChar):
             util.call_command(self.bot, event, irc, arguments)
         else:
