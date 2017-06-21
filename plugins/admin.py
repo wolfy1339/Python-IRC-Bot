@@ -13,7 +13,11 @@ def eval_cmd(bot, event, irc, args):
     """Admin console"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
-        irc.reply(event, console.run(" ".join(args)))
+        output = console.run(" ".join(args)).splitlines()
+        for line in output:
+            if len(line):
+                irc.reply(event, line)
+
     except Exception as e:
         irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
         utils.util.print_error(irc, event)
