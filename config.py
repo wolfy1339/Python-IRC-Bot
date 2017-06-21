@@ -9,7 +9,7 @@ if not ci:
     caps = Caps(sasl, "multi-prefix")
 
 # IRC
-channels = ["##wolfy1339", "##powder-bots", "##lazy-valoran", "#valoran-bots"]
+channels = ["##wolfy1339", "#powder-bots", "##lazy-valoran", "#valoran-bots"]
 
 # Logging
 logFormat = '%(levelname)s %(asctime)s %(message)s'
