@@ -33,7 +33,7 @@ class Bot(zirc.Client):
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
         # Event handlers
-        util.utils.reload_handlers(self)
+        utils.util.reload_handlers(self)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.start()
         utils.web.irc = self.irc
