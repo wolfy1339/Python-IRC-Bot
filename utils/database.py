@@ -21,7 +21,7 @@ class Database(dict):
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account,
-            'seen': []
+            'seen': [__import__("time").time(), ""]
         }
 
     def get_user_host(self, channel, nick):
@@ -31,3 +31,7 @@ class Database(dict):
             self.irc.send("WHO {0} nuhs%nhuac".format(channel))
             host = "*!*@" + self[channel][nick]['host']
         return host
+
+    def flush(self):
+        with open('userdb.json', 'w') as f:
+            json.dump(self, f, indent=2, separators=(',', ': '))

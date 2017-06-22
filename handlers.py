@@ -19,9 +19,7 @@ class Events(object):
         if event.raw.startswith("ERROR"):
             log.error(" ".join(event.arguments))
             if " ".join(event.arguments).startswith("Closing Link"):
-                import json
-                with open("userdb.json", "r") as f:
-                    json.dump(self.userdb, f, indent=2, separators=(',', ': '))
+                self.userdb.flush()
                 sys.exit(1)
         else:
             if event.raw.find("%") == -1:
@@ -72,8 +70,7 @@ class Events(object):
         import json
         nick = event.source.nick
         if nick == self.config['nickname']:
-            with open("userdb.json", "r") as f:
-                json.dump(self.userdb, f, indent=2, separators=(',', ': '))
+            self.userdb.flush()
             sys.exit(1)
         else:
             for chan in self.userdb.keys():
