@@ -17,12 +17,23 @@ class Database(dict):
                     break
 
     def add_entry(self, channel, nick, hostmask, account):
-        self[channel][nick] = {
+        temp = {
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account,
             'seen': [__import__("time").time(), ""]
         }
+        failed = False
+        try:
+            user = self[channel][nick]
+        except KeyError:
+            failed = True
+            self[channel][nick] = temp
+
+        if not failed:
+            for i in user:
+                if user[i] != temp[i] and i != "seen":
+                    user[i] = temp[i]
 
     def get_user_host(self, channel, nick):
         try:
