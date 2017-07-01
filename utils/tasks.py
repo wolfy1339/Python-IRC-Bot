@@ -3,6 +3,7 @@
 import threading
 import time
 
+
 class Task(object):
     def __init__(self, func, args=()):
         self.func = func
@@ -26,6 +27,7 @@ class Task(object):
     def is_stopped(self):
         return self._stop.isSet()
 
+
 class IntervalTask(Task):
     def __init__(self, interval, func, args=()):
         super(IntervalTask, self).__init__(func, args)
@@ -37,6 +39,7 @@ class IntervalTask(Task):
             if self.is_stopped():
                 break
             self.func(*self.args)
+
 
 class ScheduleTask(Task):
     def __init__(self, runtime, func, args=()):
@@ -55,15 +58,18 @@ class ScheduleTask(Task):
                 interval = self.runtime - started
                 time.sleep(interval - started % interval)
 
+
 def run_every(interval, func, args=()):
     t = IntervalTask(interval, func, args)
     t.start()
     return t
 
+
 def run_at(runtime, func, args=()):
     t = ScheduleTask(runtime, func, args)
     t.start()
     return t
+
 
 def run_in(delay, func, args=()):
     t = ScheduleTask(time.time() + delay, func, args)
