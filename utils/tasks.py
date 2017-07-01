@@ -59,6 +59,12 @@ class ScheduleTask(Task):
                 time.sleep(interval - started % interval)
 
 
+def run(func, args=()):
+    t = Task(func, args)
+    t.start()
+    return t
+
+
 def run_every(interval, func, args=()):
     t = IntervalTask(interval, func, args)
     t.start()
