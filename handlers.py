@@ -14,8 +14,7 @@ class Events(object):
         self.config = self.bot.config
         self.userdb = self.bot.userdb
 
-    @staticmethod
-    def on_all(event, irc, arguments):
+    def on_all(self, event, irc, arguments):
         if event.raw.startswith("ERROR"):
             log.error(" ".join(event.arguments))
             if " ".join(event.arguments).startswith("Closing Link"):
