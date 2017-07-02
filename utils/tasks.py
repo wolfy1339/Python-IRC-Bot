@@ -5,18 +5,19 @@ import time
 
 
 class Task(object):
-    def __init__(self, func, args=()):
+    def __init__(self, func, args=(), kwargs=None):
         self.func = func
         self.args = args
+        self.kwargs = kwargs if kwargs is not None else {}
         self._stop = threading.Event()
         self.thread = threading.Thread(target=self._task)
-        self.thread.daemon = True
+        self.thread.daemon = False
 
     def _task(self):
         while True:
             if self.is_stopped():
                 break
-            self.func(*self.args)
+            self.func(*self.args, **self.kwargs)
 
     def start(self):
         self.thread.start()
@@ -29,8 +30,8 @@ class Task(object):
 
 
 class IntervalTask(Task):
-    def __init__(self, interval, func, args=()):
-        super(IntervalTask, self).__init__(func, args)
+    def __init__(self, interval, func, args=(), kwargs=None):
+        super(IntervalTask, self).__init__(func, args, kwargs)
         self.interval = interval
 
     def _task(self):
@@ -42,8 +43,8 @@ class IntervalTask(Task):
 
 
 class ScheduleTask(Task):
-    def __init__(self, runtime, func, args=()):
-        super(ScheduleTask, self).__init__(func, args)
+    def __init__(self, runtime, func, args=(), kwargs=None):
+        super(ScheduleTask, self).__init__(func, args, kwargs)
         self.runtime = runtime
 
     def _task(self):
@@ -59,25 +60,25 @@ class ScheduleTask(Task):
                 time.sleep(interval - started % interval)
 
 
-def run(func, args=()):
-    t = Task(func, args)
+def run(func, args=(), kwargs=None):
+    t = Task(func, args, kwargs)
     t.start()
     return t
 
 
-def run_every(interval, func, args=()):
-    t = IntervalTask(interval, func, args)
+def run_every(interval, func, args=(), kwargs=None):
+    t = IntervalTask(interval, func, args, kwargs)
     t.start()
     return t
 
 
-def run_at(runtime, func, args=()):
-    t = ScheduleTask(runtime, func, args)
+def run_at(runtime, func, args=(), kwargs=None):
+    t = ScheduleTask(runtime, func, args, kwargs)
     t.start()
     return t
 
 
-def run_in(delay, func, args=()):
-    t = ScheduleTask(time.time() + delay, func, args)
+def run_in(delay, func, args=(), kwargs=None):
+    t = ScheduleTask(time.time() + delay, func, args, kwargs)
     t.start()
     return t

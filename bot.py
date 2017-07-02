@@ -1,7 +1,6 @@
 from os import path
 import socket
 import ssl
-import threading
 
 import config
 import handlers
@@ -41,8 +40,8 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         utils.web.irc = self.irc
         utils.web.bot = self
-        threading.Thread(target=utils.web.app.run, kwargs={'host':'0.0.0.0'}).start()
-        threading.Thread(target=self.start).start()
+        utils.tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
+        utils.tasks.run(self.start)
         utils.tasks.run_every(600, self.userdb.flush)
 
 Bot()
