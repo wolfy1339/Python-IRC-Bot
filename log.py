@@ -30,6 +30,7 @@ from __future__ import print_function
 
 import atexit
 import logging
+import logging.handlers
 import os
 import sys
 import textwrap
@@ -137,7 +138,7 @@ class StdoutStreamHandler(logging.StreamHandler):
             logging._releaseLock()
 
 
-class BetterFileHandler(logging.FileHandler):
+class BetterFileHandler(logging.handlers.TimedRotatingFileHandler):
     def emit(self, record):
         msg = self.format(record)
         try:
@@ -193,8 +194,11 @@ class ColorizedFormatter(Formatter):
 
 
 try:
-    messagesLogFilename = 'messages.log'
-    _handler = BetterFileHandler(messagesLogFilename, encoding='utf8')
+    folder = 'logs'
+    messagesLogFilename = os.path.join(folder, 'messages.log')
+    if not os.path.exists(messagesLogFilename):
+        os.makedirs(folder)
+    _handler = BetterFileHandler(messagesLogFilename, encoding='utf8', when='midnight')
 except EnvironmentError as e:
     raise SystemExit('Error opening messages logfile ({0}). The original '
                      'error was: {1}'.format(messagesLogFilename,
