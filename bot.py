@@ -41,7 +41,7 @@ class Bot(zirc.Client):
         utils.web.irc = self.irc
         utils.web.bot = self
         utils.tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
-        utils.tasks.run(self.start)
         utils.tasks.run_every(600, self.userdb.flush)
+        self.start()
 
 Bot()
