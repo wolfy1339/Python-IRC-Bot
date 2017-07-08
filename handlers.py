@@ -29,7 +29,9 @@ class Events(object):
         log.info("Received CTCP reply " + raw)
 
     def on_privmsg(self, event, irc, arguments):
-        if " ".join(arguments).startswith(config.commandChar):
+        str_args = " ".join(arguments)
+        if (str_args.startswith(config.commandChar) or
+           str_args.startswith(self.config['nick'])):
             util.call_command(self.bot, event, irc, arguments)
         else:
             util.call_hook(self.bot, event, irc, arguments)
