@@ -45,3 +45,4 @@ class Database(dict):
     def flush(self):
         with open('userdb.json', 'w') as f:
             json.dump(self, f, indent=2, separators=(',', ': '))
+            f.write("\n")
