@@ -122,3 +122,17 @@ def version(bot, event, irc, args):
 def hostmask(bot, event, irc, args):
     """Replies with your host"""
     irc.reply(event, event.source.host)
+
+
+@add_cmd("seen", min_args=1)
+def seen(bot, event, irc, args):
+    """[<channel>] <nick>
+    Returns the last time <nick> was seen and what <nick> was last seen saying.
+    <channel> is only necessary if the message isn't sent on the channel itself.
+    """
+    channel = args[0] if args[0].startswith("#") else event.target
+    nick = args[0] if args[0].startswith("#") else args[1]
+    try:
+        irc.reply(event, self.userdb[channel][nick])
+    except KeyError:
+        irc.reply(event, "I have not seen {0}".format(nick))
