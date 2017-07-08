@@ -31,9 +31,8 @@ class Database(dict):
             self[channel][nick] = temp
 
         if not failed:
-            for i in user:
-                if user[i] != temp[i] and i != "seen":
-                    user[i] = temp[i]
+            del temp['seen']
+            user.update(temp)
 
     def get_user_host(self, channel, nick):
         try:
