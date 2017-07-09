@@ -83,7 +83,8 @@ def add_hook(func):
 
 
 def call_hook(bot, event, irc, args):
-    if event.target in config.hooks_whitelist:
+    is_bot = event.source.host.find("/bot/") != -1
+    if event.target in config.hooks_whitelist and not is_bot:
         try:
             for i in hooks:
                 i(bot, event, irc, args)
