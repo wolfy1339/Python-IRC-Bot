@@ -61,7 +61,9 @@ def get_info_tuple(event, args, userdb=None):
 
 def unban_after_duration(tasks, irc, users, chan, duration):
     duration += int(time.time())
+
     def func(irc, users, chan):
         for i in users:
             irc.unban(chan, i)
+
     tasks.run_at(duration, func, (irc, users, chan))

@@ -7,10 +7,12 @@ from flask import request
 
 irc = None
 bot = None
+app = flask.Flask(__name__)
+
+
 def ip2long(ip_addr):
     return unpack("!L", inet_aton(ip_addr))[0]
 
-app = flask.Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def main():
