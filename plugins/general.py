@@ -133,6 +133,6 @@ def seen(bot, event, irc, args):
     channel = args[0] if args[0].startswith("#") else event.target
     nick = args[0] if args[0].startswith("#") else args[1]
     try:
-        irc.reply(event, self.userdb[channel][nick])
+        irc.reply(event, bot.userdb[channel][nick])
     except KeyError:
         irc.reply(event, "I have not seen {0}".format(nick))
