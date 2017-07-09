@@ -130,8 +130,12 @@ def seen(bot, event, irc, args):
     Returns the last time <nick> was seen and what <nick> was last seen saying.
     <channel> is only necessary if the message isn't sent on the channel itself.
     """
-    channel = args[0] if args[0].startswith("#") else event.target
-    nick = args[0] if args[0].startswith("#") else args[1]
+    if args[0].startswith("#"):
+        channel = args[0]
+        nick = args[1]
+    else:
+        channel = event.target
+        nick = args[0]
     try:
         irc.reply(event, bot.userdb[channel][nick])
     except KeyError:
