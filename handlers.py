@@ -108,6 +108,9 @@ class Events(object):
             log.info("Joining %s", event.target)
             self.userdb[event.target] = {}
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
+            irc.send("NAMES {0}".format(event.target))
+            for i in ["i", "e", "b"]:
+                irc.send("MODE {0} {1}")
         else:
             irc.send("WHO {0} nuhs%nhuac".format(event.source.nick))
 
@@ -153,6 +156,14 @@ class Events(object):
     @staticmethod
     def on_welcome(event, irc):
         log.info("Connected to network")
+
+
+    def on_namreply(self, event, irc):
+        channel = event.arguments[1]
+        args = event.arguments[2].split(" ")
+        for i in args:
+            r = re.match(r"([@+]+)([\w]+)", i)
+            self.userdb[channel][r.group(2)]["modes"].extend(r.group(1).split(""))
 
     def on_whoreply(self, event, irc, arguments):
         nick = arguments[4]
