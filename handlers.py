@@ -59,7 +59,7 @@ class Events(object):
     def on_nick(self, event, irc):
         to_nick = event.source.nick
         nick = event.arguments[0]
-        for chan in self.userdb.keys():
+        for chan in self.userdb:
             chandb = self.userdb[chan]
             for u in chandb.values():
                 if u['host'] == event.source.host:
@@ -75,7 +75,7 @@ class Events(object):
             self.userdb.flush()
             sys.exit(1)
         else:
-            for chan in self.userdb.keys():
+            for chan in self.userdb:
                 for u in self.userdb[chan].values():
                     if u['host'] == event.source.host:
                         del self.userdb[chan][nick]
