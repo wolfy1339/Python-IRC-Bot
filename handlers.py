@@ -70,7 +70,6 @@ class Events(object):
             break
 
     def on_quit(self, event, irc):
-        import json
         nick = event.source.nick
         if nick == self.config['nickname']:
             self.userdb.flush()
