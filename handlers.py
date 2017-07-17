@@ -57,8 +57,8 @@ class Events(object):
             log.debug(data)
 
     def on_nick(self, event, irc):
-        to_nick = event.source.nick
-        nick = event.arguments[0]
+        nick = event.source.nick
+        to_nick = event.arguments[0]
         for chan in self.userdb:
             chandb = self.userdb[chan]
             for u in chandb.values():
