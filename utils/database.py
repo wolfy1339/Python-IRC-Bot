@@ -23,16 +23,11 @@ class Database(dict):
             'account': account,
             'seen': [__import__("time").time(), ""]
         }
-        failed = False
-        try:
-            user = self[channel][nick]
-        except KeyError:
-            failed = True
-            self[channel][nick] = temp
-
-        if not failed:
+        if nick in self[channel]:
             del temp['seen']
-            user.update(temp)
+            self[channel][nick].update(temp)
+        else:
+            self[channel][nick] = temp
 
     def get_user_host(self, channel, nick):
         try:
