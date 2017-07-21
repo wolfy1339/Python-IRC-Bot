@@ -49,7 +49,10 @@ class Events(object):
                     pass
         else:
             timestamp = time.time()
-        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
+        try:
+            self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
+        except KeyError:
+            irc.send("WHO {0} nuhs%nhuac".format(event.target))
 
     @staticmethod
     def on_send(data):
