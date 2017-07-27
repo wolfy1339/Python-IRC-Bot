@@ -17,14 +17,14 @@ class Events(object):
         self.userdb = self.bot.userdb
 
     def on_all(self, event, irc, arguments):
-        if event.raw.startswith("ERROR"):
-            log.error(" ".join(event.arguments))
-            if " ".join(event.arguments).startswith("Closing Link"):
-                self.userdb.flush()
-                sys.exit(1)
-        else:
-            if event.raw.find("%") == -1:
-                log.debug(event.raw)
+        if event.raw.find("%") == -1:
+            log.debug(event.raw)
+
+    def on_error(self, event, irc):
+        log.error(" ".join(event.arguments))
+        if " ".join(event.arguments).startswith("Closing Link"):
+            self.userdb.flush()
+            sys.exit(1)
 
     @staticmethod
     def on_ctcp(irc, event, raw):
