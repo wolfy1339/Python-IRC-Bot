@@ -1,5 +1,5 @@
-git+https://github.com/itslukej/zirc.git@v1.2.7#egg=zirc
-#zirc>=1.2.7
+#git+https://github.com/itslukej/zirc.git@v1.2.8#egg=zirc
+zirc>=1.2.8
 requests>=2.12.4
 six>=1.10.0
 flask>=0.12.2
