@@ -54,7 +54,9 @@ class Events(object):
         else:
             timestamp = time.time()
         try:
-            self.userdb[event.target][nick]['seen'].append({'time':timestamp, 'messsage':str_args})
+            self.userdb[event.target][nick]['seen'].append({'time':timestamp, 'messsage':str_args})\
+            seendb = self.userdb[event.target][nick]['seen']
+            seendb = sorted(seendb, key=lambda m: m["time"])[:-5]\
         except KeyError:
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
 
