@@ -1,3 +1,4 @@
+from ast import literal_eval
 import os
 import time
 
@@ -63,7 +64,7 @@ def config_cmd(bot, event, irc, args):
     if len(args) > 1:
         if hasattr(config, args[0]):
             try:
-                value = eval(args[1])
+                value = literal_eval(args[1])
             except Exception:
                 value = args[1]
             setattr(config, args[0], value)
