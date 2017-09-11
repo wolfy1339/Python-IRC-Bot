@@ -18,7 +18,7 @@ def self_correct(bot, event, irc, args):
     if match is not None:
         nick = event.source.nick
         channel = event.target
-        for i in bot.userdb[channel][nick]['seen']
+        for i in bot.userdb[channel][nick]['seen']:
             msg = i['messsage']
             output = _replace(match, msg)
             if msg == output:
@@ -37,8 +37,13 @@ def user_correct(bot, event, irc, args):
     if match is not None:
         nick = match.group(1)
         channel = event.target
-        msg = bot.userdb[channel][nick]['seen'][1]
-        output = _replace(match, msg)
+        for i in bot.userdb[channel][nick]['seen']:
+            msg = i['messsage']
+            output = _replace(match, msg)
+            if msg == output:
+                pass
+            else:
+                break
         irc.reply(event, '<{0}> {1}'.format(nick, output))
         log.info('Changing %s to %s', args, output)
     else:
