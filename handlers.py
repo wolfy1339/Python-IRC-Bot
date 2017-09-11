@@ -52,7 +52,7 @@ class Events(object):
         else:
             timestamp = time.time()
         try:
-            self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
+            self.userdb[event.target][nick]['seen'].append({'time':timestamp, 'messsage':str_args})
         except KeyError:
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
 

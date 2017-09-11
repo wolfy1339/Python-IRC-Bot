@@ -21,7 +21,7 @@ class Database(dict):
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account,
-            'seen': [__import__("time").time(), ""]
+            'seen': [{"time":__import__("time").time(), messsage:""}]
         }
         if nick in self[channel]:
             del temp['seen']
