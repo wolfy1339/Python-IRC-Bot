@@ -2,7 +2,8 @@ import json
 
 
 class Database(dict):
-    """Holds a dict that contains all the information about the users in a channel"""
+    """Holds a dict that contains all the information 
+    about the users and their last seen actions in a channel"""
     def __init__(self, irc):
         super(Database, self).__init__(json.load(open("userdb.json")))
         self.irc = irc
