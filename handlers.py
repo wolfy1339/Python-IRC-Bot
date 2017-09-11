@@ -1,6 +1,9 @@
 import datetime
 import sys
 import time
+
+import iso8601 as iso
+
 import config
 # This is required so that util.call_command works
 import plugins, hooks  # pylint: disable=unused-import
@@ -42,9 +45,8 @@ class Events(object):
         if len(event.tags):
             for i in event.tags:
                 try:
-                    f = '%Y-%m-%dT%H:%M:%S.%f'
-                    timestamp = strptime(i['time'], f).timetuple()
-                    timestamp = time.mktime(timestamp)
+                    date = iso.parse_date(i['time'])
+                    timestamp = time.mktime(date.timetuple())
                 except KeyError:
                     pass
         else:
