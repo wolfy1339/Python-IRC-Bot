@@ -1,3 +1,4 @@
+import math
 import config
 import utils
 from utils.util import add_cmd
@@ -138,8 +139,8 @@ def seen(bot, event, irc, args):
         nick = args[0]
     try:
         db = bot.userdb[channel][nick]["seen"]
-        seen = sorted(db, key=lambda x: x["time"])
-        ago = seen[0]
+        seendb = sorted(db, key=lambda x: x["time"])
+        ago = seendb[0]["time"]
         day = int(math.floor(ago / 86400))
         hour = int(math.floor((ago % 86400) / 3600))
         minute = int(math.floor((ago - (day * 86400) - (hour * 3600)) / 60))
@@ -148,7 +149,7 @@ def seen(bot, event, irc, args):
                                                                       hour,
                                                                       minute,
                                                                       second)
-        last_msg = bot.userdb[channel][nick]["seen"][1]
+        last_msg = seendb[0]["message"]
         msg = "I have last seen {0} {1} ago: {2}"
         irc.reply(event, msg.format(nick, time_ago, last_msg))
     except KeyError:
