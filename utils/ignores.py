@@ -8,7 +8,7 @@ import log as logging
 def check_ignored(host, channel):
     ignores = config.ignores['global']
     if channel in config.ignores['channels'].keys():
-        ignores.extend(config.expires['channels'][channel])
+        ignores.extend(config.ignores['channels'][channel])
 
     for i in ignores:
         for (uhost, expires) in i:
