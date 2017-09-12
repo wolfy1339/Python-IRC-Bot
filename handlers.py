@@ -44,8 +44,11 @@ class Events(object):
             util.call_hook(self.bot, event, irc, arguments)
         nick = event.source.nick
         str_args = ' '.join(arguments)
-        if len(event.tags):
-            for i in event.tags:
+        self._update_seen_db(event, nick, str_args)
+
+    def _get_time(self, tags):
+        if len(tags):
+            for i in tags:
                 try:
                     date = iso.parse_date(i['time'])
                     timestamp = time.mktime(date.timetuple())
@@ -53,6 +56,9 @@ class Events(object):
                     pass
         else:
             timestamp = time.time()
+
+    def _update_seen_db(self, event, nick, str_args):
+        timestamp = self._get_time(event.tags)
         try:
             udb = self.userdb[event.target][nick]
             udb["seen"].append({'time': timestamp, 'messsage': str_args})
@@ -174,7 +180,10 @@ class Events(object):
             (ident, host) = arguments[1:3]
             channel = arguments[0]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-            account = host.split("/")[-1].split('.')[-1]
+            if "gateway" not in host or not util.is_ip_or_rdns(host):
+                account = host.split("/")[-1].split('.')[-1]
+            else:
+                account = None
             self.userdb.add_entry(channel, nick, hostmask, account)
 
     def on_whospcrpl(self, event, irc, arguments):
