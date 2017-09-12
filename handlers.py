@@ -44,7 +44,7 @@ class Events(object):
             util.call_hook(self.bot, event, irc, arguments)
         nick = event.source.nick
         str_args = ' '.join(arguments)
-        self._update_seen_db(event, nick, str_args)
+        self._update_seen_db(event, irc, nick, str_args)
 
     def _get_time(self, tags):
         if len(tags):
@@ -56,8 +56,9 @@ class Events(object):
                     pass
         else:
             timestamp = time.time()
+        return timestamp
 
-    def _update_seen_db(self, event, nick, str_args):
+    def _update_seen_db(self, event, irc, nick, str_args):
         timestamp = self._get_time(event.tags)
         try:
             udb = self.userdb[event.target][nick]
