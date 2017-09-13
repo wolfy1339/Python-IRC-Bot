@@ -152,5 +152,5 @@ def seen(bot, event, irc, args):
         last_msg = seendb[0]["message"]
         msg = "I have last seen {0} {1} ago: {2}"
         irc.reply(event, msg.format(nick, time_ago, last_msg))
-    except KeyError:
+    except (KeyError, TypeError):
         irc.reply(event, "I have not seen {0}".format(nick))

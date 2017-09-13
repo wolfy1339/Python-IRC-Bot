@@ -2,7 +2,7 @@ import json
 
 
 class Database(dict):
-    """Holds a dict that contains all the information 
+    """Holds a dict that contains all the information
     about the users and their last seen actions in a channel"""
     def __init__(self, irc):
         super(Database, self).__init__(json.load(open("userdb.json")))
@@ -22,7 +22,7 @@ class Database(dict):
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account,
-            'seen': [{"time":__import__("time").time(), "messsage":""}]
+            'seen': None
         }
         if nick in self[channel]:
             del temp['seen']
