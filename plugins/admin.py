@@ -36,25 +36,11 @@ def nick(bot, event, irc, args):
 def log_level(bot, event, irc, args):
     """<level>
     Changes the logging level"""
-    if args[0] == "debug":
-        level = 10
+    try:
+        log.setLevel(log.getattr(args[0].upper()))
         irc.reply(event, "Set log level to {0}".format(args[0]))
-    elif args[0] == "info":
-        level = 20
-        irc.reply(event, "Set log level to {0}".format(args[0]))
-    elif args[0] == "error":
-        level = 30
-        irc.reply(event, "Set log level to {0}".format(args[0]))
-    elif args[0] == "warning":
-        level = 40
-        irc.reply(event, "Set log level to {0}".format(args[0]))
-    elif args[0] == "critical":
-        level = 50
-        irc.reply(event, "Set log level to {0}".format(args[0]))
-    else:
-        level = config.logLevel  # Default logging level
+    except AttributeError:
         irc.reply(event, "Invalid log level {0}".format(args))
-    log.setLevel(level)
 
 
 @add_cmd("config", admin=True, min_args=1, alias=['cfg'])

@@ -213,11 +213,17 @@ _logger = logging.getLogger('bot')
 _stdoutHandler = StdoutStreamHandler(sys.stdout)
 
 # These just make things easier.
+DEBUG = logging.debug
 debug = _logger.debug
+INFO = logging.INFO
 info = _logger.info
+WARNING = logging.warning
 warning = _logger.warning
+ERROR = logging.ERROR
 error = _logger.error
+CRITICAL = logging.CRITICAL
 critical = _logger.critical
+EXCEPTION = logging.EXCEPTION
 exception = _logger.exception
 
 setLevel = _logger.setLevel

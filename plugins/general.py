@@ -47,7 +47,7 @@ def ping(bot, event, irc, args):
 def help_cmd(bot, event, irc, args):
     """<command>
     Returns help text for the specified command"""
-    if len(args) >= 1:
+    if len(args):
         try:
             doc = utils.util.commands[args[0]]['func'].__doc__
             irc.reply(event, utils.commands.format_cmd_docs(doc, args[0]))
