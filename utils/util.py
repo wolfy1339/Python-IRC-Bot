@@ -29,7 +29,8 @@ def add_cmd(name, **kwargs):
                     'trusted': False,
                     'hide': False
                 }
-        locals().update(default.update(kwargs))
+        default.update(kwargs)
+        locals().update(default)
         global alias_list
         global cmd_list
 
