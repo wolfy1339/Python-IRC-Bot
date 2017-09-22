@@ -223,7 +223,6 @@ ERROR = logging.ERROR
 error = _logger.error
 CRITICAL = logging.CRITICAL
 critical = _logger.critical
-EXCEPTION = logging.EXCEPTION
 exception = _logger.exception
 
 setLevel = _logger.setLevel
