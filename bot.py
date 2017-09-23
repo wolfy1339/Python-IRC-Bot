@@ -5,6 +5,7 @@ import ssl
 import config
 import handlers
 import utils
+from utils import tasks
 import zirc
 from zirc.wrappers import connection_wrapper
 
@@ -36,8 +37,8 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         utils.web.irc = self.irc
         utils.web.bot = self
-        utils.tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
-        utils.tasks.run_every(600, self.userdb.flush)
+        self.web = tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
+        self.db_job = tasks.run_every(600, self.userdb.flush)
         self.start()
 
 Bot()
