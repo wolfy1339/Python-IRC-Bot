@@ -39,6 +39,9 @@ class Bot(zirc.Client):
         utils.web.bot = self
         self.web = tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
         self.db_job = tasks.run_every(600, self.userdb.flush)
-        self.start()
 
-Bot()
+x = Bot()
+try:
+    x.start()
+except KeyboardInterrupt:
+    x.irc.quit("KeyboardInterrupt")
