@@ -19,18 +19,9 @@ get = requests.get
 post = requests.post
 
 
-def add_cmd(name, **kwargs):
+def add_cmd(name, min_args=1, alias=None, owner=False,
+            admin=False, trusted=False, hide=False):
     def real_command(func):
-        default = {
-                    'min_args': 1,
-                    'alias': None,
-                    'owner': False,
-                    'admin': False,
-                    'trusted': False,
-                    'hide': False
-                }
-        default.update(kwargs)
-        locals().update(default)
         global alias_list
         global cmd_list
 
