@@ -129,11 +129,6 @@ def reload_handlers(bot):
             setattr(bot, h, func)
 
 
-def reload_plugins():
-    #reload(plugins)
-    pass
-
-
 def print_error(irc, event):
     log.exception("An unknown error occured")
     if not config.ci:

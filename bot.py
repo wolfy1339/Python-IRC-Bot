@@ -3,7 +3,6 @@ import socket
 import ssl
 
 import config
-import handlers
 import utils
 from utils import tasks
 import zirc

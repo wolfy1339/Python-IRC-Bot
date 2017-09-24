@@ -138,19 +138,15 @@ def seen(bot, event, irc, args):
         channel = event.target
         nick = args[0]
     try:
-        db = bot.userdb[channel][nick]["seen"]
-        seendb = sorted(db, key=lambda x: x["time"])
-        ago = seendb[0]["time"]
+        comp = lambda x: x["time"]
+        db = sorted(bot.userdb[channel][nick]["seen"], key=comp, reverse=True)
+        ago = db[0]["time"]
         day = int(math.floor(ago / 86400))
         hour = int(math.floor((ago % 86400) / 3600))
         minute = int(math.floor((ago - (day * 86400) - (hour * 3600)) / 60))
         second = int(ago - (day * 86400) - (hour * 3600) - (minute * 60))
-        time_ago = "{0} days {1} hours {2} months {3} seconds".format(day,
-                                                                      hour,
-                                                                      minute,
-                                                                      second)
         last_msg = seendb[0]["message"]
-        msg = "I have last seen {0} {1} ago: {2}"
-        irc.reply(event, msg.format(nick, time_ago, last_msg))
+        msg = "I have last seen {0} {2} days {3} hours {4} months {5} seconds ago: {1}"
+        irc.reply(event, msg.format(nick, last_msg, day, hour, minute, second))
     except (KeyError, TypeError):
         irc.reply(event, "I have not seen {0}".format(nick))
