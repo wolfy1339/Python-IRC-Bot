@@ -146,7 +146,7 @@ def seen(bot, event, irc, args):
         hour = int(math.floor((ago % 86400) / 3600))
         minute = int(math.floor((ago - (day * 86400) - (hour * 3600)) / 60))
         second = int(ago - (day * 86400) - (hour * 3600) - (minute * 60))
-        last_msg = seendb[0]["message"]
+        last_msg = db[0]["message"]
         msg = " ".join(["I have last seen {0} {2} days {3} hours {4}",
                         "seconds ago: {1}"])
         irc.reply(event, msg.format(nick, last_msg, day, hour, minute, second))
