@@ -145,7 +145,9 @@ class Events(object):
         if not event.target == "*":
             if not event.target == self.config['nickname']:
                 channel = event.target
-                log.info("Received channel notice from %s in %s", source, channel)
+                log.info("Received channel notice from %s in %s",
+                         source,
+                         channel)
             else:
                 log.info("Received private notice from %s", source)
 

@@ -198,7 +198,9 @@ try:
     messagesLogFilename = os.path.join(folder, 'messages.log')
     if not os.path.exists(messagesLogFilename):
         os.makedirs(folder)
-    _handler = BetterFileHandler(messagesLogFilename, encoding='utf8', when='midnight')
+    _handler = BetterFileHandler(messagesLogFilename,
+                                 encoding='utf8',
+                                 when='midnight')
 except EnvironmentError as e:
     raise SystemExit('Error opening messages logfile ({0}). The original '
                      'error was: {1}'.format(messagesLogFilename,
