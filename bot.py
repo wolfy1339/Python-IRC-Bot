@@ -38,7 +38,7 @@ class Bot(zirc.Client):
         utils.web.bot = self
         kwargs = {
             'host': '0.0.0.0',
-            'context': utils.web.ssl_context()
+            'ssl_context': utils.web.ssl_context()
         }
         self.web = tasks.run(utils.web.app.run, kwargs=kwargs)
         self.db_job = tasks.run_every(600, self.userdb.flush)
