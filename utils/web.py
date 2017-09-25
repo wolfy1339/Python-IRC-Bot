@@ -9,6 +9,7 @@ from .util import reload_handlers
 irc = None
 bot = None
 app = flask.Flask(__name__)
+app.debug = False
 
 
 def ip2long(ip_addr):
