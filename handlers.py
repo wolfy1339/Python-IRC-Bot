@@ -65,7 +65,8 @@ class Events(object):
             udb = self.userdb[event.target][nick]
             if udb['seen'] is None:
                 udb['seen'] = []
-            udb["seen"].append({'time': timestamp, 'message': str_args})
+            msg = utils.irc.strip_colors(str_args)
+            udb["seen"].append({'time': timestamp, 'message': msg})
             compare = lambda m: m["time"]
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
                                                              key=compare,
