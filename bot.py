@@ -36,7 +36,11 @@ class Bot(zirc.Client):
         self.connect(self.config, certfile=path.abspath("user.pem"))
         utils.web.irc = self.irc
         utils.web.bot = self
-        self.web = tasks.run(utils.web.app.run, kwargs={'host':'0.0.0.0'})
+        kwargs = {
+            'host': '0.0.0.0',
+            'context': utils.web.ssl_context()
+        }
+        self.web = tasks.run(utils.web.app.run, kwargs=kwargs)
         self.db_job = tasks.run_every(600, self.userdb.flush)
 
 x = Bot()

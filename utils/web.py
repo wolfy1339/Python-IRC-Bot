@@ -33,3 +33,12 @@ def main():
         return flask.Response("Wrong repo.", mimetype="text/plain")
     else:
         flask.abort(403)
+
+
+def ssl_context():
+    import ssl, sys
+    if tuple(sys.version_info)[:-2] < (2, 7, 13):
+        ssl.PROTOCOL_TLS = ssl.PROTOCOL_SSLv23
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    context.load_cert_chain('/etc/ssl/certs/znc.pem')
+    return context
