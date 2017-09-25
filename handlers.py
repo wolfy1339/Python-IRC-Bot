@@ -63,6 +63,8 @@ class Events(object):
         timestamp = self._get_time(event.tags)
         try:
             udb = self.userdb[event.target][nick]
+            if udb['seen'] is None:
+                udb['seen'] = []
             udb["seen"].append({'time': timestamp, 'message': str_args})
             compare = lambda m: m["time"]
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
