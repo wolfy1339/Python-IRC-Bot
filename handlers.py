@@ -9,6 +9,7 @@ import config
 import plugins, hooks  # pylint: disable=unused-import
 import log
 from utils import util
+from utils import web
 
 strptime = datetime.datetime.strptime
 
@@ -91,6 +92,7 @@ class Events(object):
     def on_quit(self, event, irc):
         nick = event.source.nick
         if nick == self.config['nickname']:
+            web.app.stop()
             self.web.stop()
             self.userdb.flush()
             self.db_job.stop()
