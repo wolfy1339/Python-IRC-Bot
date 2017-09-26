@@ -47,7 +47,9 @@ class Events(object):
         str_args = ' '.join(arguments)
         self._update_seen_db(event, irc, nick, str_args)
 
-    def _get_time(self, tags):
+
+    @staticmethod
+    def _get_time(tags):
         if len(tags):
             for i in tags:
                 try:
