@@ -27,9 +27,9 @@ class Events(object):
     def on_error(self, event, irc):
         log.error(" ".join(event.arguments))
         if " ".join(event.arguments).startswith("Closing Link"):
-            self.web.stop()
+            self.bot.web.stop()
             self.userdb.flush()
-            self.db_job.stop()
+            self.bot.db_job.stop()
             sys.exit(1)
 
     @staticmethod
@@ -98,9 +98,9 @@ class Events(object):
         nick = event.source.nick
         if nick == self.config['nickname']:
             web.app.stop()
-            self.web.stop()
+            self.bot.web.stop()
             self.userdb.flush()
-            self.db_job.stop()
+            self.bot.db_job.stop()
             sys.exit(1)
         else:
             for chan in self.userdb:
