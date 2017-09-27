@@ -8,6 +8,7 @@ import config
 # This is required so that util.call_command works
 import plugins, hooks  # pylint: disable=unused-import
 import log
+from utils import irc as irc_utils
 from utils import util
 from utils import web
 
@@ -67,7 +68,7 @@ class Events(object):
             udb = self.userdb[event.target][nick]
             if udb['seen'] is None:
                 udb['seen'] = []
-            msg = utils.irc.strip_colors(str_args)
+            msg = irc_utils.strip_colors(str_args)
             udb["seen"].append({'time': timestamp, 'message': msg})
             compare = lambda m: m["time"]
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
