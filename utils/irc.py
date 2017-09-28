@@ -71,6 +71,7 @@ def unban_after_duration(tasks, irc, users, chan, duration):
 
 
 def strip_colours(s):
+    import re
     ccodes = ['\x0f', '\x16', '\x1d', '\x1f', '\x02',
               '\x03([1-9][0-6]?)?,?([1-9][0-6]?)?']
     for cc in ccodes:
