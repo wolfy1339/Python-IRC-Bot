@@ -4,23 +4,15 @@ import log
 import utils
 
 
-def _replace(match, msg):
-    data = match.string.split('/')
-    if len(data) == 4:
-        data = data[1:]
-    output = msg.replace(data[1], data[2])
-    return output[0:min(len(output), 4096)]
-
-
 @add_hook
 def self_correct(bot, event, irc, args):
-    match = re.match(r"^s[/].*[/].*$", " ".join(args))
+    match = re.match(r"^s[/](.*)[/](.*)[/]?$", " ".join(args))
     if match is not None:
         nick = event.source.nick
         channel = event.target
         for i in bot.userdb[channel][nick]['seen']:
             msg = i['message']
-            output = _replace(match, msg)
+            output = msg.replace(match.group(2), match.group(3))
             if msg == output:
                 pass
             else:
@@ -33,13 +25,13 @@ def self_correct(bot, event, irc, args):
 
 @add_hook
 def user_correct(bot, event, irc, args):
-    match = re.match(r"^u[/]([\w]+)[/].*[/].*$", " ".join(args))
+    match = re.match(r"^u[/]([\w]+)[/](.*)[/](.*)[/]?$", " ".join(args))
     if match is not None:
         nick = match.group(1)
         channel = event.target
         for i in bot.userdb[channel][nick]['seen']:
             msg = i['message']
-            output = _replace(match, msg)
+            output = msg.replace(match.group(2), match.group(3))
             if msg == output:
                 pass
             else:

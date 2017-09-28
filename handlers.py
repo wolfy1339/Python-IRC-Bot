@@ -72,8 +72,7 @@ class Events(object):
             udb["seen"].append({'time': timestamp, 'message': msg})
             compare = lambda m: m["time"]
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
-                                                             key=compare,
-                                                             reverse=True)[-5:]
+                                                             key=compare)[-5:]
         except KeyError:
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
 
