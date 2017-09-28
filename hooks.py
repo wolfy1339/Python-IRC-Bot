@@ -12,7 +12,7 @@ def self_correct(bot, event, irc, args):
         channel = event.target
         for i in bot.userdb[channel][nick]['seen']:
             msg = i['message']
-            output = msg.replace(match.group(2), match.group(3))
+            output = msg.replace(match.group(1), match.group(2))
             if msg == output:
                 pass
             else:
