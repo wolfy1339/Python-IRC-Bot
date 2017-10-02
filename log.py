@@ -100,10 +100,6 @@ class Logger(logging.Logger):
         # The traceback should be sufficient if we want it.
         # self.error('Exception string: %s', eStrId)
 
-    def _log(self, level, msg, args, exc_info=None, extra=None):
-        logging.Logger._log(self, level, msg, args, exc_info=exc_info,
-                            extra=extra)
-
 
 class StdoutStreamHandler(logging.StreamHandler):
     def format(self, record):
