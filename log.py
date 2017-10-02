@@ -68,7 +68,13 @@ def stackTrace(frame=None, compact=True):
 deadlyExceptions = [KeyboardInterrupt, SystemExit]
 
 class Formatter(logging.Formatter):
-    _fmtConf = config.logFormat
+    def __init__(self, *args):
+        del args
+        self._fmtConf = config.logFormat
+        self._fmt = self._fmtConf
+        if hasattr(self, '_style'):  # Python 3
+            self._style._fmt = self._fmtConf
+        self.super = super(Formatter, self)
 
     @staticmethod
     def formatTime(record, datefmt=None):
@@ -79,13 +85,8 @@ class Formatter(logging.Formatter):
         for exn in deadlyExceptions:
             if issubclass(er.__class__, exn):
                 raise
-        return logging.Formatter.formatException(self, (Exc, er, tb))
+        return self.super.formatException((Exc, er, tb))
 
-    def format(self, record):
-        self._fmt = self._fmtConf
-        if hasattr(self, '_style'):  # Python 3
-            self._style._fmt = self._fmtConf
-        return logging.Formatter.format(self, record)
 
 class Logger(logging.Logger):
     def exception(self, *args):
@@ -95,7 +96,7 @@ class Logger(logging.Logger):
         path = '[{0!s}]'.format('|'.join(map(operator.itemgetter(2), tbinfo)))
         eStrId = '{0!s}:{1!s}'.format(E, path)
         eId = hex(hash(eStrId) & 0xFFFFF)
-        logging.Logger.exception(self, *args)
+        super(Logger, self).exception(*args)
         self.error('Exception id: %s', eId)
         # The traceback should be sufficient if we want it.
         # self.error('Exception string: %s', eStrId)
@@ -103,7 +104,7 @@ class Logger(logging.Logger):
 
 class StdoutStreamHandler(logging.StreamHandler):
     def format(self, record):
-        s = logging.StreamHandler.format(self, record)
+        s = super(StdoutStreamHandler, self).format(record)
         if record.levelname != 'ERROR' and config.stdoutWrap:
             # We check for ERROR there because otherwise, tracebacks (which are
             # already wrapped by Python itself) wrap oddly.
@@ -118,7 +119,7 @@ class StdoutStreamHandler(logging.StreamHandler):
 
     def emit(self, record):
         try:
-            logging.StreamHandler.emit(self, record)
+            super(StdoutStreamHandler, self).emit(record)
         except ValueError:  # Raised if sys.stdout is closed.
             self.disable()
             error('Error logging to stdout.  Removing stdout handler.')
@@ -161,18 +162,20 @@ class BetterFileHandler(logging.handlers.TimedRotatingFileHandler):
 class ColorizedFormatter(Formatter):
     # This was necessary because these variables aren't defined until later.
     # The staticmethod is necessary because they get treated like methods.
-    _fmtConf = config.logFormat
+    def __init__(self, *args):
+        del args
+        self._fmtConf = config.logFormat
+        self.super = super(ColorizedFormatter, self)
 
     def formatException(self, exc_info):
         (E, exn, tb) = exc_info
         if config.colorized:
             return ''.join([ansi.RED,
-                            Formatter.formatException(self, (E, exn, tb)),
+                            self.super.formatException((E, exn, tb)),
                             ansi.RESET])
-        return Formatter.formatException(self, (E, exn, tb))
+        return self.super.formatException((E, exn, tb))
 
     def format(self, record, *args, **kwargs):
-        formatters = Formatter.format
         if config.colorized:
             color = ''
             if record.levelno == logging.CRITICAL:
@@ -183,10 +186,10 @@ class ColorizedFormatter(Formatter):
                 color = ansi.YELLOW
             if color:
                 return ''.join([color,
-                                formatters(self, record, *args, **kwargs),
+                                self.super.format(record, *args, **kwargs),
                                 ansi.RESET])
 
-            return formatters(self, record, *args, **kwargs)
+            return self.super.format(record, *args, **kwargs)
 
 
 try:
