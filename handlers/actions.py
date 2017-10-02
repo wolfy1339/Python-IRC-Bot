@@ -112,7 +112,7 @@ class Actions(object):
     def on_join(self, event, irc):
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
-            if not event.target in self.userdb:
+            if event.target not in self.userdb:
                 self.userdb[event.target] = {}
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
             irc.send("NAMES {0}".format(event.target))
