@@ -47,7 +47,8 @@ class Actions(object):
             msg = irc_utils.strip_colours(str_args)
             udb["seen"].append({'time': timestamp, 'message': msg})
 
-            def compare(m): return m["time"]
+            def compare(m):
+                return m["time"]
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
                                                              key=compare)[-5:]
         except KeyError:

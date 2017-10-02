@@ -47,7 +47,7 @@ class User(object):
             nick = nick.lstrip(''.join(list(
                                self.server['ISUPPORT']['PREFIX'].values())))
             if nick not in self.channels[channel]['names']:
-                self.channels[channel][nick]['modes']
+                self.channels[channel][nick]['modes'] = ''
 
     @staticmethod
     def on_endofnames(event, irc):
