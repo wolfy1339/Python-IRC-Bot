@@ -8,26 +8,24 @@ class Server(object):
         for param in event.arguments[:-1]:
             name, key, value = param.partition('=')
             del key
+            if name not in self.server['ISUPPORT']:
+                self.server['ISUPPORT'][name] = {}
             if value != '':
                 if ',' in value:
                     for param1 in value.split(','):
                         if ':' in value:
                             if ':' in param1:
-                                name1, value1 = param1.split(':')
-                            else:
-                                name1 = param1
-                                value1 = ''
-                            if name not in self.server['ISUPPORT']:
-                                self.server['ISUPPORT'][name] = {}
+                                name1, key, value1 = param1.partition(':')
+                                del key
                             self.server['ISUPPORT'][name][name1] = value1
                         else:
-                            if name not in self.server['ISUPPORT']:
+                            if (name in self.server['ISUPPORT'] and
+                               type(self.server['ISUPPORT'][name]) is dict):
                                 self.server['ISUPPORT'][name] = []
                             self.server['ISUPPORT'][name].append(param1)
                 else:
                     if ':' in value:
                         name1, value1 = value.split(':')
-                        self.server['ISUPPORT'][name] = {}
                         self.server['ISUPPORT'][name][name1] = value1
                     elif name == 'PREFIX':
                         count = 0
@@ -39,7 +37,6 @@ class Server(object):
                             'halfop': types[1] or '',
                             'voice': types[2]
                         }
-                        self.server['ISUPPORT'][name] = {}
                         self.server['prefixes'] = {}
                         for mode in value[0]:
                             name1 = mode

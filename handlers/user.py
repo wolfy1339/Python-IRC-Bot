@@ -1,5 +1,6 @@
 import log
 
+
 class User(object):
     def on_unavailresource(self, event, irc):
         log.error("Nick unavailable, trying alternative")
