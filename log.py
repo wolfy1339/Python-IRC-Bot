@@ -69,6 +69,7 @@ deadlyExceptions = [KeyboardInterrupt, SystemExit]
 
 class Formatter(logging.Formatter):
     def __init__(self, *args):
+        super(Formatter, self).__init__()
         del args
         self._fmtConf = config.logFormat
         self._fmt = self._fmtConf
@@ -163,6 +164,7 @@ class ColorizedFormatter(Formatter):
     # This was necessary because these variables aren't defined until later.
     # The staticmethod is necessary because they get treated like methods.
     def __init__(self, *args):
+        super(ColorizedFormatter, self).__init__()
         del args
         self._fmtConf = config.logFormat
         self.super = super(ColorizedFormatter, self)
