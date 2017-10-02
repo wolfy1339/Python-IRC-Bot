@@ -44,7 +44,7 @@ class User(object):
         channel = event.arguments[1]
         names = event.arguments[2]
         for nick in names.split():
-            nick = nick.lstrip(''.join([](
+            nick = nick.lstrip(''.join(list(
                                self.server['ISUPPORT']['PREFIX'].values())))
             if nick not in self.channels[channel]['names']:
                 self.channels[channel][nick]['modes']

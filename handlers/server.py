@@ -1,14 +1,13 @@
+import re
+
 class Server(object):
     def __init__(self):
         self.server = {}
 
     def on_005(self, event, irc):
         for param in event.arguments[:-1]:
-            if '=' in param:
-                name, value = param.split('=')
-            else:
-                name = param
-                value = ''
+            name, key, value = param.partition('=')
+            del key
             if value != '':
                 if ',' in value:
                     for param1 in value.split(','):
