@@ -91,8 +91,7 @@ class Formatter(logging.Formatter):
 
 class Logger(logging.Logger):
     def exception(self, *args):
-        (E, er, tb) = sys.exc_info()
-        del er
+        tb = sys.exc_info()[2]
         tbinfo = traceback.extract_tb(tb)
         path = '[{0!s}]'.format('|'.join(map(operator.itemgetter(2), tbinfo)))
         eId = hex(hash(eStrId) & 0xFFFFF)
