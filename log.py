@@ -35,8 +35,6 @@ import os
 import sys
 import textwrap
 import time
-import traceback
-import operator
 
 import six
 
@@ -87,16 +85,6 @@ class Formatter(logging.Formatter):
             if issubclass(er.__class__, exn):
                 raise
         return self.super.formatException((Exc, er, tb))
-
-
-class Logger(logging.Logger):
-    def exception(self, *args):
-        tb = sys.exc_info()[2]
-        tbinfo = traceback.extract_tb(tb)
-        path = '[{0!s}]'.format('|'.join(map(operator.itemgetter(2), tbinfo)))
-        eId = hex(hash(eStrId) & 0xFFFFF)
-        super(Logger, self).exception(*args)
-        self.error('Exception id: %s', eId)
 
 
 class StdoutStreamHandler(logging.StreamHandler):
@@ -207,7 +195,6 @@ except EnvironmentError as e:
 formatter = Formatter('NEVER SEEN; IF YOU SEE THIS, FILE A BUG!')
 
 # These are not.
-logging.setLoggerClass(Logger)
 _logger = logging.getLogger('bot')
 _stdoutHandler = StdoutStreamHandler(sys.stdout)
 
