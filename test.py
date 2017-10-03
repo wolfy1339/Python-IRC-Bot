@@ -17,6 +17,7 @@ class fp(object):
         self.irc_queue = []
 
 class Undefined(object):
+    @staticmethod
     def stop():
         return None
 

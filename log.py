@@ -95,12 +95,9 @@ class Logger(logging.Logger):
         del er
         tbinfo = traceback.extract_tb(tb)
         path = '[{0!s}]'.format('|'.join(map(operator.itemgetter(2), tbinfo)))
-        eStrId = '{0!s}:{1!s}'.format(E, path)
         eId = hex(hash(eStrId) & 0xFFFFF)
         super(Logger, self).exception(*args)
         self.error('Exception id: %s', eId)
-        # The traceback should be sufficient if we want it.
-        # self.error('Exception string: %s', eStrId)
 
 
 class StdoutStreamHandler(logging.StreamHandler):

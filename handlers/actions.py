@@ -4,7 +4,7 @@ import time
 # Pacakge imports
 import config
 import log
-import plugins # pylint disable:unused-import
+import plugins  # pylint disable:unused-import
 from utils import irc as irc_utils
 from utils import util
 from utils import web

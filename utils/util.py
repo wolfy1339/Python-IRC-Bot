@@ -1,4 +1,5 @@
 import traceback
+import re
 import requests
 import six
 
@@ -17,6 +18,12 @@ hooks = []
 
 get = requests.get
 post = requests.post
+
+
+def is_ip_or_rdns(host):
+    ip = re.match(r"(?:[0-9]{1,3}\.){3}[0-9]{1,3}", host)
+    url = re.match(r"(?:https?\:\/\/)?[-\w@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-\w@:%_\+.~#?&//=]*)", host)
+    return ip is not None or url is not None
 
 
 def add_cmd(name, min_args=1, alias=None, owner=False,
