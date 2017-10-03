@@ -5,7 +5,6 @@ from zirc.wrappers import connection_wrapper
 import log as logging
 from utils import util
 from utils import database
-import plugins  # pylint: disable=unused-import
 import config
 
 config.admins['global'].append("user/user3")
@@ -16,6 +15,10 @@ logging.setLevel(30)
 class fp(object):
     def __init__(self):
         self.irc_queue = []
+
+class Undefined(object):
+    def stop():
+        return None
 
 class botTest(TestCase):
     def __init__(self):
@@ -32,47 +35,10 @@ class botTest(TestCase):
         self.userdb.add_entry("#zirc", "wolfy1339bot", "wolfy1339bot!~wolfy1339@botters/wolfy/bot/mooobot", None)
         self.userdb.add_entry("##wolfy1339", "bot", "bot!~limnoria@botters/wolf1339/bot/bigwolfy1339", "BigWolfy1339")
         self.fp = fp()
-
-    def on_privmsg(self, event, irc, arguments):
-        nick = event.source.nick
-        str_args = ' '.join(arguments)
-        timestamp = time.time()
-        self.userdb[event.target][nick]['seen'] = [timestamp, str_args]
-        if " ".join(arguments).startswith(config.commandChar):
-            util.call_command(self, event, irc, arguments)
-        else:
-            util.call_hook(self, event, irc, arguments)
-
-    def on_part(self, event, irc):
-        self.userdb.remove_entry(event, event.source.nick)
-
-    @staticmethod
-    def on_kick(event, irc):
-        nick = event.raw.split(" ")[3]
-        if nick == 'zIRC-test':
-            irc.join(event.target)
-
-    @staticmethod
-    def on_join(event, irc):
-        irc.send("WHO {0} nuhs%nhua".format(event.target))
-
-    @staticmethod
-    def on_invite(event, irc):
-        if util.check_perms(event.source.host, event.target, trusted=True):
-            irc.join(event.target)
-
-    def on_nick(self, event, irc):
-        nick = event.arguments[0]
-        to_nick = event.source.nick
-        for chan in self.userdb.keys():
-            chandb = self.userdb[chan]
-            for u in chandb.values():
-                if u['host'] == event.source.host:
-                    self.userdb[chan][to_nick] = chandb[nick]
-                    self.userdb[chan][to_nick]['hostmask'] = event.source
-                    del self.userdb[chan][nick]
-                    break
-            break
+        self.web = Undefined()
+        self.db_job = Undefined()
+        # Event handlers
+        util.reload_handlers(self)
 
 
 bot = botTest()
