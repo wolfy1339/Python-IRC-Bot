@@ -4,9 +4,10 @@ import time
 # Pacakge imports
 import config
 import log
+import plugins # pylint disable:unused-import
 from utils import irc as irc_utils
 from utils import util
-from util import web
+from utils import web
 # Third-party imports
 import iso8601 as iso
 
