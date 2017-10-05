@@ -3,7 +3,7 @@ import re
 
 class Server(object):
     def __init__(self):
-        self.server = {}
+        self.server = {'ISUPPORT': {}}
 
     def on_005(self, event, irc):
         for param in event.arguments[:-1]:
