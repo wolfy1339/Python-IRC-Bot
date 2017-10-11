@@ -131,6 +131,7 @@ def seen(bot, event, irc, args):
     Returns the last time <nick> was seen and what <nick> was last seen saying.
     <channel> is only necessary if the message isn't sent on the channel itself.
     """
+    import datetime
     if args[0].startswith("#"):
         channel = args[0]
         nick = args[1]
@@ -141,11 +142,11 @@ def seen(bot, event, irc, args):
         def comp(x):
             return x["time"]
         db = sorted(bot.userdb[channel][nick]["seen"], key=comp, reverse=True)
-        ago = db[0]["time"]
-        day = int(math.floor(ago / 86400))
-        hour = int(math.floor((ago % 86400) / 3600))
-        minute = int(math.floor((ago - (day * 86400) - (hour * 3600)) / 60))
-        second = int(ago - (day * 86400) - (hour * 3600) - (minute * 60))
+        ago = datetime.date.now() - datetime.datetime.fromtimestamp(db[0]["time"])
+        day = ago.days
+        hour = math.floor(ago.seconds / 3600)
+        minute = math.floor(ago.seconds / 60)
+        second = ago.seconds
         last_msg = db[0]["message"]
         msg = " ".join(["I have last seen {0} {2} days {3} hours {4}",
                         "seconds ago: {1}"])
