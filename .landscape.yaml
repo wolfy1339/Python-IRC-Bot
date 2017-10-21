@@ -4,6 +4,7 @@ python-targets:
 pep8:
   full: true
 strictness: veryhigh
+max-line-length: 120
 pylint:
   disable:
     - no-self-argument
