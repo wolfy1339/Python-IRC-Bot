@@ -9,13 +9,10 @@ def self_correct(bot, event, irc, args):
     match = re.match(r"^s[/](.*)[/](.*)[/]?$", " ".join(args))
     if match is not None:
         nick = event.source.nick
-        channel = event.target
-        for i in bot.userdb[channel][nick]['seen']:
+        for i in bot.userdb[event.target][nick]['seen']:
             msg = i['message']
             output = msg.replace(match.group(1), match.group(2))
-            if msg == output:
-                pass
-            else:
+            if not msg == output:
                 break
         irc.reply(event, '<{0}> {1}'.format(nick, output))
         log.info('Changing %s to %s', msg, output)
@@ -28,16 +25,13 @@ def user_correct(bot, event, irc, args):
     match = re.match(r"^u[/]([\w]+)[/](.*)[/](.*)[/]?$", " ".join(args))
     if match is not None:
         nick = match.group(1)
-        channel = event.target
-        for i in bot.userdb[channel][nick]['seen']:
+        for i in bot.userdb[event.target][nick]['seen']:
             msg = i['message']
             output = msg.replace(match.group(2), match.group(3))
-            if msg == output:
-                pass
-            else:
+            if not msg == output:
                 break
         irc.reply(event, '<{0}> {1}'.format(nick, output))
-        log.info('Changing %s to %s', args, output)
+        log.info('Changing %s to %s', msg, output)
     else:
         pass
 
