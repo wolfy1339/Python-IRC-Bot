@@ -49,13 +49,11 @@ def help_cmd(bot, event, irc, args):
     Returns help text for the specified command"""
     if len(args):
         try:
-            doc = utils.util.commands[args[0]]['func'].__doc__
-            irc.reply(event, utils.commands.format_cmd_docs(doc, args[0]))
+            irc.reply(event, utils.commands.format_cmd_docs(utils.util.commands[args[0]]['func'].__doc__, args[0]))
         except KeyError:
             irc.reply(event, "Invalid command {0}".format(args[0]))
     else:
-        doc = utils.util.commands["help"]['func'].__doc__
-        irc.reply(event, utils.commands.format_cmd_docs(doc, 'help'))
+        irc.reply(event, utils.commands.format_cmd_docs(utils.util.commands['help']['func'].__doc__, 'help'))
 
 
 @add_cmd("list", min_args=0, alias=["ls"])
@@ -106,8 +104,6 @@ def permissions(bot, event, irc, args):
         perms = 'Admin'
     elif utils.util.check_perms(host, channel, trusted=True):
         perms = 'Trusted'
-    elif host in config.bots['hosts'] or (is_bot_chan and is_bot):
-        perms = 'Bot'
     else:
         perms = 'User'
 
