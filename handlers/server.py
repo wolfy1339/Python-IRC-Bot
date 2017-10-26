@@ -21,8 +21,7 @@ class Server(object):
                             self.server['ISUPPORT'][name][name1] = value1
                         else:
                             if (name in self.server['ISUPPORT'] and
-                                    isinstance(self.server['ISUPPORT'][name],
-                                               dict)):
+                                    isinstance(self.server['ISUPPORT'][name], dict)):
                                 self.server['ISUPPORT'][name] = []
                             self.server['ISUPPORT'][name].append(param1)
                 else:
