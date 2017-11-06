@@ -20,7 +20,7 @@ def ip2long(ip_addr):
 def main():
     iplow = ip2long('192.30.252.0')
     iphigh = ip2long('192.30.255.255')
-    if request.remote_addr in range(iplow, iphigh):
+    if ip2long(request.remote_addr) in range(iplow, iphigh):
         payload = request.get_json()
         if payload["repository"]["name"] == "Python-IRC-Bot":
             try:
@@ -34,6 +34,24 @@ def main():
         return flask.Response("Wrong repo.", mimetype="text/plain")
     else:
         flask.abort(403)
+
+
+@app.route('/shutdown', methods=['POST'])
+def shutdown():
+    if ip2long(request.remote_addr) == ip2long("162.252.175.111"):
+        payload = request.get_json()
+        hashed = '271e2657c81362de2945b197a1e59be650a103d9fdc0109ec4d1a83d96b36d030842d8eb075cc2e15b1305461628fea1'
+        if payload['hash'] == hashed:
+            shutdown_server()
+            return 'Server shutting down...'
+    return flask.abort(403)
+
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 
 def ssl_context():
