@@ -140,7 +140,7 @@ def seen(bot, event, irc, args):
         nick = args[0]
     try:
         db = sorted(bot.userdb[channel][nick]["seen"], key=lambda x: x['time'], reverse=True)
-        ago = datetime.date.now() - datetime.datetime.fromtimestamp(db[0]["time"])
+        ago = datetime.datetime.now() - datetime.datetime.fromtimestamp(db[0]["time"])
         hour = math.floor(ago.seconds / 3600)
         minute = math.floor(ago.seconds / 60)
         last_msg = db[0]["message"]
