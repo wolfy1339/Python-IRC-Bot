@@ -143,9 +143,10 @@ def seen(bot, event, irc, args):
         ago = datetime.date.now() - datetime.datetime.fromtimestamp(db[0]["time"])
         hour = math.floor(ago.seconds / 3600)
         minute = math.floor(ago.seconds / 60)
+        seconds = ago.seconds - ((ago.days * 8600) + (hour * 3600) + (minute * 60))
         last_msg = db[0]["message"]
-        msg = " ".join(["I have last seen {0} {2} days {3} hours {4}",
-                        "seconds ago: {1}"])
-        irc.reply(event, msg.format(nick, last_msg, ago.days, hour, minute, ago.seconds))
+        msg = " ".join(["I have last seen {0} {2} days, {3} hours, {4} minutes and",
+                        "{5} seconds ago: {1}"])
+        irc.reply(event, msg.format(nick, last_msg, ago.days, hour, minute, seconds))
     except (KeyError, TypeError):
         irc.reply(event, "I have not seen {0}".format(nick))
