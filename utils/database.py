@@ -8,6 +8,15 @@ class Database(dict):
         super(Database, self).__init__(json.load(open("userdb.json")))
         self.irc = irc
 
+    def change_attr(self, name, attr, value, channel=None):
+        if channel is not None:
+            self[channel][name][attr] = value
+        for i in self:
+            try:
+                self[i][name][attr] = value
+            except KeyError:
+                pass
+
     def remove_entry(self, event, nick):
         try:
             del self[event.target][nick]
