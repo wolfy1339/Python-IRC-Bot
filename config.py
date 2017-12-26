@@ -6,7 +6,7 @@ if not ci:
     with open("password", "r") as i:
         password = i.read().strip()
     sasl = Sasl(username="BigWolfy1339", password=password, method="external")
-    caps = Caps(sasl, "multi-prefix")
+    caps = Caps(sasl, "multi-prefix", "account-notify", "extended-join")
 
 # IRC
 channels = ["##wolfy1339", "#powder-bots", "##lazy-valoran", "#valoran-bots"]

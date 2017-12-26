@@ -120,6 +120,12 @@ class Actions(object):
             irc.send("WHO {0} nuhs%nhuac".format(event.target))
             irc.send("NAMES {0}".format(event.target))
         else:
+            # Extended join methods
+            if len(event.arguments):
+                hostmask = event.source
+                channel = event.target
+                account = args[0] if args[0] != "*" else None
+                self.userdb.add_entry(channel, nick, hostmask, account)
             irc.send("WHO {0} nuhs%nhuac".format(event.source.nick))
 
     @staticmethod

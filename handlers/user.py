@@ -20,6 +20,10 @@ class User(object):
         irc.notice("wolfy1339", "Banned from {0}".format(channel))
         log.warning("Banned from %s", channel)
 
+    # Account tracking
+    def on_account(self, event, irc, arguments):
+        self.userdb.change_attr(event.source.nick, 'account', event.target)
+
     def on_whoreply(self, event, irc, arguments):
         nick = arguments[4]
         if nick != "ChanServ":
@@ -45,11 +49,16 @@ class User(object):
     def on_namereply(self, event, irc, arguments):
         channel = event.arguments[1]
         names = event.arguments[2]
-        for nick in names.split():
-            nick = nick.lstrip(''.join(list(
+        # This is only possible due to multi-prefix CAP
+        for value in names.split():
+            nick = value.lstrip(''.join(list(
                                self.server['ISUPPORT']['PREFIX'].values())))
-            if nick not in self.channels[channel]['names']:
-                self.channels[channel][nick]['modes'] = ''
+            modes = ''
+            if '@' in value:
+                modes += "o"
+            elif '+' in value:
+                modes += "v"
+            self.userdb[channel][nick]['modes'] = modes
 
     @staticmethod
     def on_endofnames(event, irc):
