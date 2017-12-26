@@ -7,3 +7,5 @@ password
 *.pem
 .vs/*
 userdb.json
+.coverage
+coverage.xml
