@@ -134,7 +134,7 @@ def reload_handlers(bot):
     bot.events = __import__("handlers").Events(bot)
     for h in dir(bot.events):
         func = getattr(bot.events, h)
-        if callable(func) and not h.startswith("__"):
+        if (callable(func) or h == "server") and not h.startswith("__"):
             setattr(bot, h, func)
 
 
