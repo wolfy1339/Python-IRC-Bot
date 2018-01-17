@@ -91,7 +91,7 @@ class Actions(object):
                     del self.userdb[chan][nick]
                     break
                 except KeyError:
-                    chandb = sef.userdb[chan]
+                    chandb = self.userdb[chan]
                     for u in chandb:
                         if chandb[u]['host'] == event.source.host and u == nick:
                             del self.userdb[chan][u]
@@ -120,6 +120,7 @@ class Actions(object):
             self.userdb.remove_entry(event, nick)
 
     def on_join(self, event, irc):
+        args = event.arguments
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
             if event.target not in self.userdb:
@@ -128,7 +129,7 @@ class Actions(object):
             irc.send("NAMES {0}".format(event.target))
         else:
             # Extended join methods
-            if len(event.arguments):
+            if len(args):
                 hostmask = event.source
                 channel = event.target
                 account = args[0] if args[0] != "*" else None
