@@ -53,12 +53,13 @@ class User(object):
         for value in names.split():
             nick = value.lstrip(''.join(list(
                                self.server['ISUPPORT']['PREFIX'].values())))
-            modes = ''
-            if '@' in value:
-                modes += "o"
-            elif '+' in value:
-                modes += "v"
-            self.userdb[channel][nick]['modes'] = modes
+            if nick != "ChanServ":
+                modes = ''
+                if '@' in value:
+                    modes += "o"
+                elif '+' in value:
+                    modes += "v"
+                self.userdb[channel][nick]['modes'] = modes
 
     @staticmethod
     def on_endofnames(event, irc):
