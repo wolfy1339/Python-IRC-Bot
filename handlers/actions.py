@@ -130,6 +130,7 @@ class Actions(object):
         else:
             # Extended join methods
             if len(args):
+                nick = event.source.nick
                 hostmask = event.source
                 channel = event.target
                 account = args[0] if args[0] != "*" else None
