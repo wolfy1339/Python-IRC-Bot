@@ -87,10 +87,15 @@ class Actions(object):
             sys.exit(1)
         else:
             for chan in self.userdb:
-                for u in self.userdb[chan].values():
-                    if u['host'] == event.source.host:
-                        del self.userdb[chan][nick]
-                        break
+                try:
+                    del self.userdb[chan][nick]
+                    break
+                except KeyError:
+                    chandb = sef.userdb[chan]
+                    for u in chandb:
+                        if chandb[u]['host'] == event.source.host and u == nick:
+                            del self.userdb[chan][u]
+                            break
                 break
 
     def on_kick(self, event, irc):
