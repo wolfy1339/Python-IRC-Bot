@@ -37,7 +37,7 @@ def log_level(bot, event, irc, args):
     """<level>
     Changes the logging level"""
     try:
-        log.setLevel(log.getattr(args[0].upper()))
+        log.setLevel(getattr(log, args[0].upper()))
         irc.reply(event, "Set log level to {0}".format(args[0]))
     except AttributeError:
         irc.reply(event, "Invalid log level {0}".format(args))
