@@ -44,7 +44,7 @@ def user_correct(bot, event, irc, args):
 @add_hook
 def titler(bot, event, irc, args):
     match = re.match(r"(?:http://|https://)([^\s]+)", " ".join(args))
-    if match is not None and event.target != "##lazy-valoran":
+    if match is not None:
         r = utils.util.get(match.string)
         t = re.search(r"<title>(.*)</title>", r.text)
         url = match.group(1).split("/")[0]
