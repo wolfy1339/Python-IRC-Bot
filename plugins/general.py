@@ -4,6 +4,12 @@ import utils
 from utils.util import add_cmd
 
 
+@add_cmd
+def shrug(bot, event, irc, args):
+    """Sends a shrug to the channel"""
+    irc.reply(event, "¯\_(ツ)_/¯")
+
+
 @add_cmd("calc", alias=["math"], min_args=1)
 def calc(bot, event, irc, args):
     """Command to do some math calculation using the math.js web API"""
