@@ -20,7 +20,7 @@ class Actions(object):
     def on_privmsg(self, event, irc, arguments):
         str_args = " ".join(arguments)
         if (str_args.startswith(config.commandChar) or
-                arguments[0] in ["{}{}".format(self.config['nickname'],","),
+                str_args.split(" ")[0] in ["{}{}".format(self.config['nickname'],","),
                                  "{}{}".format(self.config['nickname'],":"),
                                  self.config['nickname']]):
             util.call_command(self.bot, event, irc, arguments)
