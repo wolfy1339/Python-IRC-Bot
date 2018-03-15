@@ -24,6 +24,9 @@ class User(object):
     def on_account(self, event, irc, arguments):
         self.userdb.change_attr(event.source.nick, 'account', event.target)
 
+    def on_chghost(self, event, irc):
+        self.userdb.change_attr(event.source.nick, 'host', event.target)
+
     def on_whoreply(self, event, irc, arguments):
         nick = arguments[4]
         if nick != "ChanServ":

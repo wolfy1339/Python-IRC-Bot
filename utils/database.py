@@ -13,6 +13,9 @@ class Database(dict):
             self[channel][name][attr] = value
         for i in self:
             try:
+                if attr == "host":
+                    nick_ident = self[i][name]["hostmask"].split("@")[0]
+                    self[i][name]["hostmask"] = nick_indent + value
                 self[i][name][attr] = value
             except KeyError:
                 pass
