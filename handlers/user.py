@@ -24,8 +24,12 @@ class User(object):
     def on_account(self, event, irc, arguments):
         self.userdb.change_attr(event.source.nick, 'account', event.target)
 
-    def on_chghost(self, event, irc):
-        self.userdb.change_attr(event.source.nick, 'host', event.target)
+    def on_chghost(self, event, irc, arguments):
+        if len(arguments):
+            self.userdb.change_attr(event.source.nick, 'ident', event.target)
+            self.userdb.change_attr(event.source.nick, 'host', arguments[0])
+        else:
+            self.userdb.change_attr(event.source.nick, 'host', event.target)
 
     def on_whoreply(self, event, irc, arguments):
         nick = arguments[4]
