@@ -31,12 +31,12 @@ class Bot(zirc.Client):
             'USERINFO': 'An IRC bot built using zIRC on Python',
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
-        self.fp.sleep_time = 0.7
-        self.fp.lines = 5
         # Event handlers
         utils.util.reload_handlers(self)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         utils.web.irc = self.irc
+        self.fp.sleep_time = 0.7
+        self.fp.lines = 5
         utils.web.bot = self
         kwargs = {
             'host': '0.0.0.0',
