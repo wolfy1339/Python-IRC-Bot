@@ -54,7 +54,7 @@ def add_cmd(name, min_args=1, alias=None, owner=False,
 
 def call_command(bot, event, irc, arguments):
     command = ' '.join(arguments).split(' ')
-    if not command[0].startswith("?"):
+    if not command[0].startswith(config.commandChar):
         del command[0]
         name = command[0]
     else:
