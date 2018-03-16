@@ -18,7 +18,7 @@ class Database(dict):
                     self[i][name]["hostmask"] = nick_indent + '@' + value
                     self[i][name][attr] = value
                 elif attr == "ident":
-                    self[i]["hostmask"] = name + '!' + value
+                    self[i][name]["hostmask"] = name + '!' + value + '@' + self[i][name]["host"]
                 else:
                     self[i][name][attr] = value
             except KeyError:
