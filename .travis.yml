@@ -13,6 +13,7 @@ install:
   - pip install coverage codacy-coverage
 script:
   - touch userdb.json
+  - echo '{}' > userdb.json
   - coverage run test.py --source="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers/*.py,log.py" --exclude="utils/tasks.py,utils/web.py,handlers/server.py"
 after_success:
   - coverage report --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers/*.py,log.py" --omit="utils/tasks.py,utils/web.py,handlers/server.py"
