@@ -4,6 +4,7 @@ import log
 from .user import User
 from .server import Server
 from .actions import Actions
+from utils.irc import strip_colours
 
 
 class Events(User, Server, Actions):
@@ -15,7 +16,7 @@ class Events(User, Server, Actions):
 
     def on_all(self, event, irc, arguments):
         if event.raw.find("%") == -1:
-            log.debug(event.raw)
+            log.debug(strip_colours(event.raw))
 
     def on_error(self, event, irc):
         log.error(" ".join(event.arguments))
