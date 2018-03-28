@@ -57,6 +57,7 @@ class Database(dict):
 
     def flush(self):
         with open('userdb.json', 'w') as f:
+            # Use dict(self) to onyly get the actual dict object
             # Use copy.deepcopy() to avoid having errors due to the DB being updated while we flush it
-            json.dump(copy.deepcopy(self), f, indent=2, separators=(',', ': '))
+            json.dump(copy.deepcopy(dict(self)), f, indent=2, separators=(',', ': '))
             f.write("\n")
