@@ -1,5 +1,7 @@
+from contextlib import closing
 import re
 from utils.util import add_hook
+import requests
 import log
 import utils
 
@@ -43,9 +45,35 @@ def user_correct(bot, event, irc, args):
 
 @add_hook
 def titler(bot, event, irc, args):
+    # Implementation taken from Eleos
     match = re.match(r"(?:http://|https://)([^\s]+)", " ".join(args))
     if match is not None:
-        r = utils.util.get(match.string)
-        t = re.search(r"<title>(.*)</title>", r.text)
-        url = match.group(1).split("/")[0]
-        irc.reply(event, "[{0!s}] - {1!s}".format(t.group(1), url))
+        try:
+            with closing(utils.util.get(match.string, stream=True, timeout=3)) as r:
+                status = r.status_code
+                headers = r.headers
+                data = r.raw.read(16384, True).decode('UTF-8', 'replace')
+            t = BeautifulSoup(data, 'html.parser').title.string
+            title = re.sub(r'[\t\r\n]', ' ', t)
+            # Remove ASCII control characters
+            title = re.sub(r'[\x00-\x1E]', '', t)
+            title = title.strip()
+            if len(title) > 300:
+                title = '{0}... (truncated)'.format(title[:300])
+
+            url = match.group(1).split("/")[0]
+            title = "[{0!s}] - {1!s}".format(title, url)
+        except requests.Timeout:
+            title = '${RED}[timeout]${NORMAL}'
+        except requests.TooManyRedirects:
+            title = '${RED}[too many redirects]${NORMAL}'
+        except (AttributeError, TypeError):
+            if headers.get('content-type'):
+                title = ('${ORANGE}{0}${NOARMAL} '
+                         '${GREEN}{1}${NORMAL}'.format(status,
+                                                headers['content-type']))
+            else:
+                title = '${ORNAGE}{0}${NORMAL} ${RED}[no title]${NOARMAL}'.format(status)
+        except Exception:
+            title = '${RED}[error]\x0F'
+        irc.reply(event, title)
