@@ -1,4 +1,5 @@
 from contextlib import closing
+from bs4 import BeautifulSoup
 import re
 from utils.util import add_hook, print_error
 import requests
@@ -79,5 +80,5 @@ def titler(bot, event, irc, args):
             title = '${RED}[too many redirects]${NORMAL}'
         except Exception:
             title = '${RED}[error]\x0F'
-            print_error()
+            print_error(irc, event)
         irc.reply(event, title)
