@@ -48,4 +48,4 @@ def titler(bot, event, irc, args):
         r = utils.util.get(match.string)
         t = re.search(r"<title>(.*)</title>", r.text)
         url = match.group(1).split("/")[0]
-        irc.reply(event, "[{0!s}] - {1!s}".format(t, url))
+        irc.reply(event, "[{0!s}] - {1!s}".format(t.group(1), url))
