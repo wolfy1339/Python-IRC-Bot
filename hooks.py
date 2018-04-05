@@ -1,6 +1,6 @@
 from contextlib import closing
 import re
-from utils.util import add_hook
+from utils.util import add_hook, print_error
 import requests
 import log
 import utils
@@ -79,4 +79,5 @@ def titler(bot, event, irc, args):
             title = '${RED}[too many redirects]${NORMAL}'
         except Exception:
             title = '${RED}[error]\x0F'
+            print_error()
         irc.reply(event, title)
