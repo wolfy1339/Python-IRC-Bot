@@ -49,9 +49,10 @@ def _get_title(url):
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
-    t = BeautifulSoup(data, 'html.parser').title.string
+    soup = BeautifulSoup(data, 'html.parser')
     try:
-        title = re.sub(r'[\t\r\n]', ' ', t)
+        t = soup.title.string
+        title = re.sub(r'[\t\r\n]|', ' ', t)
         # Remove ASCII control characters
         title = re.sub(r'[\x00-\x1E]', '', title)
         title = title.strip()
