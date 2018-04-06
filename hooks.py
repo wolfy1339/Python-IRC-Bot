@@ -52,7 +52,7 @@ def _get_title(url):
     soup = BeautifulSoup(data, 'html.parser')
     try:
         t = soup.title.string
-        title = re.sub(r'[\t\r\n]|', ' ', t)
+        title = re.sub(r'[\t\r\n]', ' ', t)
         # Remove ASCII control characters
         title = re.sub(r'[\x00-\x1E]', '', title)
         title = title.strip()
