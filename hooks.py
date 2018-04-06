@@ -45,7 +45,7 @@ def user_correct(bot, event, irc, args):
         pass
 
 def _get_title(url):
-    with closing(utils.util.get(url, stream=True, timeout=3)) as r:
+    with closing(requests.get(url, stream=True, timeout=3)) as r:
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
@@ -60,17 +60,15 @@ def _get_title(url):
             title = '{0}... (truncated)'.format(title[:300])
     except (AttributeError, TypeError):
         if headers.get('content-type'):
-            title = ('${ORANGE}{0}${NOARMAL} '
-                     '${GREEN}{1}${NORMAL}'.format(status,
-                                            headers['content-type']))
+            title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
         else:
-            title = '${ORNAGE}{0}${NORMAL} ${RED}[no title]${NOARMAL}'.format(status)
+            title = '\x0307{0}\x0F \x0304[no title]\x0F'.format(status)
     return title
 
 @add_hook
 def titler(bot, event, irc, args):
     # Implementation taken from Eleos
-    match = re.match(r"(?:http://|https://)([^\s]+)", " ".join(args))
+    match = re.match(r"(?:http://|https://)([^\s]+)|(?:[0-9]{1,3}\.){4}", " ".join(args))
     if match is not None:
         try:
             url = match.group(1).split("/")[0]
@@ -80,6 +78,6 @@ def titler(bot, event, irc, args):
         except requests.TooManyRedirects:
             title = '${RED}[too many redirects]${NORMAL}'
         except Exception:
-            title = '${RED}[error]\x0F'
+            title = '${RED}[error]${NORMAL}'
             print_error(irc, event)
         irc.reply(event, title)
