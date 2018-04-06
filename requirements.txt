@@ -4,3 +4,4 @@ requests>=2.12.4
 six>=1.10.0
 flask>=0.12.2
 iso8601>=0.1.12
+beautifulsoup4>=4.6.0
