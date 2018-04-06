@@ -68,11 +68,11 @@ def _get_title(url):
 @add_hook
 def titler(bot, event, irc, args):
     # Implementation taken from Eleos
-    match = re.match(r"(?:http://|https://)([^\s]+)|(?:[0-9]{1,3}\.){4}", " ".join(args))
+    match = re.search(r"(?:https?://)(?:www\.)?([^\s]+)", " ".join(args))
     if match is not None:
         try:
             url = match.group(1).split("/")[0]
-            title = "[{0!s}] - {1!s}".format(_get_title(match.string), url)
+            title = "[{0!s}] - {1!s}".format(_get_title(match.group(0)), url)
         except requests.Timeout:
             title = '${RED}[timeout]${NORMAL}'
         except requests.TooManyRedirects:
