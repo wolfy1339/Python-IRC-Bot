@@ -45,7 +45,8 @@ def user_correct(bot, event, irc, args):
         pass
 
 def _get_title(url):
-    with closing(requests.get(url, stream=True, timeout=3)) as r:
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}
+    with closing(requests.get(url, stream=True, timeout=3, headers=headers)) as r:
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
