@@ -75,6 +75,8 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?deop foo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?echo moo
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval self.userdb["##wolfy1339"] = {}
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval Undefined
+:wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?eval dir(self)
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flush
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?flushq
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?hash sha224 moo
@@ -152,7 +154,7 @@ log = """:user!~user@user/user PRIVMSG #zirc :Hey!
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?voice user3
 :wolfy1339!~wolfy1339@botters/wolfy1339 PRIVMSG #zirc :?invalid
-:user3!~user@user/user3 QUIT :Hello there!
+@time=2011-10-19T16:40:51.620Z;account=user3 :user3!~user@user/user3 QUIT :Hello there!
 :woof!~user@user/user5 PART #zirc :*.net *.split"""
 
 try:
