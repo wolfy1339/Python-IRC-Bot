@@ -50,7 +50,7 @@ def _get_title(url):
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
-    if headers.get('content-type') == 'text/html':
+    if headers.get('content-type', '').startswith('text/html'):
         soup = BeautifulSoup(data, 'html.parser')
         try:
             t = soup.title.string
