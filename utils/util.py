@@ -94,7 +94,8 @@ def add_hook(func):
 
 
 def call_hook(bot, event, irc, args):
-    is_bot = event.source.host.find("/bot/") != -1
+    is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.split("@")[0].split("!")[1] == "bot"
+    is_bot = event.source.host.find("/bot/") != -1 or is_Eleos
     if event.target in config.hooks_whitelist and not is_bot:
         try:
             for i in hooks:
