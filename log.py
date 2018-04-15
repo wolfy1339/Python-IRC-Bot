@@ -200,7 +200,7 @@ _logger = logging.getLogger('bot')
 _stdoutHandler = StdoutStreamHandler(sys.stdout)
 
 # These just make things easier.
-DEBUG = logging.debug
+DEBUG = logging.DEBUG
 debug = _logger.debug
 INFO = logging.INFO
 info = _logger.info
