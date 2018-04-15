@@ -50,16 +50,22 @@ def _get_title(url):
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
-    soup = BeautifulSoup(data, 'html.parser')
-    try:
-        t = soup.title.string
-        title = re.sub(r'[\t\r\n]', ' ', t)
-        # Remove ASCII control characters
-        title = re.sub(r'[\x00-\x1E]', '', title)
-        title = title.strip()
-        if len(title) > 300:
-            title = '{0}... (truncated)'.format(title[:300])
-    except (AttributeError, TypeError):
+    if headers.get('content-type') == 'text/html':
+        soup = BeautifulSoup(data, 'html.parser')
+        try:
+            t = soup.title.string
+            title = re.sub(r'[\t\r\n]', ' ', t)
+            # Remove ASCII control characters
+            title = re.sub(r'[\x00-\x1E]', '', title)
+            title = title.strip()
+            if len(title) > 300:
+                title = '{0}... (truncated)'.format(title[:300])
+        except (AttributeError, TypeError):
+            if headers.get('content-type'):
+                title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
+            else:
+                title = '\x0307{0}\x0F \x0304[no title]\x0F'.format(status)
+    else:
         if headers.get('content-type'):
             title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
         else:
