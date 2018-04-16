@@ -61,6 +61,7 @@ def _get_title(url):
             if len(title) > 300:
                 title = '{0}... (truncated)'.format(title[:300])
         except (AttributeError, TypeError):
+            print_error(irc, event)
             if headers.get('content-type'):
                 title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
             else:
