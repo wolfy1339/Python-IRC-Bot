@@ -50,6 +50,7 @@ def _get_title(url):
         status = r.status_code
         headers = r.headers
         data = r.raw.read(16384, True).decode('UTF-8', 'replace')
+        data = r.raw.read(163840, True).decode('UTF-8', 'replace')
     if headers.get('content-type', '').startswith('text/html'):
         soup = BeautifulSoup(data, 'html.parser')
         try:
@@ -60,8 +61,8 @@ def _get_title(url):
             title = title.strip()
             if len(title) > 300:
                 title = '{0}... (truncated)'.format(title[:300])
-        except (AttributeError, TypeError):
-            print_error(irc, event)
+        except (AttributeError, TypeError) as e:
+            raise e
             if headers.get('content-type'):
                 title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
             else:
@@ -85,6 +86,10 @@ def titler(bot, event, irc, args):
             title = '${RED}[timeout]${NORMAL}'
         except requests.TooManyRedirects:
             title = '${RED}[too many redirects]${NORMAL}'
+        except AttributeError:
+            print_error(irc, event)
+            url, t = _get_title(match.group(0))
+            title = "[{0!s}] - {1!s}".format(t, url)
         except Exception:
             title = '${RED}[error]${NORMAL}'
             print_error(irc, event)
