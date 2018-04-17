@@ -52,6 +52,7 @@ def _get_title(url):
     with closing(requests.get(url, stream=True, timeout=4, headers=headers)) as r:
         status = r.status_code
         headers = r.headers
+        url = r.url
         data = r.raw.read(1049000, True).decode('UTF-8', 'replace')
     if headers.get('content-type', '').startswith('text/html'):
         soup = BeautifulSoup(data, 'html.parser')
@@ -74,7 +75,7 @@ def _get_title(url):
             title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
         else:
             title = '\x0307{0}\x0F \x0304[no title]\x0F'.format(status)
-    return title
+    return (title, url)
 
 @add_hook
 def titler(bot, event, irc, args):
@@ -82,8 +83,8 @@ def titler(bot, event, irc, args):
     match = re.search(r"(?:https?://)(?:www\.)?([^\s]+)", " ".join(args))
     if match is not None:
         try:
-            url = match.group(1).split("/")[0]
-            title = "[{0!s}] - {1!s}".format(_get_title(match.group(0)), url)
+            url, t = _get_title(match.group(0))
+            title = "[{0!s}] - {1!s}".format(t, url)
         except requests.Timeout:
             title = '${RED}[timeout]${NORMAL}'
         except requests.TooManyRedirects:
