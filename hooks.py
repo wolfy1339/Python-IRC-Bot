@@ -52,7 +52,7 @@ def _get_title(url):
     with closing(requests.get(url, stream=True, timeout=4, headers=headers)) as r:
         status = r.status_code
         headers = r.headers
-        url = re.sub(r"https?://", '', r.url).split("/")[0s]
+        url = re.sub(r"https?://", '', r.url).split("/")[0]
         data = r.raw.read(1049000, True).decode('UTF-8', 'replace')
     if headers.get('content-type', '').startswith('text/html'):
         soup = BeautifulSoup(data, 'html.parser')
