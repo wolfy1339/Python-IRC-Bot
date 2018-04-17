@@ -83,7 +83,7 @@ def titler(bot, event, irc, args):
     match = re.search(r"(?:https?://)(?:www\.)?([^\s]+)", " ".join(args))
     if match is not None:
         try:
-            url, t = _get_title(match.group(0))
+            t, url = _get_title(match.group(0))
             title = "[{0!s}] - {1!s}".format(t, url)
         except requests.Timeout:
             title = '${RED}[timeout]${NORMAL}'
