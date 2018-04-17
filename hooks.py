@@ -46,6 +46,9 @@ def user_correct(bot, event, irc, args):
 
 def _get_title(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}
+    if 'google' in url or 'goo.gl' in url:
+        headers['Cookie'] = "NID=127=kC6ePzilj4duAyFQnFHYFDsfLhMwM8XBb8lHNbRlMFyqpMpP9sRG9OtOihNxNVBbBiHEHFtq3zkguVYNOCoMccPk3csLpPaWevigfcUYtgsx7PUStcmAcXKWlIN-KY-m"
+
     with closing(requests.get(url, stream=True, timeout=4, headers=headers)) as r:
         status = r.status_code
         headers = r.headers
