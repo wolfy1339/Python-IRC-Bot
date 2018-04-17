@@ -56,10 +56,11 @@ def _get_title(url):
             t = soup.title.string
             title = re.sub(r'[\t\r\n]', ' ', t)
             # Remove ASCII control characters
-            title = re.sub(r'[\x00-\x1E]', '', title)
+            #title = re.sub(r'[\x00-\x1E]', '', title)
             title = title.strip()
+            title += "\x0F"
             if len(title) > 300:
-                title = '{0}... (truncated)'.format(title[:300])
+                title = '{0}\x0F... (truncated)'.format(title[:300])
         except (AttributeError, TypeError) as e:
             if headers.get('content-type'):
                 title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
