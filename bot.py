@@ -38,12 +38,18 @@ class Bot(zirc.Client):
         self.fp.sleep_time = 0.7
         self.fp.lines = 5
         utils.web.bot = self
-        kwargs = {
-            'host': '0.0.0.0',
-            'ssl_context': utils.web.ssl_context()
-        }
-        self.web = tasks.run(utils.web.app.run, kwargs=kwargs)
-        self.db_job = tasks.run_every(600, self.userdb.flush)
+        try:
+            kwargs = {
+                'host': '0.0.0.0',
+                'ssl_context': utils.web.ssl_context()
+            }
+        except FileNotFoundError:
+            kwargs = {
+                'host': '0.0.0.0'
+            }
+        if not getenv('DEV', '') == 'true':
+            self.web = tasks.run(utils.web.app.run, daemon=True, kwargs=kwargs)
+        self.db_job = tasks.run_every(600, self.userdb.flush, daemon-True)
 
 x = Bot()
 try:
