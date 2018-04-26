@@ -22,7 +22,7 @@ class User(object):
 
     # Account tracking
     def on_account(self, event, irc, arguments):
-        self.userdb.change_attr(event.source.nick, 'account', event.target)
+        self.userdb.change_attr(event.source.nick, 'account', event.target if event.target != '*' else None)
 
     def on_chghost(self, event, irc, arguments):
         if len(arguments):
