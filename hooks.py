@@ -60,7 +60,7 @@ def _get_title(url):
             t = soup.title.string
             title = re.sub(r'[\t\r\n]', ' ', t)
             # Remove ASCII control characters
-            title = re.sub(r'[\x00-\x01\x04-\x1C\x1E\xA0\uefeff]', '', title)
+            title = re.sub(r'[\x00-\x01\x04-\x1C\x1E\ufeff\xbb\xbf\xef\xa0\xc2]', '', title)
             title = title.strip()
             title += "\x0F"
             if len(title) > 300:
