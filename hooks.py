@@ -9,7 +9,7 @@ import utils
 
 @add_hook
 def self_correct(bot, event, irc, args):
-    match = re.match(r"^s[/](.*)[/](.*)[/]?$", " ".join(args))
+    match = re.match(r"^s[/](.*)[/](.*[^/])[/]?$", " ".join(args))
     if match is not None:
         nick = event.source.nick
         channel = event.target
