@@ -19,9 +19,9 @@ def self_correct(bot, event, irc, args):
             if msg == output:
                 pass
             else:
+                irc.reply(event, '<{0}> {1}'.format(nick, output))
+                log.info('Changing %s to %s', msg, output)
                 break
-        irc.reply(event, '<{0}> {1}'.format(nick, output))
-        log.info('Changing %s to %s', msg, output)
     else:
         pass
 
@@ -38,9 +38,9 @@ def user_correct(bot, event, irc, args):
             if msg == output:
                 pass
             else:
+                irc.reply(event, '<{0}> {1}'.format(nick, output))
+                log.info('Changing %s to %s', args, output)
                 break
-        irc.reply(event, '<{0}> {1}'.format(nick, output))
-        log.info('Changing %s to %s', args, output)
     else:
         pass
 
