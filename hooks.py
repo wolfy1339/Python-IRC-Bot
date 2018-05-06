@@ -13,15 +13,20 @@ def self_correct(bot, event, irc, args):
     if match is not None:
         nick = event.source.nick
         channel = event.target
-        for i in bot.userdb[channel][nick]['seen']:
-            msg = i['message']
-            output = msg.replace(match.group(1), match.group(2))
-            if msg == output:
+        seen = bot.userdb[channel][nick]['seen']
+        for i in range(len(seen)):
+            msg = seen[i]['message']
+            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is None:
+                del seen[i]
                 pass
             else:
-                irc.reply(event, '<{0}> {1}'.format(nick, output))
-                log.info('Changing %s to %s', msg, output)
-                break
+                output = msg.replace(match.group(1), match.group(2))
+                if msg == output:
+                    pass
+                else:
+                    irc.reply(event, '<{0}> {1}'.format(nick, output))
+                    log.info('Changing %s to %s', msg, output)
+                    break
     else:
         pass
 
@@ -32,15 +37,20 @@ def user_correct(bot, event, irc, args):
     if match is not None:
         nick = match.group(1)
         channel = event.target
-        for i in bot.userdb[channel][nick]['seen']:
-            msg = i['message']
-            output = msg.replace(match.group(2), match.group(3))
-            if msg == output:
+        seen = bot.userdb[channel][nick]['seen']
+        for i in range(len(seen)):
+            msg = seen[i]['message']
+            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is None:
+                del seen[i]
                 pass
             else:
-                irc.reply(event, '<{0}> {1}'.format(nick, output))
-                log.info('Changing %s to %s', args, output)
-                break
+                output = msg.replace(match.group(2), match.group(3))
+                if msg == output:
+                    pass
+                else:
+                    irc.reply(event, '<{0}> {1}'.format(nick, output))
+                    log.info('Changing %s to %s', args, output)
+                    break
     else:
         pass
 
