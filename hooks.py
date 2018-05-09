@@ -16,8 +16,7 @@ def self_correct(bot, event, irc, args):
         seen = bot.userdb[channel][nick]['seen']
         for i in range(len(seen)):
             msg = seen[i]['message']
-            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is None:
-                del seen[i]
+            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
                 pass
             else:
                 output = msg.replace(match.group(1), match.group(2))
@@ -40,8 +39,7 @@ def user_correct(bot, event, irc, args):
         seen = bot.userdb[channel][nick]['seen']
         for i in range(len(seen)):
             msg = seen[i]['message']
-            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is None:
-                del seen[i]
+            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
                 pass
             else:
                 output = msg.replace(match.group(2), match.group(3))

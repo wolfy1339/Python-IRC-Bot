@@ -28,7 +28,9 @@ class Actions(object):
             util.call_hook(self.bot, event, irc, arguments)
         nick = event.source.nick
         str_args = ' '.join(arguments)
-        self._update_seen_db(event, irc, nick, str_args)
+        regex = r"^u[/]([^/]+)[/]([^/]+)[/]([^/]+)[/]?$|^s[/]([^/]+)[/]([^/]+)[/]?$"
+        if __import__("re").match(regex, str_args) is None:
+            self._update_seen_db(event, irc, nick, str_args)
 
     @staticmethod
     def _get_time(tags):
