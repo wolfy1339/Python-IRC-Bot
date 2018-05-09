@@ -9,14 +9,14 @@ import utils
 
 @add_hook
 def self_correct(bot, event, irc, args):
-    match = re.match(r"^s[/](.*)[/](.*[^/])[/]?$", " ".join(args))
+    match = re.match(r"^s[/]([^/]+)[/]([^/]+)[/]?$", " ".join(args))
     if match is not None:
         nick = event.source.nick
         channel = event.target
         seen = bot.userdb[channel][nick]['seen']
         for i in range(len(seen)):
             msg = seen[i]['message']
-            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
+            if re.match(r"^s[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
                 pass
             else:
                 output = msg.replace(match.group(1), match.group(2))
@@ -32,14 +32,14 @@ def self_correct(bot, event, irc, args):
 
 @add_hook
 def user_correct(bot, event, irc, args):
-    match = re.match(r"^u[/]([\w]+)[/](.*)[/](.*)[/]?$", " ".join(args))
+    match = re.match(r"^u[/]([^/]+)[/]([^/]+)[/]([^/]+)[/]?$", " ".join(args))
     if match is not None:
         nick = match.group(1)
         channel = event.target
         seen = bot.userdb[channel][nick]['seen']
         for i in range(len(seen)):
             msg = seen[i]['message']
-            if re.match(r"^u[/]([\w-][^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
+            if re.match(r"^u[/]([^/]+)[/]([^/]+)[/]([^/]+)[/]?$", msg) is not None:
                 pass
             else:
                 output = msg.replace(match.group(2), match.group(3))
