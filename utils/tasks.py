@@ -60,25 +60,29 @@ class ScheduleTask(Task):
                 time.sleep(interval - started % interval)
 
 
-def run(func, args=(), kwargs=None):
+def run(func, daemon=False, args=(), kwargs=None):
     t = Task(func, args, kwargs)
+    t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_every(interval, func, args=(), kwargs=None):
+def run_every(interval, func, daemon=False, args=(), kwargs=None):
     t = IntervalTask(interval, func, args, kwargs)
+    t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_at(runtime, func, args=(), kwargs=None):
+def run_at(runtime, func, daemon=False, args=(), kwargs=None):
     t = ScheduleTask(runtime, func, args, kwargs)
+    t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_in(delay, func, args=(), kwargs=None):
+def run_in(delay, func, daemon=False, args=(), kwargs=None):
     t = ScheduleTask(time.time() + delay, func, args, kwargs)
+    t.thread.daemon = daemon
     t.start()
     return t
