@@ -6,7 +6,8 @@ class Database(dict):
     """Holds a dict that contains all the information
     about the users and their last seen actions in a channel"""
     def __init__(self, irc):
-        super(Database, self).__init__(json.load(open("userdb.json")))
+        with open("userdb.json") as f:
+            super(Database, self).__init__(json.load(f))
         self.irc = irc
 
     def change_attr(self, name, attr, value, channel=None):
