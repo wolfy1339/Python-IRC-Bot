@@ -50,7 +50,7 @@ class Bot(zirc.Client):
             }
         if not getenv('DEV', '') == 'true':
             self.web = tasks.run(utils.web.app.run, daemon=True, kwargs=kwargs)
-        self.db_job = tasks.run_every(600, self.userdb.flush, daemon-True)
+        self.db_job = tasks.run_every(600, self.userdb.flush, daemon=True)
 
 x = Bot()
 try:
