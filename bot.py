@@ -7,7 +7,6 @@ import config
 import utils
 from utils import tasks
 import zirc
-from zirc.wrappers import connection_wrapper
 
 
 class Bot(zirc.Client):
@@ -30,14 +29,13 @@ class Bot(zirc.Client):
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
         # Event handlers
+        self.userdb = utils.database.Database(self)
         utils.util.reload_handlers(self)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.fp.sleep_time = 0.7
         self.fp.lines = 5
 
-        self.irc = connection_wrapper(self)
-        self.userdb = utils.database.Database(self.irc)
-        utils.web.irc = self.irc
+        utils.web.irc = zirc.wrappers.connection_wrapper(self)
         utils.web.bot = self
         try:
             kwargs = {
