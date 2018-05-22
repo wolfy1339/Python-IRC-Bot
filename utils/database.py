@@ -14,7 +14,7 @@ class Database(dict):
             def __init__(self, bot):
                 self.send = bot.send
                 self._config = bot.config
-        self.irc = connection_wrapper(x())
+        self.irc = connection_wrapper(x(bot))
 
     def change_attr(self, name, attr, value, channel=None):
         if channel is not None:
