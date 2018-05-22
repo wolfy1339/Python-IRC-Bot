@@ -10,10 +10,11 @@ class Database(dict):
     def __init__(self, bot):
         with open("userdb.json") as f:
             super(Database, self).__init__(json.load(f))
-        x = object()
-        x.send = bot.send
-        x._config = bot.config
-        self.irc = connection_wrapper(x)
+        class x(object):
+            def __init__(self, bot):
+                self.send = bot.send
+                self._config = bot.config
+        self.irc = connection_wrapper(x())
 
     def change_attr(self, name, attr, value, channel=None):
         if channel is not None:
