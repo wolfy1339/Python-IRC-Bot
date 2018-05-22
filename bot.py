@@ -12,9 +12,6 @@ from zirc.wrappers import connection_wrapper
 
 class Bot(zirc.Client):
     def __init__(self):
-        self.irc = connection_wrapper(self)
-        self.userdb = utils.database.Database(self.irc)
-
         # zIRC
         self.connection = zirc.Socket(family=socket.AF_INET6,
                                       wrapper=ssl.wrap_socket)
@@ -35,9 +32,12 @@ class Bot(zirc.Client):
         # Event handlers
         utils.util.reload_handlers(self)
         self.connect(self.config, certfile=path.abspath("user.pem"))
-        utils.web.irc = self.irc
         self.fp.sleep_time = 0.7
         self.fp.lines = 5
+
+        self.irc = connection_wrapper(self)
+        self.userdb = utils.database.Database(self.irc)
+        utils.web.irc = self.irc
         utils.web.bot = self
         try:
             kwargs = {
