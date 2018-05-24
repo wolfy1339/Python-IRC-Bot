@@ -21,6 +21,7 @@ class Events(User, Server, Actions):
     def on_error(self, event, irc):
         log.error(" ".join(event.arguments))
         if " ".join(event.arguments).startswith("Closing Link"):
+            self.bot.fp.irc_queue = []
             self.bot.web.stop()
             self.userdb.flush()
             self.bot.db_job.stop()
