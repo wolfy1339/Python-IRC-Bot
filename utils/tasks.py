@@ -1,5 +1,5 @@
-# Module taken from Bradley Shay's Eleos project
-# (https://git.intrpt.net/bs/Eleos/blob/master/utils/task.py)
+# Module taken from Bradley Shaw's Eleos project
+# (https://git.libertas.tech/bs/Eleos/blob/master/utils/task.py)
 import threading
 import time
 
