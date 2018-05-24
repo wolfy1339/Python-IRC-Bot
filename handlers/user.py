@@ -34,8 +34,7 @@ class User(object):
     def on_whoreply(self, event, irc, arguments):
         nick = arguments[4]
         if nick != "ChanServ":
-            (ident, host) = arguments[1:3]
-            channel = arguments[0]
+            (channel, ident, host) = arguments[:3]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
             if "gateway" not in host or not util.is_ip_or_rdns(host):
                 account = host.split("/")[-1].split('.')[-1]
@@ -47,9 +46,8 @@ class User(object):
         nick = arguments[3]
         if nick != "ChanServ":
             args = event.arguments
-            (ident, host) = args[1:3]
+            (channel, ident, host) = args[:3]
             hostmask = "{0}!{1}@{2}".format(nick, ident, host)
-            channel = args[0]
             account = args[4] if args[4] != "0" else None
             self.userdb.add_entry(channel, nick, hostmask, account)
 
