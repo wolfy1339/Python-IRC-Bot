@@ -54,9 +54,10 @@ x = Bot()
 try:
     x.start()
 except KeyboardInterrupt:
+    x.fp.irc_queue = []
     x.irc.quit("KeyboardInterrupt")
     utils.web.app.stop()
     x.web.stop()
     x.userdb.flush()
     x.bot.db_job.stop()
-    sys.exit(1)
+    __import__("sys").exit(1)
