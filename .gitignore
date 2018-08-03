@@ -7,5 +7,11 @@ password
 *.pem
 .vs/*
 userdb.json
+*.json
 .coverage
 coverage.xml
+# Visual Studio
+*.pyperf
+*.sln
+*.psess
+*.pyproj
