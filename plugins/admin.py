@@ -9,6 +9,22 @@ from utils.util import add_cmd
 import utils
 
 
+@add_cmd("exec", min_args=1, trusted=True, hide=True)
+def exec_cmd(bot, event, irc, args):
+    """Executes a subprocess"""
+    import subprocess
+    try:
+        output = subprocess.check_output(args).decode().splitlines()
+        for line in output:
+            if len(line):
+                irc.reply(event, line)
+        code = 0
+    except subprocess.CalledProcessError as e:
+        code = e.returncode
+
+    irc.reply(event, "{0!s}: Process's exit code is {1!s}".format(event.source.nick, code))
+
+
 @add_cmd("eval", alias=['py', '>>'], min_args=1, owner=True, hide=True)
 def eval_cmd(bot, event, irc, args):
     """Admin console"""
