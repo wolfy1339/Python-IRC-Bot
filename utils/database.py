@@ -23,7 +23,7 @@ class Database(dict):
             try:
                 if attr == "host":
                     nick_ident = self[i][name]["hostmask"].split("@")[0]
-                    self[i][name]["hostmask"] = nick_indent + '@' + value
+                    self[i][name]["hostmask"] = nick_ident + '@' + value
                     self[i][name][attr] = value
                 elif attr == "ident":
                     self[i][name]["hostmask"] = name + '!' + value + '@' + self[i][name]["host"]
