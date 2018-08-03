@@ -7,9 +7,11 @@ from zirc.wrappers import connection_wrapper
 class Database(dict):
     """Holds a dict that contains all the information
     about the users and their last seen actions in a channel"""
+
     def __init__(self, bot):
         with open("userdb.json") as f:
             super(Database, self).__init__(json.load(f))
+
         class x(object):
             def __init__(self, bot):
                 self.send = bot.send
