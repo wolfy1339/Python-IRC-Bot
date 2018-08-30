@@ -52,6 +52,7 @@ def user_correct(bot, event, irc, args):
     else:
         pass
 
+
 def _get_title(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}
     if 'google' in url or 'goo.gl' in url:
@@ -73,7 +74,7 @@ def _get_title(url):
             title += "\x0F"
             if len(title) > 300:
                 title = '{0}\x0F... (truncated)'.format(title[:300])
-        except (AttributeError, TypeError) as e:
+        except (AttributeError, TypeError):
             if headers.get('content-type'):
                 title = '\x0307{0}\x0F \x0303{1}\x0F'.format(status, headers['content-type'])
             else:
@@ -84,6 +85,7 @@ def _get_title(url):
         else:
             title = '\x0307{0}\x0F \x0304[no title]\x0F'.format(status)
     return (title, url)
+
 
 @add_hook
 def titler(bot, event, irc, args):

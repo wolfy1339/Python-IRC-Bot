@@ -1,6 +1,5 @@
 import sys
 from zirc.test import TestCase
-from zirc.wrappers import connection_wrapper
 import log as logging
 from utils import util
 from utils import database
@@ -11,14 +10,17 @@ config.trusted['global'].append("user/user2")
 config.hooks_whitelist.append('#zirc')
 logging.setLevel(30)
 
+
 class fp(object):
     def __init__(self):
         self.irc_queue = []
+
 
 class Undefined(object):
     @staticmethod
     def stop():
         return None
+
 
 class botTest(TestCase):
     def __init__(self):

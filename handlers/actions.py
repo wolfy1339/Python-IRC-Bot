@@ -4,7 +4,8 @@ import time
 # Pacakge imports
 import config
 import log
-import plugins, hooks  # pylint: disable=unused-import
+import plugins
+import hooks  # pylint: disable=unused-import
 from utils import irc as irc_utils
 from utils import util
 from utils import web
@@ -21,8 +22,8 @@ class Actions(object):
         str_args = " ".join(arguments)
         if (str_args.startswith(config.commandChar) or
                 str_args.split(" ")[0] in ["{}{}".format(self.config['nickname'], ","),
-                                 "{}{}".format(self.config['nickname'], ":"),
-                                 self.config['nickname']]):
+                                           "{}{}".format(self.config['nickname'], ":"),
+                                           self.config['nickname']]):
             util.call_command(self.bot, event, irc, arguments)
         else:
             util.call_hook(self.bot, event, irc, arguments)

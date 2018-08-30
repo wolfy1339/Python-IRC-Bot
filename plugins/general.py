@@ -7,7 +7,7 @@ from utils.util import add_cmd
 @add_cmd("shrug", min_args=0)
 def shrug(bot, event, irc, args):
     """Sends a shrug to the channel"""
-    irc.reply(event, "\u00AF\_(\u30C4)_/\u00AF")
+    irc.reply(event, "\u00AF\\_(\u30C4)_/\u00AF")
 
 
 @add_cmd("calc", alias=["math"], min_args=1)
