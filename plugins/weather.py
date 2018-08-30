@@ -46,11 +46,10 @@ def local(icao, hour, minute):
     content = web.get(uri % icao.lower()).json()
     offset = content['utc_offset']
     if offset:
-        lhour = str(int(hour) + int(offset))
+        lhour = int(hour) + int(offset)
 
-        return (lhour + ':' + str(minute) + ', ' + str(hour) +
-                str(minute) + 'Z')
-    return str(hour) + ':' + str(minute) + 'Z'
+        return f"{lhour}:{minute}, {hour}{minute}Z"
+    return f"{hour}:{minute}Z"
 
 
 def code(search):
@@ -210,11 +209,10 @@ def weather(bot, event, irc, args):
     else:
         wind = None
 
-    if ('V' in metar[0]) and (metar[0] != 'CAVOK'):
+    if 'V' in metar[0] and metar[0] != 'CAVOK':
         metar = metar[1:]
 
-    if ((len(metar[0]) == 4) or
-            metar[0].endswith('SM')):
+    if len(metar[0]) == 4 or metar[0].endswith('SM'):
         visibility = metar[0]
         metar = metar[1:]
     else:
@@ -224,19 +222,12 @@ def weather(bot, event, irc, args):
                                         or 'L/' in metar[0]):
         metar = metar[1:]
 
-    if len(metar[0]) == 6 and (metar[0].endswith('N') or
-                               metar[0].endswith('E') or
-                               metar[0].endswith('S') or
-                               metar[0].endswith('W')):
+    if len(metar[0]) == 6 and metar[0].endswith(('N', 'E', 'S', 'W')):
         metar = metar[1:]  # 7000SE?
 
     cond = []
-    while (((len(metar[0]) < 5) or
-            metar[0].startswith('+') or
-            metar[0].startswith('-')) and (not (metar[0].startswith('VV') or
-                                                metar[0].startswith('SKC') or metar[0].startswith('CLR') or
-                                                metar[0].startswith('FEW') or metar[0].startswith('SCT') or
-                                                metar[0].startswith('BKN') or metar[0].startswith('OVC')))):
+    while ((len(metar[0]) < 5 or metar[0].startswith('+')
+            or metar[0].startswith('-')) and not metar[0].startswith(('VV', 'SKC', 'CLR', 'FEW', 'SCT', 'BKN', 'OVC'))):
         cond.append(metar[0])
         metar = metar[1:]
 
@@ -244,17 +235,14 @@ def weather(bot, event, irc, args):
         metar = metar[1:]
 
     if not metar:
-        return irc.reply(event, icao_code + ': no data provided')
+        return irc.reply(event, f'{icao_code}: no data provided')
 
     cover = []
-    while (metar[0].startswith('VV') or metar[0].startswith('SKC') or
-           metar[0].startswith('CLR') or metar[0].startswith('FEW') or
-           metar[0].startswith('SCT') or metar[0].startswith('BKN') or
-           metar[0].startswith('OVC')):
+    while metar[0].startswith(('VV', 'SKC', 'CLR', 'FEW', 'SCT', 'BKN', 'OVC')):
         cover.append(metar[0])
         metar = metar[1:]
         if not metar:
-            return irc.reply(event, icao_code + ': no data provided')
+            return irc.reply(event, f'{icao_code}: no data provided')
 
     if metar[0] == 'CAVOK':
         cover.append('CLR')
@@ -268,7 +256,7 @@ def weather(bot, event, irc, args):
         cover.append('CLR')
         metar = metar[1:]
 
-    if ('/' in metar[0]) or (len(metar[0]) == 5 and metar[0][2] == '.'):
+    if '/' in metar[0] or (len(metar[0]) == 5 and metar[0][2] == '.'):
         temp = metar[0]
         metar = metar[1:]
     else:
@@ -277,7 +265,7 @@ def weather(bot, event, irc, args):
     if metar[0].startswith('QFE'):
         metar = metar[1:]
 
-    if metar[0].startswith('Q') or metar[0].startswith('A'):
+    if metar[0].startswith(('Q', 'A')):
         pressure = metar[0]
         metar = metar[1:]
     else:
@@ -306,7 +294,7 @@ def weather(bot, event, irc, args):
         degrees = wind[0:3]
         degrees = wind_dir(degrees)
 
-        if not icao_code.startswith('EN') and not icao_code.startswith('ED'):
+        if not icao_code.startswith(('EN', 'ED')):
             # for any part of the world except Germany and Norway
             wind = '%s %.1fkt (%s)' % (description, speed, degrees)
         elif icao_code.startswith('ED'):
@@ -330,7 +318,7 @@ def weather(bot, event, irc, args):
     if cover:
         level = None
         for c in cover:
-            if c.startswith('OVC') or c.startswith('VV'):
+            if c.startswith(('OVC', 'VV')):
                 if (level is None) or (level < 8):
                     level = 8
             elif c.startswith('BKN'):
@@ -342,7 +330,7 @@ def weather(bot, event, irc, args):
             elif c.startswith('FEW'):
                 if (level is None) or (level < 1):
                     level = 1
-            elif c.startswith('SKC') or c.startswith('CLR'):
+            elif c.startswith(('SKC', 'CLR')):
                 if level is None:
                     level = 0
 
@@ -352,7 +340,7 @@ def weather(bot, event, irc, args):
             cover = 'Cloudy'
         elif level == 3:
             cover = 'Scattered'
-        elif (level == 1) or (level == 0):
+        elif level == 1 or level == 0:
             cover = 'Clear \u263C'.encode('utf-8')
         else:
             cover = 'Cover Unknown'
@@ -501,19 +489,19 @@ def weather(bot, event, irc, args):
                 phenomenon = phenomena.get(c[3:], c[3:])
                 if cond:
                     cond += ', '
-                cond += intensity + ' ' + descriptor + ' ' + phenomenon
+                cond += f'{intensity} {descriptor} {phenomenon}'
             elif len(c) == 4:
                 descriptor = descriptors.get(c[:2], c[:2])
                 phenomenon = phenomena.get(c[2:], c[2:])
                 if cond:
                     cond += ', '
-                cond += descriptor + ' ' + phenomenon
+                cond += f'{descriptor} {phenomenon}'
             elif len(c) == 3:
                 intensity = intensities.get(c[0], c[0])
                 phenomenon = phenomena.get(c[1:], c[1:])
                 if cond:
                     cond += ', '
-                cond += intensity + ' ' + phenomenon
+                cond += f'{intensity} {phenomenon}'
             elif len(c) == 2:
                 phenomenon = phenomena.get(c, c)
                 if cond:
@@ -521,18 +509,18 @@ def weather(bot, event, irc, args):
                 cond += phenomenon
 
     output = str()
-    output += 'Cover: ' + cover
-    output += ', Temp: ' + temp
-    output += ', Dew Point: ' + dew
+    output += f'Cover: {cover}'
+    output += f', Temp: {temp}'
+    output += f', Dew Point: {dew}'
     if windchill:
-        output += ', Windchill: ' + windchill
+        output += f', Windchill: {windchill}'
     if heatindex:
-        output += ', Heat Index: ' + heatindex
-    output += ', Pressure: ' + pressure
+        output += f', Heat Index: {heatindex}'
+    output += f', Pressure: {pressure}'
     if cond:
-        output += ' Condition: ' + cond
-    output += ', Wind: ' + wind
-    output += ' - %s, %s' % (str(icao_code), time)
+        output += f' Condition: {cond}'
+    output += f', Wind: {wind}'
+    output += f' - {icao_code}, {time}'
 
     irc.reply(event, output)
 
@@ -670,8 +658,7 @@ def forecast(bot, event, irc, args):
     if 'alerts' in data:
         # TODO: modularize the colourful parsing of alerts from nws.py so this can be colourized
         for alert in data['alerts']:
-            irc.reply(event, alert['title'] + ' Expires at: ' +
-                      str(datetime.datetime.fromtimestamp(int(alert['expires']))))
+            irc.reply(event, f"{alert['title']} Expires at: {datetime.datetime.fromtimestamp(int(alert['expires']))}")
 
     k = 1
 
@@ -780,7 +767,7 @@ def forecastio_current_weather(bot, event, irc, args):
     temp = today['temperature']
     dew = today['dewPoint']
     pressure = today['pressure']
-    speed = today['windSpeed']
+    : .1fspeed = today['windSpeed']
     degrees = today['windBearing']
     humidity = today['humidity']
     APtemp = today['apparentTemperature']
@@ -817,27 +804,26 @@ def forecastio_current_weather(bot, event, irc, args):
 
     # value taken from, https://is.gd/3dNrbW
     speedC = 1.609344 * speed
-    wind = '%s %.1fmph (%.1fkmh) (%s)' % (description, speed, speedC, degrees)
+    wind = f'{description} {speedC:.1f}kmh ({speed:.1f}mph) ({degrees})'
 
     # ISO-8601 ftw, https://xkcd.com/1179/
-    time = datetime.datetime.fromtimestamp(
-        int(today['time'])).strftime('%Y-%m-%d %H:%M:%S')
+    time = datetime.datetime.fromtimestamp(int(today['time'])).strftime('%Y-%m-%d %H:%M:%S')
 
     # build output str(ing).
     # a bit messy, but better than other alternatives
     output = str()
-    output += '\x1FCover\x1F: ' + cover_word
-    output += ', \x1FTemp\x1F: ' + temp
-    output += ', \x1FDew Point\x1F: ' + dew
-    output += ', \x1FHumidity\x1F: ' + humidity
-    output += ', \x1FApparent Temp\x1F: ' + APtemp
-    output += ', \x1FPressure\x1F: ' + pressure
+    output += f'\x1FCover\x1F: {cover_word}'
+    output += f', \x1FTemp\x1F: {temp}'
+    output += f', \x1FDew Point\x1F: {dew}'
+    output += f', \x1FHumidity\x1F: {humidity}'
+    output += f', \x1FApparent Temp\x1F: {APtemp}'
+    output += f', \x1FPressure\x1F: {pressure}'
     if cond:
-        output += ', \x1FCondition\x1F: ' + cond
-    output += ', \x1FWind\x1F: ' + wind
+        output += f', \x1FCondition\x1F: {cond}'
+    output += f', \x1FWind\x1F: {wind}'
     output += ' - '
     output += name
-    output + '; %s UTC' % time
+    output + f'; {time} UTC'
 
     # required according to ToS by darksky.net
     output += ' (Powered by Dark Sky, darksky.net)'
@@ -939,18 +925,15 @@ def weather_wunderground(bot, event, irc, args):
                           '\x1FLast Updated\x1F: ', time_updated)
 
     output = str()
-    output += '\x1FCover\x1F: ' + condition
-    output += ', \x1FTemp\x1F: ' + add_degree(temp)
-    output += ', \x1FDew Point\x1F: ' + add_degree(dewpoint)
-    output += ', \x1FHumdity\x1F: ' + rh
-    output += ', \x1FFeels Like\x1F: ' + add_degree(feelslike)
-    output += ', \x1FPressure\x1F: ' + \
-        '[%s] %sin (%smb)' % (pressure_trend, pressure_in, pressure_mb)
-    output += ', \x1FWind\x1F: ' + \
-        'From the %s at %s mph (%s kmh)' % (wind_dir, wind_mph, wind_kph)
-    output += ', \x1FLocation\x1F: ' + \
-        location.encode('utf-8').decode('utf-8')
-    output += ', ' + time_updated
+    output += f'\x1FCover\x1F: {condition}'
+    output += f', \x1FTemp\x1F: {add_degree(temp)}'
+    output += f', \x1FDew Point\x1F: {add_degree(dewpoint)}'
+    output += f', \x1FHumdity\x1F: {rh}'
+    output += f', \x1FFeels Like\x1F: {add_degree(feelslike)}'
+    output += f', \x1FPressure\x1F: [{pressure_trend}] {pressure_in}in ({pressure_mb}mb)'
+    output += f', \x1FWind\x1F: From the {wind_dir} at {wind_kph} kmh ({wind_mph} mph)'
+    output += f", \x1FLocation\x1F: {location.encode('utf-8').decode('utf-8')}"
+    output += f', {time_updated}'
 
     output += ', (Powered by Wunderground, wunderground.com)'
 
@@ -959,9 +942,9 @@ def weather_wunderground(bot, event, irc, args):
 
 def preface_location(ci, reg='', cty=''):
     out = str()
-    out += '[' + ci
+    out += f'[{ci}'
     if reg:
-        out += ', ' + reg
+        out += f', {reg}'
     if cty:
         out += ', %s' % cty
     out += '] '
