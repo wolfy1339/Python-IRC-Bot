@@ -25,10 +25,10 @@ class Database(dict):
             try:
                 if attr == "host":
                     nick_ident = self[i][name]["hostmask"].split("@")[0]
-                    self[i][name]["hostmask"] = nick_ident + '@' + value
+                    self[i][name]["hostmask"] = f'{nick_ident}@{value}'
                     self[i][name][attr] = value
                 elif attr == "ident":
-                    self[i][name]["hostmask"] = name + '!' + value + '@' + self[i][name]["host"]
+                    self[i][name]["hostmask"] = f'{name}!{value}@{self[i][name]["host"]}'
                 else:
                     self[i][name][attr] = value
             except KeyError:
@@ -58,10 +58,10 @@ class Database(dict):
 
     def get_user_host(self, channel, nick):
         try:
-            host = "*!*@" + self[channel][nick]['host']
+            host = f"*!*@{self[channel][nick]['host']}"
         except KeyError:
             self.irc.send("WHO {0} nuhs%nhuac".format(channel))
-            host = "*!*@" + self[channel][nick]['host']
+            host = f"*!*@{self[channel][nick]['host']}"
         return host
 
     def flush(self):

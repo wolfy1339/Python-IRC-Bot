@@ -767,7 +767,7 @@ def forecastio_current_weather(bot, event, irc, args):
     temp = today['temperature']
     dew = today['dewPoint']
     pressure = today['pressure']
-    : .1fspeed = today['windSpeed']
+    speed = today['windSpeed']
     degrees = today['windBearing']
     humidity = today['humidity']
     APtemp = today['apparentTemperature']
@@ -784,17 +784,17 @@ def forecastio_current_weather(bot, event, irc, args):
         cover_word = 'Clear'
 
     temp_c = (temp - 32) / 1.8
-    temp = '%.1f\u00B0F (%.1f\u00B0C)' % (temp, temp_c)
+    temp = f'{temp_c:.1f}\u00B0C ({temp}\u00B0F)'
 
     dew_c = (dew - 32) / 1.8
-    dew = '%.1f\u00B0F (%.1f\u00B0C)' % (dew, dew_c)
+    dew = f'{dew_c:.1f}\u00B0C ({dew:.1f}\u00B0F)'
 
     APtemp_c = (APtemp - 32) / 1.8
-    APtemp = '%.1f\u00B0F (%.1f\u00B0C)' % (APtemp, APtemp_c)
+    APtemp = f'{APtemp:.1f}\u00B0F ({APtemp_c:.1f}\u00B0C)'
 
-    humidity = str(int(float(humidity) * 100)) + '%'
+    humidity = f'{int(float(humidity) * 100))}%'
 
-    pressure = '%.2fin (%.2fmb)' % (pressure * 0.0295301, pressure)
+    pressure = f'{(pressure * 0.0295301):.2f}in ({pressure:.2f}mb)'
     cond = cond.replace('-', ' ')
     cond = cond.title()
 
