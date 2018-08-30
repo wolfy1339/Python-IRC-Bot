@@ -37,9 +37,7 @@ def main():
 
 
 def ssl_context():
-    import ssl, sys
-    if tuple(sys.version_info)[:-2] < (2, 7, 13):
-        ssl.PROTOCOL_TLS = ssl.PROTOCOL_SSLv23
+    import ssl
     context = ssl.SSLContext(ssl.PROTOCOL_TLS)
     context.load_cert_chain('/etc/ssl/certs/znc.pem')
     return context

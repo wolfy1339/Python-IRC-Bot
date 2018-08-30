@@ -100,8 +100,6 @@ def reload_cmd(bot, event, irc, args):
         reload = __import__("importlib").reload
     elif utils.util.PY3:
         reload = __import__("imp").reload
-    elif utils.util.PY2:
-        reload = __builtins__["reload"]
 
     if args[0] != "utils.util":
         try:
