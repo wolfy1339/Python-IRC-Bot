@@ -792,7 +792,7 @@ def forecastio_current_weather(bot, event, irc, args):
     APtemp_c = (APtemp - 32) / 1.8
     APtemp = f'{APtemp:.1f}\u00B0F ({APtemp_c:.1f}\u00B0C)'
 
-    humidity = f'{int(float(humidity) * 100))}%'
+    humidity = f'{int(float(humidity) * 100)}%'
 
     pressure = f'{(pressure * 0.0295301):.2f}in ({pressure:.2f}mb)'
     cond = cond.replace('-', ' ')
