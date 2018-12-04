@@ -92,6 +92,7 @@ def titler(bot, event, irc, args):
     # Implementation taken from Eleos
     match = re.search(r"(?:https?://)(?:www\.)?([^\s]+)", " ".join(args))
     if match is not None:
+        log.info(f'Fetching URL ({match.group(0)}) from user {event.source}')
         try:
             t, url = _get_title(match.group(0))
             title = "[{0!s}] - {1!s}".format(t, url)
