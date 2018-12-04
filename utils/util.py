@@ -70,7 +70,7 @@ def call_command(bot, event, irc, arguments):
             perms = commands[name]['perms']
             min_args = commands[name]['minArgs']
 
-            if check_perms({host:event.source.host,user:event.source.user}, chan, owner=perms[2], admin=perms[1],
+            if check_perms({'host':event.source.host,'user':event.source.user}, chan, owner=perms[2], admin=perms[1],
                            trusted=perms[0]) or name == 'shrug' and event.source.host.startswith("hellomouse/bin/notJeffbot"):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
