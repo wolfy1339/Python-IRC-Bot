@@ -119,7 +119,7 @@ def check_perms(uinfo, channel, owner=False, admin=False, trusted=False):
     is_admin = uinfo['host'] in admins
     is_trusted = uinfo['host'] in trustees
     is_Eleos = uinfo['host'] == "kalahari.sigint.pw" and uinfo['user']== "bot"
-    is_Jenni = event.source.user == "~jenni" and =host.startswith("jenni")
+    is_Jenni = event.source.user == "~jenni" and uinfo['host'].startswith("jenni")
     is_Celena = uinfo['host'] == "techcavern/bot"
     is_hellomouse_bots = uinfo['host'].startswith("hellomouse/bin/")
     is_bot = uinfo['host'].find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots and uinfo['host'] not in config.bots['hosts']
