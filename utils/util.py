@@ -71,7 +71,7 @@ def call_command(bot, event, irc, arguments):
             min_args = commands[name]['minArgs']
 
             if check_perms(host, chan, owner=perms[2], admin=perms[1],
-                           trusted=perms[0]):
+                           trusted=perms[0]) or name == 'shrug' and event.source.host.startswith("hellomouse/bin/notJeffbot"):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
                 else:
@@ -97,6 +97,7 @@ def call_hook(bot, event, irc, args):
     is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.user == "bot"
     is_Jenni = event.source.user == "~jenni" and event.source.host.startswith("jenni")
     is_Celena = event.source.host == "techcavern/bot"
+    is_hellomouse_bots = event.source.host.startswith("hellomouse/bin/")
     is_bot = event.source.host.find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena
     if event.target in config.hooks_whitelist and not is_bot:
         try:
@@ -117,7 +118,11 @@ def check_perms(host, channel, owner=False, admin=False, trusted=False):
     is_owner = host in config.owners
     is_admin = host in admins
     is_trusted = host in trustees
-    is_bot = host.find("/bot/") != -1 and host not in config.bots['hosts']
+    is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.user == "bot"
+    is_Jenni = event.source.user == "~jenni" and event.source.host.startswith("jenni")
+    is_Celena = event.source.host == "techcavern/bot"
+    is_hellomouse_bots = event.source.host.startswith("hellomouse/bin/")
+    is_bot = host.find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots and host not in config.bots['hosts']
     if channel in config.bots['channels']:
         is_bot = False
     is_ignored = check_ignored(host, channel)
