@@ -70,7 +70,7 @@ def call_command(bot, event, irc, arguments):
             perms = commands[name]['perms']
             min_args = commands[name]['minArgs']
 
-            if check_perms(host, chan, owner=perms[2], admin=perms[1],
+            if check_perms({host:event.source.host,user:event.source.user}, chan, owner=perms[2], admin=perms[1],
                            trusted=perms[0]) or name == 'shrug' and event.source.host.startswith("hellomouse/bin/notJeffbot"):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
@@ -108,24 +108,24 @@ def call_hook(bot, event, irc, args):
             print_error(irc, event)
 
 
-def check_perms(host, channel, owner=False, admin=False, trusted=False):
+def check_perms(uinfo, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
     trustees = config.trusted['global']
 
     admins += config.admins['channels'].get(channel, [])
     trustees += config.trusted['channels'].get(channel, [])
 
-    is_owner = host in config.owners
-    is_admin = host in admins
-    is_trusted = host in trustees
-    is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.user == "bot"
-    is_Jenni = event.source.user == "~jenni" and event.source.host.startswith("jenni")
-    is_Celena = event.source.host == "techcavern/bot"
-    is_hellomouse_bots = event.source.host.startswith("hellomouse/bin/")
-    is_bot = host.find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots and host not in config.bots['hosts']
+    is_owner = uinfo['host'] in config.owners
+    is_admin = uinfo['host'] in admins
+    is_trusted = uinfo['host'] in trustees
+    is_Eleos = uinfo['host'] == "kalahari.sigint.pw" and uinfo['user']== "bot"
+    is_Jenni = event.source.user == "~jenni" and =host.startswith("jenni")
+    is_Celena = uinfo['host'] == "techcavern/bot"
+    is_hellomouse_bots = uinfo['host'].startswith("hellomouse/bin/")
+    is_bot = uinfo['host'].find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots and uinfo['host'] not in config.bots['hosts']
     if channel in config.bots['channels']:
         is_bot = False
-    is_ignored = check_ignored(host, channel)
+    is_ignored = check_ignored(uinfo['host'], channel)
 
     if owner and is_owner:
         return True
