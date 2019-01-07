@@ -9,8 +9,8 @@ if not ci:
     caps = Caps(sasl, "multi-prefix", "account-notify", "extended-join")
 
 # IRC
-channels = ["##wolfy1339", "#powder-bots", "##lazy-valoran", "#valoran-bots"]
 
+channels = ["##wolfy1339", "#powder-bots", "##hellomouse", "#valoran-bots"]
 # Logging
 logFormat = '%(levelname)s %(asctime)s %(message)s'
 colorized = True
@@ -20,23 +20,23 @@ stdoutWrap = True
 
 # Bot
 commandChar = '?'
-owners = ['zirc/botters.wolfy1339']
+owners = ['hellomouse/dev/wolfy1339']
 admins = {
     'global': [],
     'channels': {
-        '##lazy-valoran': []
+        '##hellomouse': []
     }
 }
 trusted = {
     'global': [],
     'channels': {
-        '##lazy-valoran': []
+        '##hellomouse': []
     }
 }
-hooks_whitelist = ["##lazy-valoran", "##wolfy1339"]
+hooks_whitelist = ["##hellomouse", "##wolfy1339"]
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
-    'channels': ['##lazy-valoran', '##wolfy1339']
+    'channels': ['##hellomouse', '##wolfy1339']
 }
 ignores = {
     'global': [],
