@@ -15,13 +15,13 @@ def exec_cmd(bot, event, irc, args):
     import subprocess
     output = ''
     try:
-        output = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT).decode().splitlines()
+        output = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT)
         code = 0
     except subprocess.CalledProcessError as e:
         code = e.returncode
         output = e.output
 
-    for line in output:
+    for line in output.decode().splitlines():
         try:
             if len(line): # Somehow this value turns out to be an integer somehow. It should never ever be one
                 irc.reply(event, line)
