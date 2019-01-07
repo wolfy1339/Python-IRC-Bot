@@ -93,13 +93,18 @@ def add_hook(func):
     hooks.append(func)
 
 
-def call_hook(bot, event, irc, args):
+def isBot(event):
     is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.user == "bot"
     is_Jenni = event.source.user == "~jenni" and event.source.host.startswith("jenni")
     is_Celena = event.source.host == "techcavern/bot"
+    is_tacgnol = event.source.host == "2607:2200:0:2347:0:3353:f8:7d39" and event.source.user == "~mouses"
     is_hellomouse_bots = event.source.host.startswith("hellomouse/bin/")
     is_bot = event.source.host.find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots
-    if event.target in config.hooks_whitelist and not is_bot:
+    return is_bot
+
+
+def call_hook(bot, event, irc, args):
+    if event.target in config.hooks_whitelist and not isBot(event):
         try:
             for i in hooks:
                 i(bot, event, irc, args)
@@ -118,11 +123,7 @@ def check_perms(uinfo, channel, owner=False, admin=False, trusted=False):
     is_owner = uinfo['host'] in config.owners
     is_admin = uinfo['host'] in admins
     is_trusted = uinfo['host'] in trustees
-    is_Eleos = uinfo['host'] == "kalahari.sigint.pw" and uinfo['user']== "bot"
-    is_Jenni = uinfo['user'] == "~jenni" and uinfo['host'].startswith("jenni")
-    is_Celena = uinfo['host'] == "techcavern/bot"
-    is_hellomouse_bots = uinfo['host'].startswith("hellomouse/bin/")
-    is_bot = (uinfo['host'].find("/bot/") != -1 or is_Eleos or is_Jenni or is_Celena or is_hellomouse_bots) and uinfo['host'] not in config.bots['hosts']
+    is_bot = isBot(event)
     if channel in config.bots['channels']:
         is_bot = False
     is_ignored = check_ignored(uinfo['host'], channel)
