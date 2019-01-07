@@ -103,6 +103,7 @@ def reload_cmd(bot, event, irc, args):
 
     if args[0] != "utils.util":
         try:
+            del __import__('sys').modules[args[0]]
             reload(__import__(args[0]))
             irc.reply(event, "Reloaded {0}".format(args[0]))
         except ImportError:
