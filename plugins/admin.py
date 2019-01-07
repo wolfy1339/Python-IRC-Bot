@@ -13,15 +13,20 @@ import utils
 def exec_cmd(bot, event, irc, args):
     """Executes a subprocess"""
     import subprocess
+    output = ''
     try:
-        output = subprocess.check_output(args).decode().splitlines()
-        for line in output:
-            if len(line):
-                irc.reply(event, line)
+        output = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT).decode().splitlines()
         code = 0
     except subprocess.CalledProcessError as e:
         code = e.returncode
+        output = e.output
 
+    for line in output:
+        try:
+            if len(line): # Somehow this value turns out to be an integer somehow. It should never ever be one
+                irc.reply(event, line)
+        except Exception:
+            log.error(f"Exec command error: Invalid Value: {line}")
     irc.reply(event, "{0!s}: Process's exit code is {1!s}".format(event.source.nick, code))
 
 
