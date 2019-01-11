@@ -70,7 +70,7 @@ def call_command(bot, event, irc, arguments):
             perms = commands[name]['perms']
             min_args = commands[name]['minArgs']
 
-            if check_perms({'host':event.source.host,'user':event.source.user}, chan, owner=perms[2], admin=perms[1],
+            if check_perms(event, chan, owner=perms[2], admin=perms[1],
                            trusted=perms[0]) or name == 'shrug' and event.source.host.startswith("hellomouse/bin/notJeffbot"):
                 if len(args) < min_args:
                     irc.reply(event, config.argsMissing)
@@ -113,20 +113,20 @@ def call_hook(bot, event, irc, args):
             print_error(irc, event)
 
 
-def check_perms(uinfo, channel, owner=False, admin=False, trusted=False):
+def check_perms(event, channel, owner=False, admin=False, trusted=False):
     admins = config.admins['global']
     trustees = config.trusted['global']
 
     admins += config.admins['channels'].get(channel, [])
     trustees += config.trusted['channels'].get(channel, [])
 
-    is_owner = uinfo['host'] in config.owners
-    is_admin = uinfo['host'] in admins
-    is_trusted = uinfo['host'] in trustees
+    is_owner = event.source.host in config.owners
+    is_admin = event.source.host in admins
+    is_trusted = event.source.host in trustees
     is_bot = isBot(event)
     if channel in config.bots['channels']:
         is_bot = False
-    is_ignored = check_ignored(uinfo['host'], channel)
+    is_ignored = check_ignored(event.source.host, channel)
 
     if owner and is_owner:
         return True
