@@ -35,4 +35,4 @@ def hash_cmd(bot, event, irc, args):
         func = getattr(hashlib, args[0])
         irc.reply(event, func(" ".join(args[1:]).encode()).hexdigest())
     else:
-        irc.reply(event, "Unknown hashing mechanism: " + args[0])
+        irc.reply(event, f"Unknown hashing mechanism: {args[0]}")

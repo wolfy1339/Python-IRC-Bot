@@ -43,10 +43,10 @@ def ban(bot, event, irc, args):
             host = args[0]
         else:
             try:
-                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
+                host = f"*!*@{bot.userdb[event.target][args[0]]['host']}"
             except KeyError:
-                irc.send("WHO {0} nuhs%nhuac".format(event.target))
-                host = "*!*@" + bot.userdb[event.target][args[0]]['host']
+                irc.send(f"WHO {event.target} nuhs%nhuac")
+                host = f"*!*@{bot.userdb[event.target][args[0]]['host']}"
         irc.ban(event.target, host)
 
 
@@ -79,7 +79,7 @@ def remove(bot, event, irc, args):
     """
     channel, users, message = utils.irc.get_info_tuple(event, args)
     if message == event.source.nick:
-        message = "{0} says GTFO!".format(event.source.nick)
+        message = f"{event.source.nick} says GTFO!"
     for i in users:
         irc.remove(channel, i, message)
 

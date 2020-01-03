@@ -10,14 +10,14 @@ class User(object):
 
     def on_nicknameinuse(self, event, irc):
         log.error("Nick already in use, trying alternative")
-        irc.nick(self.config['nickname'] + "_")
+        irc.nick(f"{self.config['nickname']}_")
         self.config['nickname'] = self.config['nickname'] + "_"
 
     @staticmethod
     def on_bannedfromchan(event, irc):
         s = event.raw.split(" ")
         channel = s[3]
-        irc.notice("wolfy1339", "Banned from {0}".format(channel))
+        irc.notice("wolfy1339", f"Banned from {channel}"))
         log.warning("Banned from %s", channel)
 
     # Account tracking
@@ -47,7 +47,7 @@ class User(object):
         if nick != "ChanServ":
             args = event.arguments
             (channel, ident, host) = args[:3]
-            hostmask = "{0}!{1}@{2}".format(nick, ident, host)
+            hostmask = f"{nick}!{ident}@{host}"
             account = args[4] if args[4] != "0" else None
             self.userdb.add_entry(channel, nick, hostmask, account)
 

@@ -25,7 +25,7 @@ def calc(bot, event, irc, args):
             output = format(int(float(result)), ",d")
         else:
             output = result
-        message = "The answer is: {0}".format(output)
+        message = f"The answer is: {output}"
     else:
         message = r.json()['error']
     irc.reply(event, message)
@@ -34,7 +34,7 @@ def calc(bot, event, irc, args):
 @add_cmd("echo", min_args=1)
 def echo(bot, event, irc, args):
     """Responds with given text"""
-    irc.reply(event, '\u200b' + ' '.join(args))
+    irc.reply(event, f'\u200b{' '.join(args)}')
 
 
 @add_cmd("rainbow", min_args=1)
@@ -155,4 +155,4 @@ def seen(bot, event, irc, args):
                         "{5} seconds ago: {1}"])
         irc.reply(event, msg.format(nick, last_msg, ago.days, hour, minute, seconds))
     except (KeyError, TypeError):
-        irc.reply(event, "I have not seen {0}".format(nick))
+        irc.reply(event, f"I have not seen {nick}")

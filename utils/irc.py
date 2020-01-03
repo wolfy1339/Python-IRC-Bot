@@ -53,7 +53,7 @@ def get_info_tuple(event, args, userdb=None):
     if " ".join(args[:-len(users)]) != '':
         message = " ".join(args[:-len(users)])
     else:
-        message = "{0}".format(event.source.nick)
+        message = f"{event.source.nick}"
     for (i, v) in enumerate(users):
         if not v.find("!") != -1 and userdb is not None:
             users[i] = get_user_host(userdb, event.target, v)

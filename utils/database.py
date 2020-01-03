@@ -64,7 +64,7 @@ class Database(dict):
         try:
             host = f"*!*@{self[channel][nick]['host']}"
         except KeyError:
-            self.irc.send("WHO {0} nuhs%nhuac".format(channel))
+            self.irc.send(f"WHO {channel} nuhs%nhuac")
             host = f"*!*@{self[channel][nick]['host']}"
         return host
 

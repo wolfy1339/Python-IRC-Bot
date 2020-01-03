@@ -27,7 +27,7 @@ def exec_cmd(bot, event, irc, args):
                 irc.reply(event, line)
         except Exception:
             log.error(f"Exec command error: Invalid Value: {line}")
-    irc.reply(event, "{0!s}: Process's exit code is {1!s}".format(event.source.nick, code))
+    irc.reply(event, f"{event.source.nick}: Process's exit code is {code}")
 
 
 @add_cmd("eval", alias=['py', '>>'], min_args=1, owner=True, hide=True)
@@ -41,7 +41,7 @@ def eval_cmd(bot, event, irc, args):
                 irc.reply(event, line)
 
     except Exception as e:
-        irc.reply(event, "{0}: {1}".format(e.__class__.__name__, e.args[0]))
+        irc.reply(event, f"{e.__class__.__name__}: {e.args[0]}")
         utils.util.print_error(irc, event)
 
 
@@ -59,9 +59,9 @@ def log_level(bot, event, irc, args):
     Changes the logging level"""
     try:
         log.setLevel(getattr(log, args[0].upper()))
-        irc.reply(event, "Set log level to {0}".format(args[0]))
+        irc.reply(event, f"Set log level to {args[0]}")
     except AttributeError:
-        irc.reply(event, "Invalid log level {0}".format(args))
+        irc.reply(event, f"Invalid log level {args}")
 
 
 @add_cmd("config", admin=True, min_args=1, alias=['cfg'])
@@ -75,9 +75,9 @@ def config_cmd(bot, event, irc, args):
             except Exception:
                 value = args[1]
             setattr(config, args[0], value)
-            irc.reply(event, "Set config.{0} to {1}".format(args[0], args[1]))
+            irc.reply(event, f"Set config.{args[0]} to {args[1]}")
         else:
-            irc.reply(event, "Invalid config variable {}".format(args[0]))
+            irc.reply(event, f"Invalid config variable {args[0]}")
     else:
         if hasattr(config, args[0]):
             if args[0] == 'password' and event.target.startswith('#'):
@@ -85,7 +85,7 @@ def config_cmd(bot, event, irc, args):
             else:
                 irc.reply(event, repr(getattr(config, args[0])))
         else:
-            irc.reply(event, "Invalid config variable {}".format(args[0]))
+            irc.reply(event, f"Invalid config variable {args[0]}")
 
 
 @add_cmd("quit", admin=True, min_args=0)

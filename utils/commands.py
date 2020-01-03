@@ -24,5 +24,5 @@ def format_cmd_docs(docs, name):
     s = '{0!s} {1!s}'.format(name, doclines.pop(0))
     if doclines:
         doc = ' '.join(doclines)
-        s = '({0!s}) -- {1!s}'.format('\x02' + s + '\x0F', doc)
+        s = f'(\x02{s}\x0F) -- {doc}'
     return normalize_whitespace(s)

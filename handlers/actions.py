@@ -7,8 +7,7 @@ import log
 import plugins
 import hooks  # pylint: disable=unused-import
 from utils import irc as irc_utils
-from utils import util
-from utils import web
+from utils import util, web
 # Third-party imports
 import iso8601 as iso
 
@@ -20,10 +19,9 @@ class Actions(object):
 
     def on_privmsg(self, event, irc, arguments):
         str_args = " ".join(arguments)
+        nickname = self.config['nickname']
         if (str_args.startswith(config.commandChar) or
-                str_args.split(" ")[0] in ["{}{}".format(self.config['nickname'], ","),
-                                           "{}{}".format(self.config['nickname'], ":"),
-                                           self.config['nickname']]):
+                str_args.split(" ")[0][:-1] == nickname:
             util.call_command(self.bot, event, irc, arguments)
         else:
             util.call_hook(self.bot, event, irc, arguments)
@@ -60,7 +58,7 @@ class Actions(object):
             self.userdb[event.target][nick]['seen'] = sorted(udb["seen"],
                                                              key=compare)[-5:]
         except KeyError:
-            irc.send("WHO {0} nuhs%nhuac".format(event.target))
+            irc.send(f"WHO {event.target} nuhs%nhuac")
 
     @staticmethod
     def on_send(data):
@@ -128,8 +126,8 @@ class Actions(object):
             log.info("Joining %s", event.target)
             if event.target not in self.userdb:
                 self.userdb[event.target] = {}
-            irc.send("WHO {0} nuhs%nhuac".format(event.target))
-            irc.send("NAMES {0}".format(event.target))
+            irc.send(f"WHO {event.target} nuhs%nhuac")
+            irc.send(f"NAMES {event.target}")
         else:
             # Extended join methods
             if len(args):
@@ -138,7 +136,7 @@ class Actions(object):
                 channel = event.target
                 account = args[0] if args[0] != "*" else None
                 self.userdb.add_entry(channel, nick, hostmask, account)
-            irc.send("WHO {0} nuhs%nhuac".format(event.source.nick))
+            irc.send(f"WHO {event.source.nick} nuhs%nhuac")
 
     @staticmethod
     def on_invite(event, irc):
