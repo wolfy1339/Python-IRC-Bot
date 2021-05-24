@@ -17,7 +17,7 @@ class User(object):
     def on_bannedfromchan(event, irc):
         s = event.raw.split(" ")
         channel = s[3]
-        irc.notice("wolfy1339", f"Banned from {channel}"))
+        irc.notice("wolfy1339", f"Banned from {channel}")
         log.warning("Banned from %s", channel)
 
     # Account tracking
