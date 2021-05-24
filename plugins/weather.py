@@ -378,8 +378,8 @@ def weather(bot, event, irc, args):
         temp_f = (temp * 1.8) + 32.0
         if rh >= 40.0 and temp_f >= 80.0:
             heatindex = gen_heat_index(temp_f, rh)
-            heatindex = '%.1f\u00B0F (%.1f\u00B0C)' % (
-                heatindex, (heatindex - 32.0) / (1.8))
+            heatindex = '%.1f\u00B0C (%.1f\u00B0F)' % ((heatindex - 32.0) / (1.8),
+                heatindex)
 
     if pressure:
         if pressure.startswith('Q'):
@@ -399,10 +399,10 @@ def weather(bot, event, irc, args):
 
             if isinstance(temp, float):
                 f = (temp * 1.8) + 32
-                temp = '%.1f\u00B0F (%.1f\u00B0C)' % (f, temp)
+                temp = '%.1f\u00B0C (%.1f\u00B0F)' % (temp, f)
             if isinstance(dew, float):
                 f = (dew * 1.8) + 32
-                dew = '%.1f\u00B0F (%.1f\u00B0C)' % (f, dew)
+                dew = '%.1f\u00B0C (%.1f\u00B0F)' % (dew, f)
     else:
         pressure = '?mb'
 
