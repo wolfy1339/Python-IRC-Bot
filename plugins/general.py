@@ -84,13 +84,13 @@ def list_cmds(bot, event, irc, args):
             else:
                 users.append(i)
         cmd_list = users
-        if utils.util.check_perms(host, channel, owner=True):
+        if utils.util.check_perms(event, channel, owner=True):
             cmd_list += owner + admin + trusted
             msg = text.format('Owner', ", ".join(sorted(cmd_list)))
-        elif utils.util.check_perms(host, channel, admin=True):
+        elif utils.util.check_perms(event, channel, admin=True):
             cmd_list += admin + trusted
             msg = text.format('Admin', ", ".join(sorted(cmd_list)))
-        elif utils.util.check_perms(host, channel, trusted=True):
+        elif utils.util.check_perms(event, channel, trusted=True):
             cmd_list += trusted
             msg = text.format('Trusted', ", ".join(sorted(cmd_list)))
         else:
@@ -106,11 +106,11 @@ def permissions(bot, event, irc, args):
 
     is_bot = host.find("/bot/") != -1
     is_bot_chan = channel in config.bots['channels']
-    if utils.util.check_perms(host, channel, owner=True):
+    if utils.util.check_perms(event, channel, owner=True):
         perms = 'Owner'
-    elif utils.util.check_perms(host, channel, admin=True):
+    elif utils.util.check_perms(event, channel, admin=True):
         perms = 'Admin'
-    elif utils.util.check_perms(host, channel, trusted=True):
+    elif utils.util.check_perms(event, channel, trusted=True):
         perms = 'Trusted'
     elif host in config.bots['hosts'] or (is_bot_chan and is_bot):
         perms = 'Bot'
