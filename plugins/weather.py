@@ -74,7 +74,7 @@ def code(search):
 
 def get_metar(icao_code):
     '''Obtain METAR data from NOAA for a given ICAO code'''
-    url = 'http://tgftp.nws.noaa.gov/data/observations/metar/stations/%s.TXT'
+    url = 'https://tgftp.nws.noaa.gov/data/observations/metar/stations/%s.TXT'
     req = web.get(url % icao_code)
     page = req.text
 
