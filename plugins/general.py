@@ -34,7 +34,7 @@ def calc(bot, event, irc, args):
 @add_cmd("echo", min_args=1)
 def echo(bot, event, irc, args):
     """Responds with given text"""
-    irc.reply(event, f'\u200b{' '.join(args)}')
+    irc.reply(event, f"\u200b{' '.join(args)}")
 
 
 @add_cmd("rainbow", min_args=1)
