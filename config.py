@@ -1,7 +1,8 @@
 from zirc import Sasl, Caps
+from os import getenv
 
 # zIRC
-ci = __import__("os").getenv('CI', 'false') == 'true'
+ci = getenv('CI', 'false') == 'true'
 if not ci:
     with open("password", "r") as i:
         password = i.read().strip()
@@ -9,8 +10,7 @@ if not ci:
     caps = Caps(sasl, "multi-prefix", "account-notify", "extended-join")
 
 # IRC
-
-channels = ["##wolfy1339", "#powder-bots", "##hellomouse", "#valoran-bots"]
+channels = ["##wolfy1339", "#powder-bots", "#hellomouse", "#hellomouse-botwar"]
 # Logging
 logFormat = '%(levelname)s %(asctime)s %(message)s'
 colorized = True
@@ -24,24 +24,24 @@ owners = ['hellomouse/dev/wolfy1339']
 admins = {
     'global': [],
     'channels': {
-        '##hellomouse': []
+        '#hellomouse': []
     }
 }
 trusted = {
     'global': [],
     'channels': {
-        '##hellomouse': []
+        '#hellomouse': []
     }
 }
-hooks_whitelist = ["##hellomouse", "##wolfy1339"]
+hooks_whitelist = ["#hellomouse", "##wolfy1339"]
 bots = {
     'hosts': ['botters/wolf1339/bot/bigwolfy1339'],
-    'channels': ['##hellomouse', '##wolfy1339']
+    'channels': ['#hellomouse', '##wolfy1339']
 }
 ignores = {
     'global': [],
     'channels': {
-        "##powder-bots": [],
+        "#powder-bots": [],
         "##wolfy1339": [],
     }
 }
