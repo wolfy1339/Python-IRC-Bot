@@ -370,23 +370,7 @@ def weather(bot, event, irc, args):
 
     windchill = False
     if isinstance(temp, float) and isinstance(speed, float) and temp <= 10.0 and speed > 0:
-        # Convert knots to kilometers per hour, https://is.gd/3dNrbW
-        speed_kmh = speed * 1.852
-
-        # Formula for Windchill: https://is.gd/SS0u6E
-        windchill = 13.12 + (0.6215 * temp) - (11.37 * (speed_kmh **
-                                                        (0.16))) + (0.3965 * temp * (speed_kmh ** (0.16)))
-        windchill = float(windchill)
-
-        # convert result int(o) Fahrenheit
-        f = (windchill * 1.8) + 32
-
-        if icao_code.startswith('K'):
-            # if in North America
-            windchill = '%.1f\u00B0F (%.1f\u00B0C)' % (f, windchill)
-        else:
-            # else, anywhere else in the worldd
-            windchill = '%.1f\u00B0C' % windchill
+        windchill = windchill(temp, speed)
 
     heatindex = False
     if isinstance(temp, float) and isinstance(dew, float):
@@ -525,8 +509,25 @@ def weather(bot, event, irc, args):
     irc.reply(event, output)
 
 
-def windchill(bot, event, irc, args):
-    pass
+def windchill(speed, temp):
+    # Convert knots to kilometers per hour, https://is.gd/3dNrbW
+    speed_kmh = speed * 1.852
+
+    # Formula for Windchill: https://is.gd/SS0u6E
+    windchill = 13.12 + (0.6215 * temp) - (11.37 * (speed_kmh **
+                                                    (0.16))) + (0.3965 * temp * (speed_kmh ** (0.16)))
+    windchill = float(windchill)
+
+    # convert result int(o) Fahrenheit
+    f = (windchill * 1.8) + 32
+
+    if icao_code.startswith('K'):
+        # if in North America
+        windchill = '%.1f\u00B0C (%.1f\u00B0F)' % (windchill, f)
+    else:
+        # else, anywhere else in the worldd
+        windchill = '%.1f\u00B0C' % windchill
+    return windchill
 
 
 def get_windchill(bot, event, irc, args):
