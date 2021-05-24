@@ -165,7 +165,8 @@ def print_error(irc, event):
                      data=data,
                      allow_redirects=True,
                      timeout=60)
-            irc.msg('##wolfy1339', f"Error: {r.text.split("\n")[0]}")
+            url = r.text.split('\n')[0]
+            irc.msg('##wolfy1339', f"Error: {url}")
         except Exception:
             irc.msg('##wolfy1339', config.tracebackPostError)
             log.exception(config.tracebackPostError)
