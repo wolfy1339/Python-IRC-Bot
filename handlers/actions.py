@@ -21,7 +21,7 @@ class Actions(object):
         str_args = " ".join(arguments)
         nickname = self.config['nickname']
         if (str_args.startswith(config.commandChar) or
-                str_args.split(" ")[0][:-1] == nickname:
+                str_args.split(" ")[0][:-1] == nickname):
             util.call_command(self.bot, event, irc, arguments)
         else:
             util.call_hook(self.bot, event, irc, arguments)
