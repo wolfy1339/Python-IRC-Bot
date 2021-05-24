@@ -34,12 +34,12 @@ class Actions(object):
     @staticmethod
     def _get_time(tags):
         if len(tags):
-            for i in tags:
-                try:
-                    date = iso.parse_date(i['time'])
-                    timestamp = time.mktime(date.timetuple())
-                except KeyError:
-                    pass
+            try:
+                timeTag = [tag for tag in tags if hasattr(tag, time)][0]
+                date = iso.parse_date(timeTag)
+                timestamp = time.mktime(date.timetuple())
+            except Exception:
+                timestamp = time.time()
         else:
             timestamp = time.time()
         return timestamp
