@@ -46,6 +46,10 @@ ignores = {
     }
 }
 
+# Privmsg hooks
+enable_titler = []
+enable_correct = []
+
 # Error messages
 noPerms = " ".join(["Sorry,",
                     "you do not have the right permissions",
