@@ -1,10 +1,25 @@
 import json
 import copy
+from typing import Generic, MutableMapping, Optional, TypeVar, TypedDict
+from zirc.event import Event
 
 from zirc.wrappers import connection_wrapper
 
+class SeenDB(TypedDict):
+    time: float
+    message: str
 
-class Database(dict):
+class UserDB(TypedDict):
+    hostmask: str
+    host: str
+    account: str
+    modes: str
+    seen: list[SeenDB]
+
+_KT = TypeVar("_KT", str) #  key type
+_VT = TypeVar("_VT", dict[str, UserDB]) #  value type
+
+class Database(dict[_KT, _VT]):
     """Holds a dict that contains all the information
     about the users and their last seen actions in a channel"""
 
@@ -18,7 +33,7 @@ class Database(dict):
                 self.send = bot.send
         self.irc = connection_wrapper(x(bot))
 
-    def change_attr(self, name, attr, value, channel=None):
+    def change_attr(self, name: str, attr: str, value: str, channel: Optional[str]=None):
         if channel is not None:
             self[channel][name][attr] = value
         for i in self:
@@ -34,7 +49,7 @@ class Database(dict):
             except KeyError:
                 pass
 
-    def remove_entry(self, event, nick):
+    def remove_entry(self, event: Event, nick: str):
         try:
             del self[event.target][nick]
         except KeyError:
@@ -43,8 +58,8 @@ class Database(dict):
                     del self[event.target][i['hostmask'].split("!")[0]]
                     break
 
-    def add_entry(self, channel, nick, hostmask, account):
-        temp = {
+    def add_entry(self, channel: str, nick: str, hostmask: str, account: str):
+        temp: UserDB = {
             'hostmask': hostmask,
             'host': hostmask.split("@")[1],
             'account': account,
@@ -60,7 +75,7 @@ class Database(dict):
         else:
             self[channel][nick] = temp
 
-    def get_user_host(self, channel, nick):
+    def get_user_host(self, channel: str, nick: str):
         try:
             host = f"*!*@{self[channel][nick]['host']}"
         except KeyError:

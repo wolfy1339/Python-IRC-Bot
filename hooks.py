@@ -1,3 +1,6 @@
+from zirc.event import Event
+from zirc.wrappers import connection_wrapper
+from bot import Bot
 from contextlib import closing
 from bs4 import BeautifulSoup
 import re
@@ -9,7 +12,7 @@ import config
 
 
 @add_hook
-def self_correct(bot, event, irc, args):
+def self_correct(bot: Bot, event: Event, irc: connection_wrapper, args: list[str]):
     if event.target in config.enable_correct:
         match = re.match(r"^s[/]([^/]+)[/]([^/]+)[/]?$", " ".join(args))
         if match is not None:
@@ -33,7 +36,7 @@ def self_correct(bot, event, irc, args):
 
 
 @add_hook
-def user_correct(bot, event, irc, args):
+def user_correct(bot: Bot, event: Event, irc: connection_wrapper, args: list[str]):
     if event.target in config.enable_correct:
         match = re.match(r"^u[/]([^/]+)[/]([^/]+)[/]([^/]+)[/]?$", " ".join(args))
         if match is not None:
@@ -56,10 +59,8 @@ def user_correct(bot, event, irc, args):
             pass
 
 
-def _get_title(url):
+def _get_title(url: str):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/88.0'}
-    if 'google' in url or 'goo.gl' in url:
-        headers['Cookie'] = "NID=127=kC6ePzilj4duAyFQnFHYFDsfLhMwM8XBb8lHNbRlMFyqpMpP9sRG9OtOihNxNVBbBiHEHFtq3zkguVYNOCoMccPk3csLpPaWevigfcUYtgsx7PUStcmAcXKWlIN-KY-m"
 
     with closing(requests.get(url, stream=True, timeout=4, headers=headers)) as r:
         status = r.status_code
@@ -91,7 +92,7 @@ def _get_title(url):
 
 
 @add_hook
-def titler(bot, event, irc, args):
+def titler(bot: Bot, event: Event, irc: connection_wrapper, args: list[str]):
     if event.target in config.enable_titler:
         # Implementation taken from Eleos
         match = re.search(r"(?:https?://)(?:www\.)?([^\s]+)", " ".join(args))

@@ -1,19 +1,26 @@
 import time
+from typing import List, Optional
+from utils import tasks
+
+from zirc.event import Event
+from utils.database import Database
+
+from zirc.wrappers import connection_wrapper
 
 
-def chunks(l, n):
+def chunks(l: List, n: int):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
 
-def set_mode(irc, channel, users, mode):
+def set_mode(irc: connection_wrapper, channel: str, users: List[str], mode: str):
     for block in chunks(users, 4):
         modes = "".join(mode[1:]) * len(block)
         irc.mode(channel, " ".join(block), mode[0] + modes)
 
 
-def get_users(args):
+def get_users(args: str):
     if args.find(",") != -1:
         pos = args.find(",")
         users_str = args[pos:].strip()
@@ -34,11 +41,11 @@ def get_users(args):
     return users
 
 
-def get_user_host(userdb, channel, nick):
+def get_user_host(userdb: Database, channel: str, nick: str):
     return userdb.get_user_host(channel, nick)
 
 
-def get_info_tuple(event, args, userdb=None):
+def get_info_tuple(event: Event, args: List[str], userdb: Optional[Database]=None):
     if args[0].startswith("#"):
         channel = args[0]
         str_args = " ".join(args[1:])
@@ -60,17 +67,17 @@ def get_info_tuple(event, args, userdb=None):
     return channel, users, message
 
 
-def unban_after_duration(tasks, irc, users, chan, duration):
+def unban_after_duration(irc: connection_wrapper, users: List[str], chan: str, duration: int):
     duration += int(time.time())
 
-    def func(irc, users, chan):
+    def func(irc: connection_wrapper, users: List[str], chan: str):
         for i in users:
             irc.unban(chan, i)
 
     tasks.run_at(duration, func, (irc, users, chan))
 
 
-def strip_colours(s):
+def strip_colours(s: str):
     import re
     ccodes = ['\x0f', '\x16', '\x1d', '\x1f', '\x02',
               '\x03([1-9][0-6]?)?,?([1-9][0-6]?)?']

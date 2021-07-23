@@ -1,6 +1,9 @@
 # STD lib imports
+from bot import Bot
 import sys
 import time
+from typing import Dict, List
+from utils.database import Database, SeenDB, UserDB
 # Pacakge imports
 import config
 import log
@@ -10,30 +13,32 @@ from utils import irc as irc_utils
 from utils import util, web
 # Third-party imports
 import iso8601 as iso
+from zirc import event, wrappers
 
 
 class Actions(object):
+    userdb: Database[str, dict[str, UserDB]] = None
+    bot: Bot = None
     @staticmethod
-    def on_ctcp(irc, event, raw):
-        log.info("Received CTCP reply " + raw)
+    def on_ctcp(irc: wrappers.connection_wrapper, event: event.Event, raw: str):
+        log.info(f"Received CTCP reply {raw}")
 
-    def on_privmsg(self, event, irc, arguments):
+    def on_privmsg(self, event: event.Event, irc: wrappers.connection_wrapper, arguments: list[str]):
         str_args = " ".join(arguments)
-        nickname = self.config['nickname']
+        nickname: str = self.config['nickname']
         if (str_args.startswith(config.commandChar) or
                 str_args.split(" ")[0][:-1] == nickname):
             util.call_command(self.bot, event, irc, arguments)
         else:
             util.call_hook(self.bot, event, irc, arguments)
-        nick = event.source.nick
+        nick: str = event.source.nick
         str_args = ' '.join(arguments)
         regex = r"^u[/]([^/]+)[/]([^/]+)[/]([^/]+)[/]?$|^s[/]([^/]+)[/]([^/]+)[/]?$"
         if __import__("re").match(regex, str_args) is None:
             self._update_seen_db(event, irc, nick, str_args)
 
-    @staticmethod
-    def _get_time(tags):
-        if len(tags):
+    def _get_time(self, tags: List[Dict[str, str]]):
+        if len(tags) and "server-time" in self.bot.config["caps"].availablecaps:
             try:
                 timeTag = [tag for tag in tags if hasattr(tag, time)][0]
                 date = iso.parse_date(timeTag)
@@ -44,7 +49,7 @@ class Actions(object):
             timestamp = time.time()
         return timestamp
 
-    def _update_seen_db(self, event, irc, nick, str_args):
+    def _update_seen_db(self, event: event.Event, irc: wrappers.connection_wrapper, nick: str, str_args: str):
         timestamp = self._get_time(event.tags)
         try:
             udb = self.userdb[event.target][nick]
@@ -61,11 +66,11 @@ class Actions(object):
             irc.send(f"WHO {event.target} nuhs%nhuac")
 
     @staticmethod
-    def on_send(data):
+    def on_send(data: str):
         if data.find("%") == -1:
             log.debug(data)
 
-    def on_nick(self, event, irc):
+    def on_nick(self, event: event.Event, irc: wrappers.connection_wrapper):
         nick = event.source.nick
         to_nick = event.arguments[0]
         for chan in self.userdb:
@@ -78,7 +83,7 @@ class Actions(object):
                     break
             break
 
-    def on_quit(self, event, irc):
+    def on_quit(self, event: event.Event, irc: wrappers.connection_wrapper):
         nick = event.source.nick
         if nick == self.config['nickname']:
             web.app.stop()
@@ -99,7 +104,7 @@ class Actions(object):
                             break
                 break
 
-    def on_kick(self, event, irc):
+    def on_kick(self, event: event.Event, irc: wrappers.connection_wrapper):
         nick = event.raw.split(" ")[3]
         if nick == self.config['nickname']:
             log.warning("Kicked from %s, trying to re-join", event.target)
@@ -107,7 +112,7 @@ class Actions(object):
         else:
             self.userdb.remove_entry(event, nick)
 
-    def on_part(self, event, irc):
+    def on_part(self, event: event.Event, irc: wrappers.connection_wrapper):
         requested = "".join(event.arguments).startswith("requested")
         nick = event.source.nick
         if nick == self.config['nickname']:
@@ -120,7 +125,7 @@ class Actions(object):
         else:
             self.userdb.remove_entry(event, nick)
 
-    def on_join(self, event, irc):
+    def on_join(self, event: event.Event, irc: wrappers.connection_wrapper):
         args = event.arguments
         if event.source.nick == self.config['nickname']:
             log.info("Joining %s", event.target)
@@ -128,6 +133,7 @@ class Actions(object):
                 self.userdb[event.target] = {}
             irc.send(f"WHO {event.target} nuhs%nhuac")
             irc.send(f"NAMES {event.target}")
+            irc.mode(event.target, "", "")
         else:
             # Extended join methods
             if len(args):
@@ -139,14 +145,14 @@ class Actions(object):
             irc.send(f"WHO {event.source.nick} nuhs%nhuac")
 
     @staticmethod
-    def on_invite(event, irc):
+    def on_invite(event: event.Event, irc: wrappers.connection_wrapper):
         hostmask = event.source.host
         channel = event.arguments[0]
         if util.check_perms(event, channel, trusted=True):
             log.info("Invited to %s by %s", channel, hostmask)
             irc.join(channel)
 
-    def on_notice(self, event, irc):
+    def on_notice(self, event: event.Event, irc: wrappers.connection_wrapper):
         source = event.source.host
         if not event.target == "*":
             if not event.target == self.config['nickname']:

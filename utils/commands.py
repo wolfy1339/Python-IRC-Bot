@@ -1,7 +1,7 @@
 import re
 
 
-def normalize_whitespace(s, remove_newline=True):
+def normalize_whitespace(s: str, remove_newline: bool=True):
     """Normalizes the whitespace in a string; \s+ becomes one space."""
     if not s:
         return str(s)  # not the same reference
@@ -19,7 +19,7 @@ def normalize_whitespace(s, remove_newline=True):
     return s
 
 
-def format_cmd_docs(docs, name):
+def format_cmd_docs(docs: str, name: str):
     doclines = docs.splitlines()
     s = '{0!s} {1!s}'.format(name, doclines.pop(0))
     if doclines:

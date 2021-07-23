@@ -1,16 +1,22 @@
+from typing import List, TYPE_CHECKING
 import utils
 from utils.util import add_cmd
 
+if TYPE_CHECKING:
+    from zirc.wrappers import connection_wrapper
+    from bot import Bot
+    from zirc.event import Event
+
 
 @add_cmd("join", trusted=True, min_args=1)
-def join(bot, event, irc, args):
+def join(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<channel>
     Joins given channel"""
     irc.join(args[0], key=args[1] if len(args) >= 2 else None)
 
 
 @add_cmd("part", alias=["leave"], trusted=True, min_args=0)
-def part(bot, event, irc, args):
+def part(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>]
     Parts the given or the current channel"""
     if len(args):
@@ -20,7 +26,7 @@ def part(bot, event, irc, args):
 
 
 @add_cmd("cycle", alias=["rejoin"], admin=True, min_args=0)
-def cycle(bot, event, irc, args):
+def cycle(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>]
     Parts then joins the given or the current channel"""
     if len(args):
@@ -32,7 +38,7 @@ def cycle(bot, event, irc, args):
 
 
 @add_cmd("ban", admin=True, min_args=1)
-def ban(bot, event, irc, args):
+def ban(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Bans a user"""
     if len(args) > 2 or " ".join(args).find(",") != -1:
@@ -51,7 +57,7 @@ def ban(bot, event, irc, args):
 
 
 @add_cmd("kban", admin=True, min_args=1)
-def kban(bot, event, irc, args):
+def kban(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kick-bans a user
     """
@@ -62,7 +68,7 @@ def kban(bot, event, irc, args):
 
 
 @add_cmd("kick", admin=True, min_args=1)
-def kick(bot, event, irc, args):
+def kick(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Kicks a user
     """
@@ -73,7 +79,7 @@ def kick(bot, event, irc, args):
 
 
 @add_cmd("remove", alias=['ninja'], admin=True, min_args=1)
-def remove(bot, event, irc, args):
+def remove(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Forces a user to part the channel.
     """
@@ -85,7 +91,7 @@ def remove(bot, event, irc, args):
 
 
 @add_cmd("unban", admin=True, min_args=1)
-def unban(bot, event, irc, args):
+def unban(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] [<message>] <nick>[, <nick>, ...]
     Unbans a user"""
     channel, users = utils.irc.get_info_tuple(event, args, bot.userdb)[:-1]
@@ -93,7 +99,7 @@ def unban(bot, event, irc, args):
 
 
 @add_cmd("op", admin=True, min_args=0)
-def op(bot, event, irc, args):
+def op(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] <nick>[, <nick>, ...]
     Give operator status to a user"""
     if len(args):
@@ -104,7 +110,7 @@ def op(bot, event, irc, args):
 
 
 @add_cmd("deop", admin=True, min_args=0)
-def deop(bot, event, irc, args):
+def deop(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] <nick>[, <nick>, ...]
     Remove operator status from a user"""
     if len(args):
@@ -115,7 +121,7 @@ def deop(bot, event, irc, args):
 
 
 @add_cmd("voice", admin=True, min_args=0)
-def voice(bot, event, irc, args):
+def voice(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] <nick>[, <nick>, ...]
     Give voiced status a user"""
     if len(args):
@@ -126,7 +132,7 @@ def voice(bot, event, irc, args):
 
 
 @add_cmd("unvoice", admin=True, min_args=0)
-def unvoice(bot, event, irc, args):
+def unvoice(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] <nick>[, <nick>, ...]
     Remove voiced status a user"""
     if len(args):

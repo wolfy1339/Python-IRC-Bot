@@ -1,6 +1,7 @@
 from ast import literal_eval
 import os
 import time
+from typing import List, TYPE_CHECKING
 
 from zirc.util import repl
 import config
@@ -8,18 +9,36 @@ import log
 from utils.util import add_cmd
 import utils
 
+if TYPE_CHECKING:
+    from zirc.event import Event
+
+    from zirc.wrappers import connection_wrapper
+    from bot import Bot
+
+
+@add_cmd
+def alias(bot, event, irc, args):
+    if args[0] == "add":
+        try:
+            utils.util.commands[args[1]] = utils.util.commands[args[2]]
+            utils.util.alias_list.append(args[1])
+        except KeyError:
+            irc.reply(event, "Looks like that command doesn't exist")
+    elif args[0] == "remove":
+        pass
+
 
 @add_cmd("exec", min_args=1, trusted=True, hide=True)
-def exec_cmd(bot, event, irc, args):
+def exec_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Executes a subprocess"""
     import subprocess
-    output = ''
+    output = b''
     try:
-        output = subprocess.check_output(args, shell=True, stderr=subprocess.STDOUT)
+        output = subprocess.check_output(" ".join(args), shell=True, stderr=subprocess.STDOUT)
         code = 0
     except subprocess.CalledProcessError as e:
-        code = e.returncode
-        output = e.output
+        code: int = e.returncode
+        output: bytes = e.output
 
     for line in output.decode().splitlines():
         try:
@@ -31,7 +50,7 @@ def exec_cmd(bot, event, irc, args):
 
 
 @add_cmd("eval", alias=['py', '>>'], min_args=1, owner=True, hide=True)
-def eval_cmd(bot, event, irc, args):
+def eval_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Admin console"""
     console = repl.Repl({'self': bot, 'bot': bot, 'irc': irc, 'event': event})
     try:
@@ -46,7 +65,7 @@ def eval_cmd(bot, event, irc, args):
 
 
 @add_cmd("nick", owner=True, min_args=1)
-def nick(bot, event, irc, args):
+def nick(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<nick>
     Changes the bot's nickname"""
     bot.config['nickname'] = args[0]
@@ -54,7 +73,7 @@ def nick(bot, event, irc, args):
 
 
 @add_cmd("log.level", admin=True, min_args=1)
-def log_level(bot, event, irc, args):
+def log_level(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<level>
     Changes the logging level"""
     try:
@@ -65,7 +84,7 @@ def log_level(bot, event, irc, args):
 
 
 @add_cmd("config", admin=True, min_args=1, alias=['cfg'])
-def config_cmd(bot, event, irc, args):
+def config_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<nick>
     Changes or displays a config variable"""
     if len(args) > 1:
@@ -89,7 +108,7 @@ def config_cmd(bot, event, irc, args):
 
 
 @add_cmd("quit", admin=True, min_args=0)
-def quit_cmd(bot, event, irc, args):
+def quit_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<text>
     Exits the bot with the QUIT message <text>."""
     irc.quit("zIRC - https://github.com/itslukej/zirc" if (
@@ -99,7 +118,7 @@ def quit_cmd(bot, event, irc, args):
 
 
 @add_cmd("reload", admin=True, min_args=1, hide=True)
-def reload_cmd(bot, event, irc, args):
+def reload_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Help text"""
     if utils.util.PY34:
         reload = __import__("importlib").reload
@@ -118,13 +137,13 @@ def reload_cmd(bot, event, irc, args):
 
 
 @add_cmd("flushq", alias=['flush'], min_args=0, admin=True)
-def flush(bot, event, irc, args):
+def flush(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     bot.fp.irc_queue = []
     irc.reply(event, "Cleared IRC queue")
 
 
 @add_cmd("ignore", min_args=1, admin=True)
-def add_ignore(bot, event, irc, args):
+def add_ignore(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<host> [<duration|random>] [<channel>]
     Adds an ignore for the specified host"""
     utils.ignores.add_ignore(irc, event, args)

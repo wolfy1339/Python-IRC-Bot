@@ -2,10 +2,11 @@
 # (https://git.libertas.tech/bs/Eleos/blob/master/utils/task.py)
 import threading
 import time
+from typing import Any, Callable, Optional
 
 
 class Task(object):
-    def __init__(self, func, args=(), kwargs=None):
+    def __init__(self, func: Callable, args: tuple[Any]=(), kwargs: Optional[dict[str, Any]]=None):
         self.func = func
         self.args = args
         self.kwargs = kwargs if kwargs is not None else {}
@@ -30,7 +31,7 @@ class Task(object):
 
 
 class IntervalTask(Task):
-    def __init__(self, interval, func, args=(), kwargs=None):
+    def __init__(self, interval: int, func: Callable, args:tuple=(), kwargs: Optional[dict[str, Any]]=None):
         super(IntervalTask, self).__init__(func, args, kwargs)
         self.interval = interval
 
@@ -43,7 +44,7 @@ class IntervalTask(Task):
 
 
 class ScheduleTask(Task):
-    def __init__(self, runtime, func, args=(), kwargs=None):
+    def __init__(self, runtime: int, func: Callable, args:tuple=(), kwargs: Optional[dict[str, Any]]=None):
         super(ScheduleTask, self).__init__(func, args, kwargs)
         self.runtime = runtime
 
@@ -60,28 +61,28 @@ class ScheduleTask(Task):
                 time.sleep(interval - started % interval)
 
 
-def run(func, daemon=False, args=(), kwargs=None):
+def run(func: Callable, daemon:bool=False, args:tuple=(), kwargs:Optional[dict[str, Any]]=None):
     t = Task(func, args, kwargs)
     t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_every(interval, func, daemon=False, args=(), kwargs=None):
+def run_every(interval:int, func: Callable, daemon:bool=False, args=(), kwargs:Optional[dict[str, Any]]=None):
     t = IntervalTask(interval, func, args, kwargs)
     t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_at(runtime, func, daemon=False, args=(), kwargs=None):
+def run_at(runtime:int, func: Callable, daemon:bool=False, args:tuple=(), kwargs:Optional[dict[str, Any]]=None):
     t = ScheduleTask(runtime, func, args, kwargs)
     t.thread.daemon = daemon
     t.start()
     return t
 
 
-def run_in(delay, func, daemon=False, args=(), kwargs=None):
+def run_in(delay:int, func: Callable, daemon:bool=False, args:tuple=(), kwargs:Optional[dict[str, Any]]=None):
     t = ScheduleTask(time.time() + delay, func, args, kwargs)
     t.thread.daemon = daemon
     t.start()

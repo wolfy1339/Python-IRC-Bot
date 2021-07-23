@@ -1,17 +1,24 @@
-import math
+import time
+from typing import List, TYPE_CHECKING
 import config
 import utils
 from utils.util import add_cmd
 
+if TYPE_CHECKING:
+    from utils.database import SeenDB
+    from zirc.event import Event
+    from zirc.wrappers import connection_wrapper
+    from bot import Bot
+
 
 @add_cmd("shrug", min_args=0)
-def shrug(bot, event, irc, args):
+def shrug(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Sends a shrug to the channel"""
     irc.reply(event, "\u00AF\\_(\u30C4)_/\u00AF")
 
 
 @add_cmd("calc", alias=["math"], min_args=1)
-def calc(bot, event, irc, args):
+def calc(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Command to do some math calculation using the math.js web API"""
     arguments = "".join(args)
     payload = {
@@ -32,25 +39,25 @@ def calc(bot, event, irc, args):
 
 
 @add_cmd("echo", min_args=1)
-def echo(bot, event, irc, args):
+def echo(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Responds with given text"""
     irc.reply(event, f"\u200b{' '.join(args)}")
 
 
 @add_cmd("rainbow", min_args=1)
-def rainbow(bot, event, irc, args):
+def rainbow(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Responds with given text colored in rainbow"""
     irc.reply(event, ' '.join(args), rainbow=True)
 
 
 @add_cmd("ping", min_args=0)
-def ping(bot, event, irc, args):
+def ping(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Responds with pong"""
     irc.reply(event, "PONG!")
 
 
 @add_cmd("help", min_args=0)
-def help_cmd(bot, event, irc, args):
+def help_cmd(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """<command>
     Returns help text for the specified command"""
     if len(args):
@@ -65,7 +72,7 @@ def help_cmd(bot, event, irc, args):
 
 
 @add_cmd("list", min_args=0, alias=["ls"])
-def list_cmds(bot, event, irc, args):
+def list_cmds(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Help text"""
     if len(args) and args[0] == "alias":
         irc.reply(event, ", ".join(utils.util.alias_list))
@@ -99,7 +106,7 @@ def list_cmds(bot, event, irc, args):
 
 
 @add_cmd("perms", min_args=0)
-def permissions(bot, event, irc, args):
+def permissions(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Replies with your permission level"""
     channel = event.target
     host = event.source.host
@@ -121,38 +128,51 @@ def permissions(bot, event, irc, args):
 
 
 @add_cmd("version", min_args=0)
-def version(bot, event, irc, args):
+def version(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     irc.reply(event, utils.version)
 
 
 @add_cmd("host", min_args=0)
-def hostmask(bot, event, irc, args):
+def hostmask(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """Replies with your host"""
     irc.reply(event, event.source.host)
 
 
 @add_cmd("seen", min_args=1)
-def seen(bot, event, irc, args):
+def seen(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     """[<channel>] <nick>
     Returns the last time <nick> was seen and what <nick> was last seen saying.
     <channel> is only necessary if the message isn't sent on the channel itself.
     """
-    import datetime
     if args[0].startswith("#"):
         channel = args[0]
         nick = args[1]
     else:
         channel = event.target
         nick = args[0]
+    msg = [f"I have last seen {nick} "]
     try:
         db = sorted(bot.userdb[channel][nick]["seen"], key=lambda x: x['time'], reverse=True)
-        ago = datetime.datetime.now() - datetime.datetime.fromtimestamp(db[0]["time"])
-        hour = math.floor(ago.seconds / 3600)
-        minute = math.floor((ago.seconds / 60) % 60)
-        seconds = ago.seconds - ((ago.days * 8600) + (hour * 3600) + (minute * 60))
-        last_msg = db[0]["message"]
-        msg = " ".join(["I have last seen {0} {2} days, {3} hours, {4} minutes and",
-                        "{5} seconds ago: {1}"])
-        irc.reply(event, msg.format(nick, last_msg, ago.days, hour, minute, seconds))
+        elapsed = int(time.time() - db[0]["time"])
+        day = 24 * 60 * 60
+        year, elapsed = elapsed // (365 * day), elapsed % (365 * day)
+        if year > 0:
+            msg.append(f"{year} years, ")
+        weeks, elapsed = elapsed // (7 * day), elapsed % (7 * day)
+        if weeks > 0:
+            msg.append(f"{weeks} weeks, ")
+        days, elapsed = elapsed // day, elapsed % day
+        if days > 0:
+            msg.append(f"{days} days, ")
+        hours, elapsed = elapsed // (60 * 60), elapsed % (60 * 60)
+        if hours > 0:
+            msg.append(f"{hours} hours, ")
+        minutes, seconds = elapsed // (60), elapsed % (60)
+        if minutes > 0:
+            msg.append(f"{minutes} minutes, ")
+        msg.append(f"{seconds} seconds")
+        msg.append(f"ago: {db[0]['message']}")
+
+        irc.reply(event, " ".join(msg))
     except (KeyError, TypeError):
         irc.reply(event, f"I have not seen {nick}")

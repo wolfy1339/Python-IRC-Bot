@@ -1,13 +1,18 @@
 import random
 import time
+from typing import List
+from zirc.event import Event
+
+from zirc.wrappers import connection_wrapper
 
 import config
 import log as logging
 
 
-def check_ignored(host, channel):
+def check_ignored(host: str, channel: str):
     ignores = config.ignores['global']
     if channel in config.ignores['channels'].keys():
+        # ignores = {'channels': {'##lazy-valoran':[[uhost, expires]]}}
         ignores.extend(config.ignores['channels'][channel])
 
     for i in ignores:
@@ -23,7 +28,7 @@ def check_ignored(host, channel):
     return False
 
 
-def add_ignore(irc, event, args):
+def add_ignore(irc: connection_wrapper, event: Event, args: List[str]):
     host = args[0]
     base_message = "Ignoring %s for %s seconds"
     indefinite = "Ignoring %s indefinately"

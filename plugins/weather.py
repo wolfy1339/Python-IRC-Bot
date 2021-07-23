@@ -1,3 +1,4 @@
+from typing import List, TYPE_CHECKING
 import datetime
 import json
 import re
@@ -16,12 +17,16 @@ try:
 except ImportError:
     print(install_geopy)
 
+if TYPE_CHECKING:
+    from zirc.wrappers import connection_wrapper
+    from bot import Bot
+    from zirc.event import Event
 
 r_from = re.compile(r'(?i)([+-]\d+):00 from')
 r_tag = re.compile(r'<(?!!)[^>]+>')
 
 
-def location(name):
+def location(name: str):
     geolocator = geo.Nominatim()
 
     geolocator.country_bias = str()
@@ -40,7 +45,7 @@ def location(name):
     return outgoing_name, str(lat), str(lng)
 
 
-def local(icao, hour, minute):
+def local(icao: str, hour, minute):
     '''Grab local time based on ICAO code'''
     uri = 'https://airports-api.s3-us-west-2.amazonaws.com/icao/%s.json'
     content = web.get(uri % icao.lower()).json()
@@ -52,7 +57,7 @@ def local(icao, hour, minute):
     return f"{hour}:{minute}Z"
 
 
-def code(search):
+def code(search: str):
     '''Find ICAO code in the provided database.py (find the nearest one)'''
     if search.upper() in data:
         return search.upper()
@@ -72,7 +77,7 @@ def code(search):
         return sumOfSquares[1]
 
 
-def get_metar(icao_code):
+def get_metar(icao_code: str):
     '''Obtain METAR data from NOAA for a given ICAO code'''
     url = 'https://tgftp.nws.noaa.gov/data/observations/metar/stations/%s.TXT'
     req = web.get(url % icao_code)
@@ -84,7 +89,7 @@ def get_metar(icao_code):
     return True, page
 
 
-def get_icao(args, command='weather'):
+def get_icao(args: List[str], command='weather'):
     '''Provide the ICAO code for a given args'''
 
     icao_code = code(' '.join(args))
@@ -96,7 +101,7 @@ def get_icao(args, command='weather'):
 
 
 @add_cmd('metar', min_args=0)
-def metar(bot, event, irc, args):
+def metar(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     '''.metar <location> -- shows the raw METAR data for a given location'''
 
     status, icao_code = get_icao(args, 'metar')
@@ -110,7 +115,7 @@ def metar(bot, event, irc, args):
     return irc.reply(event, metar.replace('\n', ' ').replace('/', ''))
 
 
-def speed_desc(speed):
+def speed_desc(speed: int):
     '''Provide a more natural description of wind speed'''
     description = str()
 
@@ -144,7 +149,7 @@ def speed_desc(speed):
     return description
 
 
-def wind_dir(degrees):
+def wind_dir(degrees: str):
     '''Provide a nice little unicode character of the wind direction'''
     try:
         degrees = float(degrees)
@@ -174,7 +179,7 @@ def wind_dir(degrees):
 
 
 @add_cmd('weather', min_args=1)
-def weather(bot, event, irc, args):
+def weather(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     '''.weather <ICAO> - Show the weather at airport with the code <ICAO>.'''
 
     status, icao_code = get_icao(args)
@@ -509,7 +514,7 @@ def weather(bot, event, irc, args):
     irc.reply(event, output)
 
 
-def windchill(speed, temp):
+def windchill(speed: float, temp):
     # Convert knots to kilometers per hour, https://is.gd/3dNrbW
     speed_kmh = speed * 1.852
 
@@ -530,7 +535,7 @@ def windchill(speed, temp):
     return windchill
 
 
-def get_windchill(bot, event, irc, args):
+def get_windchill(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     '''.windchill <temp> <wind speed> -- shows Windchill in F'''
 
     if len(args) == 1:
@@ -569,7 +574,7 @@ def get_windchill(bot, event, irc, args):
 dotw = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 
-def remove_dots(txt):
+def remove_dots(txt: str):
     if '..' not in txt:
         return txt
     else:
@@ -577,7 +582,7 @@ def remove_dots(txt):
         return remove_dots(txt)
 
 
-def remove_spaces(x):
+def remove_spaces(x: str):
     if '  ' in x:
         x = x.replace('  ', ' ')
         return remove_spaces(x)
@@ -585,7 +590,7 @@ def remove_spaces(x):
         return x
 
 
-def chomp_desc(txt):
+def chomp_desc(txt: str):
     out = txt
     p = re.compile(r'(?<=[\.\?!]\s)(\w+)')
 
@@ -623,7 +628,7 @@ def chomp_desc(txt):
 
 
 @add_cmd('forecast', min_args=1)
-def forecast(bot, event, irc, args):
+def forecast(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     if not hasattr(config, 'forecastio_apikey'):
         return irc.reply(event, 'Please sign up for a Dark Sky API key at https://darksky.net/ or try .wx-noaa or .weather-noaa')
 
@@ -730,7 +735,7 @@ def forecast(bot, event, irc, args):
 
 
 @add_cmd('weather-darksky', min_args=1)
-def forecastio_current_weather(bot, event, irc, args):
+def forecastio_current_weather(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     if not hasattr(config, 'forecastio_apikey'):
         return irc.reply(event, 'Please sign up for a darksky.net API key at https://darksky.net/')
 
@@ -870,7 +875,7 @@ def add_degree(txt):
 
 
 @add_cmd('weather-wu', min_args=1)
-def weather_wunderground(bot, event, irc, args):
+def weather_wunderground(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     if not hasattr(config, 'wunderground_apikey'):
         return irc.reply(event, 'Please sign up for a wunderground.com API key at https://www.wunderground.com/weather/api/ or try .wx-noaa or .weather-noaa')
 
@@ -953,7 +958,7 @@ def preface_location(ci, reg='', cty=''):
 
 
 @add_cmd('forecast-wu', min_args=1)
-def forecast_wg(bot, event, irc, args):
+def forecast_wg(bot: Bot, event: Event, irc: connection_wrapper, args: List[str]):
     if not hasattr(config, 'wunderground_apikey'):
         return irc.reply(event, 'Please sign up for a wunderground.com API key at https://www.wunderground.com/weather/api/ or try .wx-noaa or .weather-noaa')
 

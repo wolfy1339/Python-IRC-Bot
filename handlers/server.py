@@ -1,11 +1,14 @@
 import re
+from typing import Dict, List, Union
+
+from zirc import event, wrappers
 
 
 class Server(object):
     def __init__(self):
-        self.server = {'ISUPPORT': {}}
+        self.server: Dict[str, Dict[str, Union[str, List[str], Dict[str, str]]]] = {'ISUPPORT': {}}
 
-    def on_005(self, event, irc):
+    def on_005(self, event: event.Event, irc: wrappers.connection_wrapper):
         for param in event.arguments[:-1]:
             name, key, value = param.partition('=')
             del key

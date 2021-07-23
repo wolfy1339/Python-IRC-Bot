@@ -2,6 +2,7 @@ from os import path
 import socket
 import ssl
 from os import getenv
+from utils.database import Database, UserDB
 
 import config
 import utils
@@ -29,7 +30,7 @@ class Bot(zirc.Client):
             'SOURCE': 'https://github.com/wolfy1339/Python-IRC-Bot'
         }
         # Event handlers
-        self.userdb = utils.database.Database(self)
+        self.userdb: Database[str, dict[str, UserDB]] = utils.database.Database(self)
         utils.util.reload_handlers(self)
         self.connect(self.config, certfile=path.abspath("user.pem"))
         self.fp.sleep_time = 0.7
@@ -61,4 +62,5 @@ except KeyboardInterrupt:
     x.web.stop()
     x.userdb.flush()
     x.bot.db_job.stop()
+    x.socket.close()
     __import__("sys").exit(1)

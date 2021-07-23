@@ -1,10 +1,15 @@
-import traceback
+from typing import List, Match, Optional
+from zirc import event, wrappers
+from bot import Bot
 import re
-import requests
-import six
+import traceback
+
+from requests.models import HTTPError
 
 import config
 import log
+import requests
+import six
 from .ignores import check_ignored
 
 print_ = six.print_
@@ -20,14 +25,14 @@ get = requests.get
 post = requests.post
 
 
-def is_ip_or_rdns(host):
-    ip = re.match(r"(?:[0-9]{1,3}\.){3}[0-9]{1,3}", host)
+def is_ip_or_rdns(host: str):
+    ip : Match = re.match(r"(?:[0-9]{1,3}\.){3}[0-9]{1,3}", host)
     url = re.match(r"(?:https?\:\/\/)?[-\w@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-\w@:%_\+.~#?&//=]*)", host)
     return ip is not None or url is not None
 
 
-def add_cmd(name, min_args=1, alias=None, owner=False,
-            admin=False, trusted=False, hide=False):
+def add_cmd(name : str, min_args:int=1, alias: Optional[List[str]]=None, owner:bool=False,
+            admin:bool=False, trusted:bool=False, hide:bool=False):
     def real_command(func):
         global alias_list
         global cmd_list
@@ -52,7 +57,7 @@ def add_cmd(name, min_args=1, alias=None, owner=False,
     return real_command
 
 
-def call_command(bot, event, irc, arguments):
+def call_command(bot: Bot, event: event.Event, irc: wrappers.connection_wrapper, arguments: List[str]):
     command = ' '.join(arguments).split(' ')
     if not command[0].startswith(config.commandChar):
         del command[0]
@@ -89,11 +94,11 @@ def call_command(bot, event, irc, arguments):
             print_error(irc, event)
 
 
-def add_hook(func):
+def add_hook(func: function):
     hooks.append(func)
 
 
-def isBot(event):
+def isBot(event: event.Event):
     is_Eleos = event.source.host == "kalahari.sigint.pw" and event.source.user == "bot"
     is_Jenni = event.source.user == "~jenni" and event.source.host.startswith("jenni")
     is_Celena = event.source.host == "techcavern/bot"
@@ -103,7 +108,7 @@ def isBot(event):
     return is_bot
 
 
-def call_hook(bot, event, irc, args):
+def call_hook(bot:Bot, event:event.Event, irc:wrappers.connection_wrapper, args:List[str]):
     if event.target in config.hooks_whitelist and not isBot(event):
         try:
             for i in hooks:
@@ -113,7 +118,7 @@ def call_hook(bot, event, irc, args):
             print_error(irc, event)
 
 
-def check_perms(event, channel, owner=False, admin=False, trusted=False):
+def check_perms(event:event.Event, channel:str, owner:bool=False, admin:bool=False, trusted:bool=False):
     admins = config.admins['global']
     trustees = config.trusted['global']
 
@@ -139,7 +144,7 @@ def check_perms(event, channel, owner=False, admin=False, trusted=False):
     return False
 
 
-def reload_handlers(bot):
+def reload_handlers(bot: Bot):
     bot.events = __import__("handlers").Events(bot)
     for h in dir(bot.events):
         func = getattr(bot.events, h)
@@ -147,7 +152,7 @@ def reload_handlers(bot):
             setattr(bot, h, func)
 
 
-def print_error(irc, event):
+def print_error(irc: wrappers.connection_wrapper, event: event.Event):
     log.exception("An unknown error occured")
     if not config.ci:
         try:
@@ -164,7 +169,12 @@ def print_error(irc, event):
             r = post("http://dpaste.com/api/v2/",
                      data=data,
                      allow_redirects=True,
-                     timeout=60)
+                     timeout=60,
+                     headers={
+                         "Authorization": "Bearer a51a7636bb3eb7fe"
+                     })
+            if (r.status_code != 200):
+                raise HTTPError("An Issue Arose when trying to send a paste to dpaste.com")
             url = r.text.split('\n')[0]
             irc.msg('##wolfy1339', f"Error: {url}")
         except Exception:
