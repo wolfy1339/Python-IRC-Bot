@@ -1,0 +1,39 @@
+name: Pylint
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10.0-beta.4"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        # This path is specific to Ubuntu
+        path: ~/.cache/pip
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage codacy-coverage
+    - run: |
+        touch userdb.json
+        echo '{"##wolfy1339":{},"#zirc":{}}' > userdb.json
+    - run: |
+        coverage run test.py --source="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers/*.py,log.py" --exclude="utils/tasks.py,utils/web.py,handlers/server.py"
+    - if: ${{ success() }}
+      run: |
+        coverage report --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers/*.py,log.py" --omit="utils/tasks.py,utils/web.py,handlers/server.py"
+        coverage xml --include="test.py,plugins/*.py,utils/*.py,ansi.py,config.py,handlers/*.py,log.py" --omit="utils/tasks.py,utils/web.py,handlers/server.py"
+        python-codacy-coverage -r coverage.xml
