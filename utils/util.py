@@ -1,6 +1,8 @@
-from typing import List, Match, Optional
-from zirc import event, wrappers
-from bot import Bot
+from __future__ import annotations
+from typing import List, Match, Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from zirc import event, wrappers
+    from bot import Bot
 import re
 import traceback
 
@@ -9,13 +11,8 @@ from requests.models import HTTPError
 import config
 import log
 import requests
-import six
 from .ignores import check_ignored
 
-print_ = six.print_
-PY2 = six.PY2
-PY3 = six.PY3
-PY34 = six.PY34
 commands = {}
 cmd_list = []
 alias_list = []

@@ -1,6 +1,6 @@
 import json
 import copy
-from typing import Generic, MutableMapping, Optional, TypeVar, TypedDict
+from typing import Optional, TypeVar, TypedDict
 from zirc.event import Event
 
 from zirc.wrappers import connection_wrapper
@@ -16,8 +16,8 @@ class UserDB(TypedDict):
     modes: str
     seen: list[SeenDB]
 
-_KT = TypeVar("_KT", str) #  key type
-_VT = TypeVar("_VT", dict[str, UserDB]) #  value type
+_KT = TypeVar("_KT", bound=str) #  key type
+_VT = TypeVar("_VT", bound=dict[str, UserDB]) #  value type
 
 class Database(dict[_KT, _VT]):
     """Holds a dict that contains all the information
